@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class NodeSpawner : MonoBehaviour
 {
@@ -11,19 +12,30 @@ public class NodeSpawner : MonoBehaviour
     private List<Transform> nodes = new List<Transform>();
     [SerializeField] private Vector3 nodeSize = Vector3.one;
     [SerializeField] Vector2 nodeOffset = Vector2.zero;
+    #endregion
+
+    #region path
     [SerializeField] private Transform start;
     [SerializeField] private Transform end;
     private Transform startObj;
     private Transform endObj;
+
+    [SerializeField] private Transform wayPoint;
+    private List<Transform> wayPoints = new List<Transform>();
+
+    [SerializeField] private Transform path;
+    private List<Transform> pathList = new List<Transform>();
+    //[FormerlySerializedAs("path")]
+    [SerializeField] private List<GridPos> enemyPath = new List<GridPos>();
+    private List<GridPos> dontSpawNodeList = new List<GridPos>();
     #endregion
 
-    [SerializeField] private Transform ground;
-    private List<Transform> grounds = new List<Transform>();
 
     [SerializeField] private Transform nodeParent;
+    [SerializeField] private Transform pathParent;
+    [SerializeField] private Transform wayPointParent;
     [SerializeField] private GridPos mapSize;
-    [SerializeField] private List<GridPos> path = new List<GridPos>();
-    private List<GridPos> dontSpawNodeList = new List<GridPos>();
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -70,16 +82,16 @@ public class NodeSpawner : MonoBehaviour
             }
 
             start.localScale = nodeSize;
-            var startPos = new Vector3(nodeParent.position.x + path[0].x * nodeOffset.x, nodeSize.y, nodeParent.position.y + +path[0].y * nodeOffset.y);
+            var startPos = new Vector3(pathParent.position.x + enemyPath[0].x * nodeOffset.x, nodeSize.y, pathParent.position.y + +enemyPath[0].y * nodeOffset.y);
             var tempstartObj = Instantiate(start);
-            tempstartObj.SetParent(nodeParent);
+            tempstartObj.SetParent(pathParent);
             tempstartObj.transform.position = startPos;
             nodes.Add(tempstartObj);
 
             end.localScale = nodeSize;
-            var endPos = new Vector3(nodeParent.position.x + path[path.Count - 1].x * nodeOffset.x, nodeSize.y, nodeParent.position.y + +path[path.Count - 1].y * nodeOffset.y);
+            var endPos = new Vector3(pathParent.position.x + enemyPath[enemyPath.Count - 1].x * nodeOffset.x, nodeSize.y, pathParent.position.y + +enemyPath[enemyPath.Count - 1].y * nodeOffset.y);
             var tempEndObj = Instantiate(end);
-            tempEndObj.SetParent(nodeParent);
+            tempEndObj.SetParent(pathParent);
             tempEndObj.transform.position = endPos;
             nodes.Add(tempEndObj);
         }
@@ -94,12 +106,19 @@ public class NodeSpawner : MonoBehaviour
         }
         nodes.Clear();
 
-        if (grounds.Count > 0)
+        if (pathList.Count > 0)
         {
-            for (int i = 0; i < grounds.Count; i++)
-                DestroyImmediate(grounds[i].gameObject);
+            for (int i = 0; i < pathList.Count; i++)
+                DestroyImmediate(pathList[i].gameObject);
         }
-        grounds.Clear();
+        pathList.Clear();
+
+        if(wayPoints.Count > 0)
+        {
+            for (int i = 0; i < wayPoints.Count; i++)
+                DestroyImmediate(wayPoints[i].gameObject);
+        }
+        wayPoints.Clear();
         DestroyImmediate(startObj);
         DestroyImmediate(endObj);
     }
@@ -107,34 +126,44 @@ public class NodeSpawner : MonoBehaviour
     public void SetPath()
     {
         dontSpawNodeList.Clear();
-        if (path.Count < 1) return;
+        if (enemyPath.Count < 1) return;
 
-        for (int i =0;i<path.Count-1;i++)
+        for (int i =0;i<enemyPath.Count-1;i++)
         {
-            AddDontSpawnNodes(path[i], path[i + 1]);
+            AddDontSpawnNodes(enemyPath[i], enemyPath[i + 1]);
+        }
+
+        for (int i = 1; i < enemyPath.Count; i++)
+        {
+            var tempPos = new Vector3(nodeParent.position.x + enemyPath[i].x * nodeOffset.x, 5, nodeParent.position.y + enemyPath[i].y * nodeOffset.y);
+            var tempObj = Instantiate(wayPoint);
+            tempObj.name = "WayPoint " + i + "";
+            tempObj.SetParent(wayPointParent);
+            tempObj.transform.position = tempPos;
+            nodes.Add(tempObj);
         }
     }
     
     private void AddDontSpawnNodes(GridPos node1, GridPos node2)
     {
-        var tempObj = Instantiate(ground);
+        var tempObj = Instantiate(path);
 
-        var child = ground.GetChild(0);
+        var child = path.GetChild(0);
         child.localScale = new Vector3(nodeSize.x + (nodeOffset.x - nodeSize.x) , nodeSize.y , nodeSize.z + (nodeOffset.y - nodeSize.z));
         child.localPosition = new Vector3(child.localScale.x / 2,0, child.localScale.z/2);
         var scaleX = Math.Abs(node1.x - node2.x) > 0 ? Math.Abs(node1.x - node2.x) + 1 : 1;
         var scaleZ = Math.Abs(node1.y - node2.y) > 0 ? Math.Abs(node1.y - node2.y) + 1 : 1;
 
         tempObj.localScale = new Vector3(scaleX, nodeSize.y , scaleZ);
-        tempObj.SetParent(nodeParent);
+        tempObj.SetParent(pathParent);
         Vector3 tempPos;
         if (GridPos.Distance(GridPos.GridPosZero(), node1) > GridPos.Distance(GridPos.GridPosZero(), node2))
-            tempPos = new Vector3((nodeParent.position.x + node2.x * nodeOffset.x) - nodeOffset.x / 2, 0, (nodeParent.position.y + node2.y * nodeOffset.y) - nodeOffset.y / 2);
+            tempPos = new Vector3((pathParent.position.x + node2.x * nodeOffset.x) - nodeOffset.x / 2, 0, (pathParent.position.y + node2.y * nodeOffset.y) - nodeOffset.y / 2);
         else
-            tempPos = new Vector3((nodeParent.position.x + node1.x * nodeOffset.x) - nodeOffset.x / 2, 0, (nodeParent.position.y + node1.y * nodeOffset.y) - nodeOffset.y / 2);
+            tempPos = new Vector3((pathParent.position.x + node1.x * nodeOffset.x) - nodeOffset.x / 2, 0, (pathParent.position.y + node1.y * nodeOffset.y) - nodeOffset.y / 2);
 
         tempObj.transform.position = tempPos;
-        grounds.Add(tempObj);
+        pathList.Add(tempObj);
 
 
         if (node1.x < node2.x)
