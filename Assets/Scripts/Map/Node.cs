@@ -8,9 +8,39 @@ public class Node : MonoBehaviour
     private GridPos pos;
     public GridPos Pos { get; private set; }
 
+    public Color hoverColor;
+    private Color startColor;
+    private Renderer render;
+
+    private GameObject turret;
+    private void Start()
+    {
+        render = GetComponent<Renderer>();
+        startColor = render.material.color;
+    }
+
     public void SetPos(int x,int y)
     {
         pos = new GridPos(x,y);
+    }
+
+    private void OnMouseDown()
+    {
+        if(turret != null)
+        {
+            return;
+        }
+        GameObject turretToBuild = BuildManager.instance.TurretTobuild;
+        Instantiate(turretToBuild,new Vector3(transform.position.x -0.5f, transform.position.y + 1f, transform.position.z),transform.rotation);
+    }
+
+    private void OnMouseEnter()
+    {
+        render.material.color = hoverColor;
+    }
+    private void OnMouseExit()
+    {
+        render.material.color = startColor;
     }
 }
 [Serializable]

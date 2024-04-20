@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class NodeSpawner : MonoBehaviour
 {
@@ -99,28 +100,17 @@ public class NodeSpawner : MonoBehaviour
     [ContextMenu("Delete Nodes")]
     public void DeleteNode()
     {
-        if (nodes.Count > 0)
-        {
-            for (int i = 0; i < nodes.Count; i++)
-                DestroyImmediate(nodes[i].gameObject);
-        }
         nodes.Clear();
-
-        if (pathList.Count > 0)
-        {
-            for (int i = 0; i < pathList.Count; i++)
-                DestroyImmediate(pathList[i].gameObject);
-        }
         pathList.Clear();
-
-        if(wayPoints.Count > 0)
-        {
-            for (int i = 0; i < wayPoints.Count; i++)
-                DestroyImmediate(wayPoints[i].gameObject);
-        }
         wayPoints.Clear();
-        DestroyImmediate(startObj);
-        DestroyImmediate(endObj);
+
+
+        for (int i = pathParent.childCount - 1; i >= 0; i--)
+            DestroyImmediate(pathParent.GetChild(i).gameObject);
+        for (int i = nodeParent.childCount - 1; i >= 0; i--)
+            DestroyImmediate(nodeParent.GetChild(i).gameObject);
+        for (int i = wayPointParent.childCount - 1; i >= 0; i--)
+            DestroyImmediate(wayPointParent.GetChild(i).gameObject);
     }
 
     public void SetPath()
@@ -135,7 +125,7 @@ public class NodeSpawner : MonoBehaviour
 
         for (int i = 1; i < enemyPath.Count; i++)
         {
-            var tempPos = new Vector3(nodeParent.position.x + enemyPath[i].x * nodeOffset.x, 5, nodeParent.position.y + enemyPath[i].y * nodeOffset.y);
+            var tempPos = new Vector3(nodeParent.position.x + enemyPath[i].x * nodeOffset.x, 1.5f, nodeParent.position.y + enemyPath[i].y * nodeOffset.y);
             var tempObj = Instantiate(wayPoint);
             tempObj.name = "WayPoint " + i + "";
             tempObj.SetParent(wayPointParent);
