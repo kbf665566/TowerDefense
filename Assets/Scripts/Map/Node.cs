@@ -31,7 +31,7 @@ public class Node : MonoBehaviour
             return;
         }
         GameObject turretToBuild = BuildManager.instance.TurretTobuild;
-        Instantiate(turretToBuild,new Vector3(transform.position.x -0.5f, transform.position.y + 1f, transform.position.z),transform.rotation);
+        turret = Instantiate(turretToBuild,new Vector3(transform.position.x -0.5f, transform.position.y + 1f, transform.position.z),transform.rotation);
     }
 
     private void OnMouseEnter()
