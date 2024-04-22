@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     protected Transform target;
     [SerializeField] protected float speed = 70f;
     [SerializeField] protected float explosionRadius = 0f;
+    [SerializeField] protected int damage = 50;
 
     public void Seek(Transform enemy)
     {
@@ -57,8 +58,11 @@ public class Bullet : MonoBehaviour
 
     protected void Damage(Transform enemy)
     {
-        Destroy(enemy.gameObject);
+        Enemy e = enemy.GetComponent<Enemy>();
+        if (e != null)
+            e.TakeDamage(damage);
     }
+
     protected void Explode()
     {
         Collider[] cols =  Physics.OverlapSphere(transform.position,explosionRadius);

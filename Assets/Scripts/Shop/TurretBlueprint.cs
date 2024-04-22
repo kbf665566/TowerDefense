@@ -6,5 +6,6 @@ using UnityEngine;
 public class TurretBlueprint 
 {
     public GameObject turretPrefab;
-    public int cost;
+    public int Cost;
+    public Vector3 BuildOffset;
 }

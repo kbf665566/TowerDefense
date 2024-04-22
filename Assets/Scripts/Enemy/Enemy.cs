@@ -1,38 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 10f;
-    private Transform target;
-    private int wavepointIndex = 0;
+    private GameManager gameManager => GameManager.instance;
+
+    private float speed;
+    [SerializeField] private float startSpeed = 10f;
+    public float Speed => speed;
+    [SerializeField] private int damage = 1;
+    public int Damage => damage;
+    [SerializeField] private float hp = 100;
+    [SerializeField] private int value = 50;
+
+    [SerializeField] private GameObject deathEffect;
 
     private void Start()
     {
-        target = GameManager.instance.WayPoints[0];
+        speed = startSpeed;
     }
 
-    private void Update()
+    public void TakeDamage(float amount)
     {
-        Vector3 dir = target.position - transform.position;
-        transform.Translate(dir.normalized * speed * Time.deltaTime , Space.World);
-
-        if(Vector3.Distance(transform.position,target.position) <= 0.4f)
-        {
-            GetNextWaypoint();
-        }
+        hp -= amount;
+        if (hp <= 0)
+            Die();
     }
 
-    private void GetNextWaypoint()
+    private void Die()
     {
-        if(wavepointIndex >= GameManager.instance.WayPoints.Length - 1)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        GameObject effect = Instantiate(deathEffect,transform.position,Quaternion.identity);
+        Destroy(effect,5f);
 
-        wavepointIndex++;
-        target = GameManager.instance.WayPoints[wavepointIndex];
+        gameManager.AddMoney(value);
+        Destroy(gameObject);
+    }
+
+    public void Slow(float pct)
+    {
+        speed = startSpeed * (1f - pct);
+    }
+
+    public void ResetSpeed()
+    {
+        speed = startSpeed;
     }
 }

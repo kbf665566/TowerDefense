@@ -10,12 +10,12 @@ public class Node : MonoBehaviour
     public GridPos Pos { get; private set; }
 
     public Color hoverColor;
+    public Color notEnoughMoneyColor;
     private Color startColor;
     private Renderer render;
 
     private GameObject turret;
     private BuildManager buildManager => BuildManager.instance;
-    public Vector3 posOffset;
     private void Start()
     {
         render = GetComponent<Renderer>();
@@ -27,9 +27,9 @@ public class Node : MonoBehaviour
         pos = new GridPos(x,y);
     }
 
-    public Vector3 GetBuildPos()
+    public Vector3 GetBuildPos(Vector3 turretOffset)
     {
-        return transform.position + posOffset;
+        return transform.position + turretOffset;
     }
 
     public void BuildTurret(GameObject turret)
@@ -61,7 +61,11 @@ public class Node : MonoBehaviour
         if (!buildManager.CanBuild)
             return;
 
-        render.material.color = hoverColor;
+        if(buildManager.HasMoney)
+            render.material.color = hoverColor;
+        else
+            render.material.color = notEnoughMoneyColor;
+
     }
     private void OnMouseExit()
     {

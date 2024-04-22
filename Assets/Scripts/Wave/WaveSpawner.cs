@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WaveSpawner : MonoBehaviour
 {
     [SerializeField] private Transform enemyPrefab;
+    [SerializeField] private Transform pathParent;
     [SerializeField] private Transform spawnPoint;
 
     [SerializeField] private float timeBetweenWaves = 5f;
@@ -13,7 +15,7 @@ public class WaveSpawner : MonoBehaviour
 
     private int waveIndex = 0;
 
-    [SerializeField] private Text waveCountdownText;
+    [SerializeField] private TextMeshProUGUI waveCountdownText;
 
     private void Update()
     {
@@ -24,8 +26,9 @@ public class WaveSpawner : MonoBehaviour
         }
 
         countdown -= Time.deltaTime;
+        countdown = Mathf.Clamp(countdown,0f,Mathf.Infinity);
 
-        waveCountdownText.text = Mathf.Floor(countdown).ToString();
+        waveCountdownText.text = string.Format("{0:00.00}",countdown);
     }
 
     private IEnumerator SpawnWave()
@@ -41,5 +44,11 @@ public class WaveSpawner : MonoBehaviour
     private void SpawnEnemy()
     {
         Instantiate(enemyPrefab,spawnPoint.position,spawnPoint.rotation);
+    }
+
+    [ContextMenu("SetSpawnPoint")]
+    public void SetSpawnPoint()
+    {
+        spawnPoint = pathParent.Find("Start(Clone)");
     }
 }
