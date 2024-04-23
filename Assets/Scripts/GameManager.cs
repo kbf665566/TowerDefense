@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -38,6 +35,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI liveText;
     #endregion
 
+    private bool gameIsOver = false;
+    [SerializeField] GameObject gameOverUI;
+    public delegate void OnGameOver();
+    public static OnGameOver onGameOver;
+
+
     private void Awake()
     {
         if (instance != null)
@@ -51,10 +54,25 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ResetGame();
+    }
+
+    private void Update()
+    {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.E))
+            onGameOver?.Invoke();
+#endif
+    }
+
+    private void ResetGame()
+    {
         money = startMoney;
         moneyText.text = money.ToString();
         live = startLive;
         liveText.text = live.ToString();
+        gameIsOver = false;
+        gameOverUI.SetActive(false);
     }
 
     public void CostMoney(int cost)
@@ -74,7 +92,7 @@ public class GameManager : MonoBehaviour
         live = live - lost <= 0 ? 0 : live - lost; 
         liveText.text = live.ToString();
         if (live <= 0)
-            EndGame();
+            onGameOver?.Invoke();
     }
 
     public void AddLive(int add)
@@ -85,7 +103,8 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-
+        gameIsOver = true;
+        gameOverUI.SetActive(true);
     }
 
     [ContextMenu("SetWayPoint")]
@@ -94,5 +113,14 @@ public class GameManager : MonoBehaviour
         wayPoints = new Transform[wayPointParent.childCount];
         for (int i = 0; i < wayPoints.Length; i++)
             wayPoints[i] = wayPointParent.GetChild(i);
+    }
+
+    private void OnEnable()
+    {
+        onGameOver += EndGame;
+    }
+    private void OnDisable()
+    {
+        onGameOver -= EndGame;
     }
 }

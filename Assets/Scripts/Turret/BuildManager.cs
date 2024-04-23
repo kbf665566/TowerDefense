@@ -17,6 +17,16 @@ public class BuildManager : MonoBehaviour
     public GameObject MissleLauncherPrefab => missleLauncherPrefab;
 
     [SerializeField] private GameObject buildEffect;
+    public GameObject BuildEffect => buildEffect;
+
+    public bool CanBuild { get { return turretToBuild != null; } }
+    public bool HasMoney { get { return gameManager.Money >= turretToBuild.Cost; } }
+
+    private Node selectNode;
+    public delegate void NodeSelected(Node node);
+    public static NodeSelected nodeSelected;
+    public delegate void NodeCancelSelected();
+    public static NodeCancelSelected nodeCancelSelected;
     private void Awake()
     {
         if (instance != null)
@@ -25,30 +35,36 @@ public class BuildManager : MonoBehaviour
             return;
         }
         instance = this;
-    }
-
-    public bool CanBuild { get { return turretToBuild != null; } }
-    public bool HasMoney { get { return gameManager.Money >= turretToBuild.Cost; } }
-
-    public void BuildTurretOn(Node node)
-    {
-        if (gameManager.Money < turretToBuild.Cost)
-        {
-            Debug.Log("½a");
-            return;
-        }
-
-        gameManager.CostMoney(turretToBuild.Cost);
-
-        GameObject turret = Instantiate(turretToBuild.turretPrefab, node.GetBuildPos(turretToBuild.BuildOffset), Quaternion.identity);
-        node.BuildTurret(turret);
-
-        GameObject effect = Instantiate(buildEffect, node.GetBuildPos(turretToBuild.BuildOffset),Quaternion.identity);
-        Destroy(effect,5f);
+        nodeSelected += SelectNode;
+        nodeCancelSelected += DeselectNode;
     }
 
     public void SelectTurretToBuild(TurretBlueprint turret)
     {
         turretToBuild = turret;
+        nodeCancelSelected?.Invoke();
+    }
+
+    private void SelectNode(Node node)
+    {
+        if(selectNode == node)
+        {
+            nodeCancelSelected?.Invoke();
+            return;
+        }
+
+        selectNode = node;
+        turretToBuild = null;
+    }
+
+    public void DeselectNode()
+    {
+        selectNode = null;
+    }
+
+    private void OnDisable()
+    {
+        nodeSelected -= SelectNode;
+        nodeCancelSelected -= DeselectNode;
     }
 }

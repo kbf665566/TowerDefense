@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,11 +12,17 @@ public class Node : MonoBehaviour
 
     public Color hoverColor;
     public Color notEnoughMoneyColor;
+    public Color SelectColor = Color.blue;
     private Color startColor;
     private Renderer render;
 
     private GameObject turret;
+    private TurretBlueprint turretBlueprint;
+    public TurretBlueprint TurretBlueprint => turretBlueprint;
+    private bool isUpgrade = false;
+    public bool IsUpgrade => isUpgrade;
     private BuildManager buildManager => BuildManager.instance;
+    private GameManager gameManager => GameManager.instance;
     private void Start()
     {
         render = GetComponent<Renderer>();
@@ -32,9 +39,41 @@ public class Node : MonoBehaviour
         return transform.position + turretOffset;
     }
 
-    public void BuildTurret(GameObject turret)
+    public void BuildTurret(TurretBlueprint blueprint)
     {
-        this.turret = turret;
+        if (gameManager.Money < blueprint.Cost)
+        {
+            Debug.Log("窮");
+            return;
+        }
+
+        gameManager.CostMoney(blueprint.Cost);
+
+        GameObject _turret = Instantiate(blueprint.turretPrefab, GetBuildPos(blueprint.BuildOffset), Quaternion.identity);
+        turret = _turret;
+        GameObject effect = Instantiate(buildManager.BuildEffect, GetBuildPos(blueprint.BuildOffset), Quaternion.identity);
+        Destroy(effect, 5f);
+        turretBlueprint = blueprint;
+    }
+
+    public void UpgradeTurret()
+    {
+        if (gameManager.Money < turretBlueprint.Cost)
+        {
+            Debug.Log("窮");
+            return;
+        }
+
+        gameManager.CostMoney(turretBlueprint.Cost);
+
+        Destroy(turret);
+
+        GameObject _turret = Instantiate(turretBlueprint.upgradeTurretPrefab, GetBuildPos(turretBlueprint.BuildOffset), Quaternion.identity);
+        turret = _turret;
+        GameObject effect = Instantiate(buildManager.BuildEffect, GetBuildPos(turretBlueprint.BuildOffset), Quaternion.identity);
+        Destroy(effect, 5f);
+
+        isUpgrade = true;
     }
 
     private void OnMouseDown()
@@ -42,16 +81,17 @@ public class Node : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
-        if (!buildManager.CanBuild)
-            return;
 
-        if(turret != null)
+        if (turret != null)
         {
-            Debug.Log("無法建造");
+            BuildManager.nodeSelected?.Invoke(this);
             return;
         }
 
-        buildManager.BuildTurretOn(this);
+        if (!buildManager.CanBuild)
+            return;
+
+        BuildTurret(buildManager.TurretTobuild);
     }
 
     private void OnMouseEnter()

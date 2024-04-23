@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 4498948016666184410}
   - component: {fileID: 3697727151460195076}
   m_Layer: 0
-  m_Name: Turret
+  m_Name: Turret_Upgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -133,11 +133,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 15
   turnSpeed: 10
-  fireRate: 1
+  fireRate: 1.5
   fireCountdown: 0
   enemyTag: Enemy
   partToRotation: {fileID: 6253215328879535039}
-  bulletPrefab: {fileID: 4850711738385815153, guid: 1e47ce422a8e6bf40ba2dd304d248f1d, type: 3}
+  bulletPrefab: {fileID: 4850711738385815153, guid: bb3de253152a0f546a699a44982f7457, type: 3}
   firePoint: {fileID: 426238143729628751}
 --- !u!1 &4681038111130529988
 GameObject:

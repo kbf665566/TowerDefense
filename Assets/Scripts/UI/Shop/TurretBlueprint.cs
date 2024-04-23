@@ -6,6 +6,9 @@ using UnityEngine;
 public class TurretBlueprint 
 {
     public GameObject turretPrefab;
+    public GameObject upgradeTurretPrefab;
     public int Cost;
     public Vector3 BuildOffset;
+    public int UpgradeCost;
+    public int SellPrice;
 }

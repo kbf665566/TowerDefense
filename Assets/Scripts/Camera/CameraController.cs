@@ -12,15 +12,19 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private float minY = 10f;
     [SerializeField] private float maxY = 80f;
+    private bool canMove = true;
     // Start is called before the first frame update
     void Start()
     {
-        
+        canMove = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!canMove)
+            return;
+
         if(Input.GetKeyDown(KeyCode.Escape))
             doMovement = !doMovement;
 
@@ -43,5 +47,19 @@ public class CameraController : MonoBehaviour
         pos.y -= scroll * 1000 * scrollSpeed * Time.deltaTime;
         pos.y = Mathf.Clamp(pos.y,minY,maxY);
         transform.position = pos;
+    }
+
+    private void OnEnable()
+    {
+        GameManager.onGameOver += GameEnd;
+    }
+    private void OnDisable()
+    {
+        GameManager.onGameOver -= GameEnd;
+    }
+
+    private void GameEnd()
+    {
+        canMove = false;
     }
 }
