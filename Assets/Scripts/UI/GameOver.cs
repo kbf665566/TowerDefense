@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameOver : MonoBehaviour
 {
-    private string menuSceneName = "MainMenu";
-    [SerializeField] private string levelName = "Level";
+    [SerializeField] private SceneFader sceneFader;
+    [SerializeField] private string levelName = "Level1";
     public void Retry()
     {
-        SceneManager.LoadScene(levelName);
+        sceneFader.FadeTo(levelName);
     }
 
     public void Menu()
     {
-        SceneManager.LoadScene(menuSceneName);
+        sceneFader.FadeTo(GameSetting.MainMenuName);
     }
 }

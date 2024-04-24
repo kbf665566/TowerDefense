@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    private bool doMovement = true;
-
     [SerializeField] private float panSpeed = 30f;
     [SerializeField] private float panBorderThicknes = 10f;
     [SerializeField] private float scrollSpeed = 5f;
@@ -23,12 +21,6 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         if (!canMove)
-            return;
-
-        if(Input.GetKeyDown(KeyCode.Escape))
-            doMovement = !doMovement;
-
-        if (!doMovement)
             return;
 
         if(Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - panBorderThicknes)

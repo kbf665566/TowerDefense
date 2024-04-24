@@ -10,5 +10,9 @@ public class TurretBlueprint
     public int Cost;
     public Vector3 BuildOffset;
     public int UpgradeCost;
-    public int SellPrice;
+
+    public int GetSellPirce()
+    {
+        return Cost / 2;
+    }
 }

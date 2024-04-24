@@ -18,6 +18,8 @@ public class BuildManager : MonoBehaviour
 
     [SerializeField] private GameObject buildEffect;
     public GameObject BuildEffect => buildEffect;
+    [SerializeField] private GameObject sellEffect;
+    public GameObject SellEffect => sellEffect;
 
     public bool CanBuild { get { return turretToBuild != null; } }
     public bool HasMoney { get { return gameManager.Money >= turretToBuild.Cost; } }
