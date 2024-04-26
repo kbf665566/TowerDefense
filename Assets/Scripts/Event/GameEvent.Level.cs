@@ -1,14 +1,16 @@
+using System;
 using UnityEngine;
 
 
 public static partial class GameEvent
 {
 
-    public class GameOverEvent
+    public class GameOverEventArgs : EventArgs
     {
-        public GameOverEvent()
+        public static GameOverEventArgs CreatEvent()
         {
-
+            var @event = CreatEvent();
+            return @event;
         }
     }
 }

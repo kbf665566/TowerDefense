@@ -16,14 +16,18 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int value = 50;
 
     [SerializeField] private GameObject deathEffect;
+    private bool isDead = false;
 
     private void Start()
     {
         speed = startSpeed;
+        isDead = false;
     }
 
     public void TakeDamage(float amount)
     {
+        if (isDead) return;
+
         hp -= amount;
         if (hp <= 0)
             Die();
@@ -31,8 +35,11 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        isDead = true;
         GameObject effect = Instantiate(deathEffect,transform.position,Quaternion.identity);
         Destroy(effect,5f);
+
+        WaveSpawner.EnemiesAlive--;
 
         gameManager.AddMoney(value);
         Destroy(gameObject);

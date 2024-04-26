@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Color = UnityEngine.Color;
 
 /// <summary>
 /// 生成地圖
@@ -36,12 +37,7 @@ public class NodeSpawner : MonoBehaviour
     [SerializeField] private Transform pathParent;
     [SerializeField] private Transform wayPointParent;
     [SerializeField] private GridPos mapSize;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
+    [SerializeField] private bool showGrid = true;
 
     [ContextMenu("Generate Nodes")]
     public void SpawNode()
@@ -87,14 +83,14 @@ public class NodeSpawner : MonoBehaviour
             var tempstartObj = Instantiate(start);
             tempstartObj.SetParent(pathParent);
             tempstartObj.transform.position = startPos;
-            nodes.Add(tempstartObj);
+            startObj = tempstartObj;
 
             end.localScale = nodeSize;
             var endPos = new Vector3(pathParent.position.x + enemyPath[enemyPath.Count - 1].x * nodeOffset.x, nodeSize.y, pathParent.position.y + +enemyPath[enemyPath.Count - 1].y * nodeOffset.y);
             var tempEndObj = Instantiate(end);
             tempEndObj.SetParent(pathParent);
             tempEndObj.transform.position = endPos;
-            nodes.Add(tempEndObj);
+            endObj = tempstartObj;
         }
     }
     [ContextMenu("Delete Nodes")]
@@ -103,7 +99,8 @@ public class NodeSpawner : MonoBehaviour
         nodes.Clear();
         pathList.Clear();
         wayPoints.Clear();
-
+        startObj = null;
+        endObj = null;
 
         for (int i = pathParent.childCount - 1; i >= 0; i--)
             DestroyImmediate(pathParent.GetChild(i).gameObject);
@@ -125,12 +122,12 @@ public class NodeSpawner : MonoBehaviour
 
         for (int i = 1; i < enemyPath.Count; i++)
         {
-            var tempPos = new Vector3(nodeParent.position.x + enemyPath[i].x * nodeOffset.x, 1.5f, nodeParent.position.y + enemyPath[i].y * nodeOffset.y);
+            var tempPos = new Vector3(nodeParent.position.x + enemyPath[i].x * nodeOffset.x, 1.5f, nodeParent.position.z + enemyPath[i].y * nodeOffset.y);
             var tempObj = Instantiate(wayPoint);
             tempObj.name = "WayPoint " + i + "";
             tempObj.SetParent(wayPointParent);
             tempObj.transform.position = tempPos;
-            nodes.Add(tempObj);
+            wayPoints.Add(tempObj);
         }
     }
     
@@ -197,4 +194,51 @@ public class NodeSpawner : MonoBehaviour
             }
         }
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (showGrid)
+        {
+            Vector3 origin = new Vector3(transform.position.x - nodeSize.x / 2, 3f, transform.position.z - nodeSize.z / 2);
+            DebugDrawGrid(origin, mapSize.x, mapSize.y, Color.blue);
+            DrawEnemyPath();
+        }
+    }
+
+    public void DebugDrawGrid(Vector3 origin, int numRows, int numCols, Color color)
+    {//在 Scene 裡面畫出對應的格線
+        float width = (numCols * nodeOffset.x);
+        float height = (numRows * nodeOffset.y);
+
+        // 水平
+        for (int i = 0; i < numRows + 1; i++)
+        {
+            Vector3 startPos = origin + i * nodeOffset.x * Vector3.forward;
+            Vector3 endPos = startPos + width * Vector3.right;
+            Debug.DrawLine(startPos, endPos, color);
+        }
+
+        // 垂直
+        for (int i = 0; i < numCols + 1; i++)
+        {
+            Vector3 startPos = origin + i * nodeOffset.x * Vector3.right;
+            Vector3 endPos = startPos + height * Vector3.forward;
+            Debug.DrawLine(startPos, endPos, color);
+        }
+    }
+
+    public void DrawEnemyPath()
+    {
+        if (enemyPath.Count < 2)
+            return;
+
+        for (int i = 0; i < enemyPath.Count - 1; i++)
+        {
+            Vector3 startPos = new Vector3(nodeParent.position.x + enemyPath[i].x * nodeOffset.x, 3f, nodeParent.position.z + enemyPath[i].y * nodeOffset.y);
+            Vector3 endPos = new Vector3(nodeParent.position.x + enemyPath[i + 1].x * nodeOffset.x, 3f, nodeParent.position.z + enemyPath[i + 1].y * nodeOffset.y);
+            Debug.DrawLine(startPos, endPos, Color.red);
+        }
+    }
+#endif
 }

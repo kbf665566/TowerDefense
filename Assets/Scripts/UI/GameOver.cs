@@ -15,4 +15,18 @@ public class GameOver : MonoBehaviour
     {
         sceneFader.FadeTo(GameSetting.MainMenuName);
     }
+
+    //IEnumerator AnimationText()
+    //{
+    //    roundText.text = "0";
+    //    int round = 0;
+    //    yield return new WaitForSeconds(0.7f);
+
+    //    while(round < 20)
+    //    {
+    //        round++;
+    //        roundText.text = round.ToString();
+    //        yield return new WaitForSeconds(0.05f);
+    //    }
+    //}
 }

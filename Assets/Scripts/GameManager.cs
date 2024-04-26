@@ -35,8 +35,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI liveText;
     #endregion
 
+    private int levelToUnlock = 2;
+
     private bool gameIsOver = false;
     [SerializeField] GameObject gameOverUI;
+    [SerializeField] GameObject gameWinUI;
     public delegate void OnGameOver();
     public static OnGameOver onGameOver;
 
@@ -105,6 +108,12 @@ public class GameManager : MonoBehaviour
     {
         gameIsOver = true;
         gameOverUI.SetActive(true);
+    }
+
+    private void WinGame()
+    {
+        gameIsOver = true;
+        gameWinUI.SetActive(true);
     }
 
     [ContextMenu("SetWayPoint")]

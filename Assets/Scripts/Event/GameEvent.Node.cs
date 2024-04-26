@@ -1,22 +1,23 @@
+using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
 public static partial class GameEvent
 {
-    public class NodeSelectEvent
+    public class NodeSelectEventArgs : GameEventArgs<NodeSelectEventArgs>
     {
-        public Node Node { get; }
-        public NodeSelectEvent(Node node)
+        public Node Node { get; set; }
+        public static NodeSelectEventArgs CreateEvent(Node node)
         {
-            Node = node;
+            var @event = CreateEvent();
+            @event.Node = node;
+            return @event;
         }
     }
 
-    public class NodeCancelSelectEvent
+    public class NodeCancelSelectEvent : GameEventArgs<NodeCancelSelectEvent>
     {
-        public NodeCancelSelectEvent()
-        {
 
-        }
     }
 }

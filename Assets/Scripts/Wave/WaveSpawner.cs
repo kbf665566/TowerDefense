@@ -6,7 +6,9 @@ using UnityEngine.UI;
 
 public class WaveSpawner : MonoBehaviour
 {
-    [SerializeField] private Transform enemyPrefab;
+    public static int EnemiesAlive = 0;
+
+    [SerializeField] private Wave[] waves;
     [SerializeField] private Transform pathParent;
     [SerializeField] private Transform spawnPoint;
 
@@ -19,10 +21,19 @@ public class WaveSpawner : MonoBehaviour
 
     private void Update()
     {
-        if(countdown <=0f)
+        if (EnemiesAlive > 0)
+            return;
+
+        if (waveIndex == waves.Length)
+        {
+            //winEvent
+        }
+
+        if (countdown <=0f)
         {
             StartCoroutine(SpawnWave());
             countdown = timeBetweenWaves;
+            return;
         }
 
         countdown -= Time.deltaTime;
@@ -33,17 +44,21 @@ public class WaveSpawner : MonoBehaviour
 
     private IEnumerator SpawnWave()
     {
-        waveIndex++;
-        for (int i = 0; i < waveIndex; i++)
+        Wave wave = waves[waveIndex];
+        EnemiesAlive = wave.count;
+
+        for (int i = 0; i < wave.count; i++)
         {
-            SpawnEnemy();
-            yield return new WaitForSeconds(0.5f);
+            SpawnEnemy(wave.enemy);
+            yield return new WaitForSeconds(1f / wave.rate);
         }
+
+        waveIndex++;
     }
 
-    private void SpawnEnemy()
+    private void SpawnEnemy(GameObject enemy)
     {
-        Instantiate(enemyPrefab,spawnPoint.position,spawnPoint.rotation);
+        Instantiate(enemy, spawnPoint.position,spawnPoint.rotation);
     }
 
     [ContextMenu("SetSpawnPoint")]
