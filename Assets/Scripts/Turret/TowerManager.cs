@@ -28,7 +28,9 @@ public class TowerManager : MonoBehaviour
 
         DrawTowerRange();
     }
-    public void DrawTowerRange()
+
+
+    private void DrawTowerRange()
     {//利用畫一個邊非常多的多邊形的方式來畫出圓形範圍
         LineDrawer.enabled = true;
         Theta = 0f;
@@ -44,7 +46,7 @@ public class TowerManager : MonoBehaviour
         }
     }
 
-    public void StopDrawTowerRange()
+    private void StopDrawTowerRange()
     {
         LineDrawer.enabled = false;
     }

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3005b4c727133a940be7389fa34a0036, type: 3}
+  m_Name: TowerData
+  m_EditorClassIdentifier: 
+  TowerList:
+  - Id: 0
+    Name: TestTower
+    TowerLevelData:
+    - Damage: 10
+      ShootRange: 50
+      FireRate: 1
+      BuffDamage: 0
+      BuffRange: 0
+      BuffFireRate: 0
+      GetMoney: 0
+      SlowAmount: 0
+      BuildUpgradeCost: 50
+      SoldPrice: 50
+      towerPrefab: {fileID: 0}
+    - Damage: 100
+      ShootRange: 500
+      FireRate: 1
+      BuffDamage: 0
+      BuffRange: 0
+      BuffFireRate: 0
+      GetMoney: 0
+      SlowAmount: 0
+      BuildUpgradeCost: 200
+      SoldPrice: 50
+      towerPrefab: {fileID: 0}
+    TowerIcon: {fileID: 21300000, guid: f3882090d04ea794a9e3a33f1fd9f685, type: 3}
+    towerType: 0
+    TowerInformation: Test
