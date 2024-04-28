@@ -19,25 +19,40 @@ MonoBehaviour:
     - Damage: 10
       ShootRange: 50
       FireRate: 1
-      BuffDamage: 0
-      BuffRange: 0
-      BuffFireRate: 0
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 0
+      BulletExplosionRadius: 0
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
       GetMoney: 0
       SlowAmount: 0
-      BuildUpgradeCost: 50
+      SlowDuration: 0
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 100
       SoldPrice: 50
       towerPrefab: {fileID: 0}
     - Damage: 100
       ShootRange: 500
       FireRate: 1
-      BuffDamage: 0
-      BuffRange: 0
-      BuffFireRate: 0
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 0
+      BulletExplosionRadius: 0
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
       GetMoney: 0
       SlowAmount: 0
+      SlowDuration: 0
+      StunProbability: 0
+      StunDuration: 0
       BuildUpgradeCost: 200
       SoldPrice: 50
       towerPrefab: {fileID: 0}
     TowerIcon: {fileID: 21300000, guid: f3882090d04ea794a9e3a33f1fd9f685, type: 3}
     towerType: 0
+    IsUseBullet: 1
+    CanSlowEnemy: 0
+    CanStunEnemy: 0
     TowerInformation: Test

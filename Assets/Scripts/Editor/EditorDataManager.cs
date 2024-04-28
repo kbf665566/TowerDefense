@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using UnityEditor;
-using UnityEngine;
 
 public class EditorDataManager : EditorWindow
 {
@@ -12,7 +9,7 @@ public class EditorDataManager : EditorWindow
     {
         if (init) return;
         LoadTower();
-
+        LoadEnemy();
     }
 
     private static Towers towers;
@@ -35,11 +32,9 @@ public class EditorDataManager : EditorWindow
 
         for (int i = 0; i < towerList.Count; i++)
         {
-            //towerList[i].prefabID=i;
             if (towerList[i] != null)
             {
                 towerIDList.Add(towerList[i].Id);
-                //if (towerList[i].stats.Count == 0) towerList[i].stats.Add(new UnitStat());
             }
             else
             {
@@ -69,7 +64,6 @@ public class EditorDataManager : EditorWindow
     public static void SetDirtyTower()
     {
         EditorUtility.SetDirty(towers);
-        //for (int i = 0; i < towerList.Count; i++) EditorUtility.SetDirty(towerList[i]);
     }
 
     public static int AddNewTower(TowerData newTower)
@@ -83,8 +77,6 @@ public class EditorDataManager : EditorWindow
 
         UpdateTowerNameList();
 
-        //if (newTower.stats.Count == 0) newTower.stats.Add(new UnitStat());
-
         SetDirtyTower();
 
         return towerList.Count - 1;
@@ -97,6 +89,83 @@ public class EditorDataManager : EditorWindow
         SetDirtyTower();
     }
 
+    private static Enemies enemies;
+    private static List<EnemyData> enemyList = new List<EnemyData>();
+    public static List<EnemyData> EnemyList => enemyList;
+    private static List<int> enemyIDList = new List<int>();
+    public static List<int> EnemyIDList => enemyIDList;
+    private static string[] enemyNameList = new string[0];
+    public static string[] EnemyNameList => enemyNameList;
+    private static string enemyDatapath = "Assets/Data/EnemyData.asset";
+
+
+    /// <summary>
+    /// 讀取Enemy資料
+    /// </summary>
+    private static void LoadEnemy()
+    {
+        //載入指定路徑的檔案
+        enemies = AssetDatabase.LoadAssetAtPath<Enemies>(enemyDatapath);
+        enemyList = enemies.EnemyList;
+
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            if (enemyList[i] != null)
+            {
+                enemyIDList.Add(enemyList[i].Id);
+            }
+            else
+            {
+                enemyList.RemoveAt(i);
+                i -= 1;
+            }
+        }
+
+        UpdateEnemyNameList();
+    }
+    private static void UpdateEnemyNameList()
+    {
+        List<string> tempList = new List<string>();
+        tempList.Add(" - ");
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            string name = enemyList[i].Name;
+            while (tempList.Contains(name)) name += ".";
+            tempList.Add(name);
+        }
+
+        enemyNameList = new string[tempList.Count];
+        for (int i = 0; i < tempList.Count; i++) enemyNameList[i] = tempList[i];
+    }
+
+
+    public static void SetDirtyEnemy()
+    {
+        EditorUtility.SetDirty(enemies);
+    }
+
+    public static int AddNewEnemy(EnemyData newEnemy)
+    {
+        if (enemyList.Contains(newEnemy)) return -1;
+
+        int ID = GenerateNewID(enemyIDList);
+        newEnemy.Id = ID;
+        enemyIDList.Add(ID);
+        enemyList.Add(newEnemy);
+
+        UpdateEnemyNameList();
+
+        SetDirtyEnemy();
+
+        return enemyList.Count - 1;
+    }
+    public static void RemoveEnemy(int listID)
+    {
+        enemyIDList.Remove(enemyList[listID].Id);
+        enemyList.RemoveAt(listID);
+        UpdateEnemyNameList();
+        SetDirtyEnemy();
+    }
 
     private static int GenerateNewID(List<int> list)
     {

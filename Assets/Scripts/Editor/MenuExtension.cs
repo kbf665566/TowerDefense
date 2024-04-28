@@ -13,6 +13,6 @@ public class MenuExtension : EditorWindow
     [MenuItem("Tools/TowerDefense/EnemyEditor", false, 10)]
     static void OpenEnemyEditor()
     {
-        //TowerEditorWindow.Init();
+        EnemyEditorWindow.Init();
     }
 }

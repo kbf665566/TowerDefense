@@ -4,12 +4,10 @@ using UnityEngine;
 
 using UnityEditor;
 using System;
-using System.Security.Cryptography;
 
 public class TowerEditorWindow : UnitEditorWindow
 {
     private static TowerEditorWindow window;
-
 
     public static void Init()
     {
@@ -39,6 +37,19 @@ public class TowerEditorWindow : UnitEditorWindow
         }
     }
 
+    private Vector2 scrollPos1;
+    private Vector2 scrollPos2;
+
+    private static int selectID = 0;
+    private float contentHeight = 0;
+    private float contentWidth = 0;
+
+    private Rect listVisibleRect;
+    private Rect listContentRect;
+
+    private int deleteID = -1;
+    private bool minimiseList = false;
+
     void SelectTower(int ID)
     {
         selectID = ID;
@@ -47,14 +58,6 @@ public class TowerEditorWindow : UnitEditorWindow
         if (selectID * 35 < scrollPos1.y) scrollPos1.y = selectID * 35;
         if (selectID * 35 > scrollPos1.y + listVisibleRect.height - 40) scrollPos1.y = selectID * 35 - listVisibleRect.height + 40;
     }
-
-    private Vector2 scrollPos1;
-    private Vector2 scrollPos2;
-
-    private static int selectID = 0;
-    private float contentHeight = 0;
-    private float contentWidth = 0;
-
 
     void OnGUI()
     {
@@ -67,13 +70,16 @@ public class TowerEditorWindow : UnitEditorWindow
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new tower:");
         TowerData newTower = null;
 
-        //改成Button
-        //newTower = (TowerData)EditorGUI.ObjectField(new Rect(100, 7, 140, 17), newTower, typeof(TowerData), false);
-        if (newTower != null)
+        if (GUI.Button(new Rect(100, 7, 140, 17), "Add"))
         {
+            newTower = new TowerData();
+            newTower.Name = "NewTower";
+            newTower.towerType = TowerType.Normal;
             int newSelectID = EditorDataManager.AddNewTower(newTower);
             if (newSelectID != -1) SelectTower(newSelectID);
         }
+
+        
 
 
         float startX = 5;
@@ -97,8 +103,14 @@ public class TowerEditorWindow : UnitEditorWindow
 
         cont = new GUIContent("Tower Prefab:");
         EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
-        EditorGUI.ObjectField(new Rect(startX + 90, startY, 185, height), towerList[selectID].TowerLevelData[0].towerPrefab, typeof(GameObject), false);
 
+        if (towerList[selectID].TowerLevelData == null)
+        {
+            towerList[selectID].TowerLevelData = new List<TowerLevelData>();
+            towerList[selectID].TowerLevelData.Add(new TowerLevelData());
+        }
+
+        EditorGUI.ObjectField(new Rect(startX + 90, startY, 185, height), towerList[selectID].TowerLevelData[0].towerPrefab, typeof(GameObject), false);
 
         startY += spaceY + 10;
 
@@ -119,11 +131,7 @@ public class TowerEditorWindow : UnitEditorWindow
         if (GUI.changed) EditorDataManager.SetDirtyTower();
     }
 
-    private Rect listVisibleRect;
-    private Rect listContentRect;
-
-    private int deleteID = -1;
-    private bool minimiseList = false;
+    
     Vector2 DrawTowerList(float startX, float startY, List<TowerData> towerList)
     {
 
@@ -243,22 +251,35 @@ public class TowerEditorWindow : UnitEditorWindow
 
         startX = cachedX;
         spaceX = 110;
+        startY += 30;
 
+        if (tower.towerType == TowerType.Normal)
+        {
+            cont = new GUIContent("是否使用發射物:");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            tower.IsUseBullet = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), tower.IsUseBullet);
+        }
+
+        if(TowerCanAttack(tower))
+        {
+            cont = new GUIContent("是否可緩速敵人:");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            tower.CanSlowEnemy = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), tower.CanSlowEnemy);
+
+            cont = new GUIContent("是否可擊暈敵人:");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            tower.CanStunEnemy = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), tower.CanStunEnemy);
+        }
 
         if (startX + spaceX + width > maxWidth) maxWidth = startX + spaceX + width;
 
 
-        startY = cachedY;
-        startX += spaceX + width + 35;
-
-
         float maxY = startY;
-        startY = 270;
-
-        startX = cachedX; cachedY = startY;
+        startY = 240;
+        startX = cachedX;
 
         cont = new GUIContent("LevelData:", "");
-        GUI.Label(new Rect(startX, startY += spaceY, 120, height), cont);
+        GUI.Label(new Rect(startX, startY, 120, height), cont);
         if (GUI.Button(new Rect(startX + spaceX, startY, 50, 15), "-1"))
         {
             if (tower.TowerLevelData.Count > 1) tower.TowerLevelData.RemoveAt(tower.TowerLevelData.Count - 1);
@@ -270,24 +291,25 @@ public class TowerEditorWindow : UnitEditorWindow
 
 
 
-        startY = Mathf.Max(maxY + 20, 310);
+        startY = Mathf.Max(maxY + 20, 240);
         startX = cachedX;
 
         float maxHeight = 0;
         float maxContentHeight = 0;
 
-        minimiseStat = EditorGUI.Foldout(new Rect(startX, startY, width, height), minimiseStat, "Show Stats");
+
+        minimiseStat = EditorGUI.Foldout(new Rect(startX, startY += spaceY, width, height), minimiseStat, "Show Stats");
         if (!minimiseStat)
         {
             startY += spaceY;
             startX += 15;
 
-            if (tower.TowerLevelData.Count == 0) tower.TowerLevelData.Add(new TowerLevelData());
             for (int i = 0; i < tower.TowerLevelData.Count; i++)
             {
                 EditorGUI.LabelField(new Rect(startX, startY, width, height), "Level " + (i + 1) + " Data");
                 v3 = DrawStat(tower.TowerLevelData[i], startX, startY + spaceY, statContentHeight, tower);
-                if (maxContentHeight < v3.z) maxContentHeight = v3.z;
+
+                if (maxContentHeight < v3.y) maxContentHeight = v3.y;
 
                 startX = v3.x + 10;
                 if (startX > maxWidth) maxWidth = startX;
@@ -323,149 +345,114 @@ public class TowerEditorWindow : UnitEditorWindow
         float fWidth = 35;
         float spaceX = 130;
         float height = 18;
-        float spaceY = height + 2;
+        float spaceY = height + 4;
 
-        GUI.Box(new Rect(startX, startY, 220, statContentHeight - startY), "");
+        GUI.Box(new Rect(startX, startY - 3, 220, statContentHeight - startY + spaceY + 3), "");
+
         if (tower != null)
         {
             cont = new GUIContent("建造/升級 消耗:");
             EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
             levelData.BuildUpgradeCost = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuildUpgradeCost);
 
-            startY += spaceY + 5;
+            cont = new GUIContent("賣價:");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.SoldPrice = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SoldPrice);
         }
 
-        //if (TowerUseShootObject(tower))
-        //{
-        //    cont = new GUIContent("ShootObject:", "The shootObject used by the unit.\nUnit that intended to shoot at the target will not function correctly if this is left unassigned.");
-        //    EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
-        //    levelData.shootObject = (ShootObject)EditorGUI.ObjectField(new Rect(startX + spaceX - 50, startY, 4 * fWidth - 20, height), levelData.shootObject, typeof(ShootObject), false);
-        //    startY += 5;
-        //}
+        if (TowerCanAttack(tower))
+        {
+            cont = new GUIContent("傷害:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.Damage = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.Damage);
 
-        //if (TowerUseShootObjectT(tower)
-        //{
-        //    cont = new GUIContent("ShootObject:", "The shootObject used by the unit.\nUnit that intended to shoot at the target will not function correctly if this is left unassigned.");
-        //    EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
-        //    levelData.shootObjectT = (Transform)EditorGUI.ObjectField(new Rect(startX + spaceX - 50, startY, 4 * fWidth - 20, height), levelData.shootObjectT, typeof(Transform), false);
-        //    startY += 5;
-        //}
+            cont = new GUIContent("射程:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.ShootRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.ShootRange);
 
-        //if (TowerDealDamage(tower))
-        //{
-        //    cont = new GUIContent("Damage(Min/Max):", "");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.damageMin = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.damageMin);
-        //    levelData.damageMax = EditorGUI.FloatField(new Rect(startX + spaceX + fWidth, startY, fWidth, height), levelData.damageMax);
+            cont = new GUIContent("攻速:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.FireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.FireRate);
+        }
 
-        //    cont = new GUIContent("Cooldown:", "Duration between each attack");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.cooldown = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.cooldown);
+        if (tower.IsUseBullet && tower.towerType == TowerType.Normal)
+        {
+            cont = new GUIContent("發射物體:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.TowerBullet = (Bullet)EditorGUI.ObjectField(new Rect(startX + spaceX - 50, startY, 4 * fWidth - 20, height), levelData.TowerBullet, typeof(Bullet), false);
+
+            cont = new GUIContent("發射物速度:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.BulletSpeed = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletSpeed);
 
 
+            cont = new GUIContent("發射物爆炸範圍:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.BulletExplosionRadius = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletExplosionRadius);
+        }
 
-        //    cont = new GUIContent("Range:", "Effect range of the unit");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.range = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.range);
+        
+        if(tower.CanSlowEnemy && TowerCanAttack(tower))
+        {
+            tower.CanStunEnemy = false;
+            cont = new GUIContent("緩速程度:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.SlowAmount = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SlowAmount);
 
-        //    cont = new GUIContent("AOE Radius:", "Area-of-Effective radius. When the shootObject hits it's target, any other hostile unit within the area from the impact position will suffer the same target as the target.\nSet value to >0 to enable. ");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.aoeRadius = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.aoeRadius);
+            cont = new GUIContent("緩速秒數:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.SlowDuration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SlowDuration);
+        }
 
+        if (tower.CanStunEnemy && TowerCanAttack(tower))
+        {
+            tower.CanSlowEnemy = false;
+            cont = new GUIContent("擊暈機率:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.StunProbability = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.StunProbability);
 
+            cont = new GUIContent("擊暈秒數:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.StunDuration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.StunDuration);
+        }
 
-        //    cont = new GUIContent("Stun", "");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont); startY -= spaceY;
+        if(tower.towerType == TowerType.Support)
+        {
+            cont = new GUIContent("影響範圍:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.ShootRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.ShootRange);
 
-        //    cont = new GUIContent("        - Chance:", "Chance to stun the target in each successful attack. Takes value from 0-1 with 0 being 0% and 1 being 100%");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.stun.chance = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.stun.chance);
+            cont = new GUIContent("Buff增加攻擊:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.BuffAddDamage = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuffAddDamage);
 
-        //    cont = new GUIContent("        - Duration:", "The stun duration in second");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.stun.duration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.stun.duration);
+            cont = new GUIContent("Buff增加範圍:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.BuffAddRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuffAddRange);
 
+            cont = new GUIContent("Buff增加攻速:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.BuffAddFireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuffAddFireRate);
+        }
 
+        if(tower.towerType == TowerType.Money)
+        {
+            cont = new GUIContent("攻速:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.FireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.FireRate);
 
-        //    cont = new GUIContent("Critical", "");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont); startY -= spaceY;
+            cont = new GUIContent("取得的資源量:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.GetMoney = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.GetMoney);
+        }
 
-        //    cont = new GUIContent("            - Chance:", "Chance to score critical hit in attack. Takes value from 0-1 with 0 being 0% and 1 being 100%");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.crit.chance = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.crit.chance);
-
-        //    cont = new GUIContent("            - Multiplier:", "Damage multiplier for successful critical hit. Takes value from 0 and above with with 0.5 being 50% of normal damage as bonus");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.crit.dmgMultiplier = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.crit.dmgMultiplier);
-
-
-
-        //    cont = new GUIContent("Slow", "");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont); startY -= spaceY;
-
-        //    cont = new GUIContent("         - Duration:", "The effect duration in second");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.slow.duration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.slow.duration);
-
-        //    cont = new GUIContent("         - Multiplier:", "Move speed multiplier. Takes value from 0-1 with with 0.7 being decrese default speed by 30%");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.slow.slowMultiplier = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.slow.slowMultiplier);
-
-
-
-        //    cont = new GUIContent("Dot", "Damage over time");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont); startY -= spaceY;
-
-        //    cont = new GUIContent("        - Duration:", "The effect duration in second");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.dot.duration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.dot.duration);
-
-        //    cont = new GUIContent("        - Interval:", "Duration between each tick. Damage is applied at each tick.");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.dot.interval = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.dot.interval);
-
-        //    cont = new GUIContent("        - Damage:", "Damage applied at each tick");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.dot.value = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.dot.value);
-
-
-        //}
-
-
-
-        //if (tower.type == _TowerType.Support)
-        //{
-        //    cont = new GUIContent("Range:", "Effect range of the unit");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.range = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.range);
-        //    startY += 5;
-
-        //    cont = new GUIContent("Buff:", "Note: Buffs from multple tower doesnt stack, however when there's difference in the buff strength, the stronger buff applies. A tower can gain maximum dmage buff from one source and maximum range buff from another");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont); startY -= spaceY;
-
-        //    cont = new GUIContent("        - Damage:", "Damage buff multiplier. Takes value from 0 and above with 0.5 being 50% increase in damage");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.buff.damageBuff = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.buff.damageBuff);
-
-        //    cont = new GUIContent("        - Cooldown:", "Dooldown buff multiplier. Takes value from 0-1 with 0.2 being reduce cooldown by 20%");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.buff.cooldownBuff = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.buff.cooldownBuff);
-
-        //    cont = new GUIContent("        - Range:", "Range buff multiplier. Takes value from 0 and above with 0.5 being 50% increase in range");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.buff.rangeBuff = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.buff.rangeBuff);
-
-        //    cont = new GUIContent("        - Critical:", "Critical hit chance buff modifier. Takes value from 0 and above with 0.25 being 25% increase in critical hit chance");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.buff.criticalBuff = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.buff.criticalBuff);
-
-        //    cont = new GUIContent("        - HP Regen:", "HP Regeneration Buff. Takes value from 0 and above with 2 being gain 2HP second ");
-        //    EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        //    levelData.buff.regenHP = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.buff.regenHP);
-        //}
-
-        //statContentHeight = startY + spaceY + 5;
 
         return new Vector3(startX + 220, startY, statContentHeight);
     }
+
+    private static bool TowerCanAttack(TowerData tower)
+    {
+        return tower.towerType == TowerType.Normal || tower.towerType == TowerType.AOE;
+    }
+
 }
