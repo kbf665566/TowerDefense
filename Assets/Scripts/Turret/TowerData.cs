@@ -15,6 +15,10 @@ public class TowerData
     public bool CanSlowEnemy;
     public bool CanStunEnemy;
     public string TowerInformation;
+    public Vector2Short TowerSize;
+    public AudioClip AttackSE;
+    public AudioClip BuildSE;
+    public AudioClip SpecialMusic;
 }
 
 [Serializable]
@@ -27,7 +31,8 @@ public enum TowerType
     /// <summary> 範圍攻擊塔 </summary>
     AOE,
     /// <summary> 增加資源的塔 </summary>
-    Money
+    Money,
+    Special,
 }
 [Serializable]
 public class TowerLevelData

@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 
 public class Node : MonoBehaviour
 {
-    private GridPos pos;
-    public GridPos Pos { get; private set; }
+    private Vector2Short pos;
+    public Vector2Short Pos { get; private set; }
 
     public Color hoverColor;
     public Color notEnoughMoneyColor;
@@ -31,7 +31,7 @@ public class Node : MonoBehaviour
 
     public void SetPos(int x,int y)
     {
-        pos = new GridPos(x,y);
+        pos = new Vector2Short(x,y);
     }
 
     public Vector3 GetBuildPos(Vector3 turretOffset)
@@ -122,30 +122,5 @@ public class Node : MonoBehaviour
     private void OnMouseExit()
     {
         render.material.color = startColor;
-    }
-}
-[Serializable]
-public class GridPos
-{
-    public int x;
-    public int y;
-
-    public GridPos(int x,int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-    public bool Equal(int x,int y)
-    {
-        return this.x == x && this.y == y;
-    }
-
-    public static GridPos GridPosZero()
-    {
-        return new GridPos(0,0);
-    }
-    public static double Distance(GridPos p1,GridPos p2)
-    {
-        return Math.Sqrt(Math.Pow(p1.x - p2.x, 2) + Math.Pow(p1.y - p2.y, 2));
     }
 }

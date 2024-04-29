@@ -28,15 +28,15 @@ public class NodeSpawner : MonoBehaviour
     [SerializeField] private Transform path;
     private List<Transform> pathList = new List<Transform>();
     //[FormerlySerializedAs("path")]
-    [SerializeField] private List<GridPos> enemyPath = new List<GridPos>();
-    private List<GridPos> dontSpawNodeList = new List<GridPos>();
+    [SerializeField] private List<Vector2Short> enemyPath = new List<Vector2Short>();
+    private List<Vector2Short> dontSpawNodeList = new List<Vector2Short>();
     #endregion
 
 
     [SerializeField] private Transform nodeParent;
     [SerializeField] private Transform pathParent;
     [SerializeField] private Transform wayPointParent;
-    [SerializeField] private GridPos mapSize;
+    [SerializeField] private Vector2Short mapSize;
     [SerializeField] private bool showGrid = true;
 
     [ContextMenu("Generate Nodes")]
@@ -48,7 +48,7 @@ public class NodeSpawner : MonoBehaviour
             DeleteNode();
             SetPath();
 
-            List<GridPos> tempList = new List<GridPos>();
+            List<Vector2Short> tempList = new List<Vector2Short>();
             foreach (var g in dontSpawNodeList)
                 tempList.Add(g);
 
@@ -59,7 +59,7 @@ public class NodeSpawner : MonoBehaviour
                     bool canSpawn = true;
                     for (int k = 0; k < tempList.Count; k++)
                     {
-                        if (tempList[k].Equal(i, j))
+                        if (tempList[k].Equals(new Vector2Short(i, j)))
                         {
                             canSpawn = false;
                             tempList.RemoveAt(k);
@@ -131,7 +131,7 @@ public class NodeSpawner : MonoBehaviour
         }
     }
     
-    private void AddDontSpawnNodes(GridPos node1, GridPos node2)
+    private void AddDontSpawnNodes(Vector2Short node1, Vector2Short node2)
     {
         var tempObj = Instantiate(path);
 
@@ -144,7 +144,7 @@ public class NodeSpawner : MonoBehaviour
         tempObj.localScale = new Vector3(scaleX, nodeSize.y , scaleZ);
         tempObj.SetParent(pathParent);
         Vector3 tempPos;
-        if (GridPos.Distance(GridPos.GridPosZero(), node1) > GridPos.Distance(GridPos.GridPosZero(), node2))
+        if (Vector2Short.Distance(Vector2Short.GridPosZero(), node1) > Vector2Short.Distance(Vector2Short.GridPosZero(), node2))
             tempPos = new Vector3((pathParent.position.x + node2.x * nodeOffset.x) - nodeOffset.x / 2, 0, (pathParent.position.y + node2.y * nodeOffset.y) - nodeOffset.y / 2);
         else
             tempPos = new Vector3((pathParent.position.x + node1.x * nodeOffset.x) - nodeOffset.x / 2, 0, (pathParent.position.y + node1.y * nodeOffset.y) - nodeOffset.y / 2);
@@ -161,14 +161,14 @@ public class NodeSpawner : MonoBehaviour
                 {
                     for (int j = node1.y; j <= node2.y; j++)
                     {
-                        dontSpawNodeList.Add(new GridPos(i, j));
+                        dontSpawNodeList.Add(new Vector2Short(i, j));
                     }
                 }
                 else
                 {
                     for (int j = node1.y; j >= node2.y; j--)
                     {
-                        dontSpawNodeList.Add(new GridPos(i, j));
+                        dontSpawNodeList.Add(new Vector2Short(i, j));
                     }
                 }
             }
@@ -181,14 +181,14 @@ public class NodeSpawner : MonoBehaviour
                 {
                     for (int j = node1.y; j <= node2.y; j++)
                     {
-                        dontSpawNodeList.Add(new GridPos(i, j));
+                        dontSpawNodeList.Add(new Vector2Short(i, j));
                     }
                 }
                 else
                 {
                     for (int j = node1.y; j >= node2.y; j--)
                     {
-                        dontSpawNodeList.Add(new GridPos(i, j));
+                        dontSpawNodeList.Add(new Vector2Short(i, j));
                     }
                 }
             }

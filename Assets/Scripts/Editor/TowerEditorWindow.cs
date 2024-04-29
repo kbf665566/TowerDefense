@@ -12,7 +12,7 @@ public class TowerEditorWindow : UnitEditorWindow
     public static void Init()
     {
         // Get existing open window or if none, make a new one:
-        window = (TowerEditorWindow)EditorWindow.GetWindow(typeof(TowerEditorWindow));
+        window = (TowerEditorWindow)GetWindow(typeof(TowerEditorWindow));
 
         EditorDataManager.Init();
 
@@ -248,6 +248,31 @@ public class TowerEditorWindow : UnitEditorWindow
 
         v3 = DrawIconAndName(tower.Name,tower.TowerIcon, startX, startY); startY = v3.y;
 
+        startX += spaceX * 2.5f;
+        startY = cachedY;
+        float fWidth = 35;
+        cont = new GUIContent("塔的大小(x,y):", "");
+        EditorGUI.LabelField(new Rect(startX, startY , width, height), cont);
+        tower.TowerSize.x = (short)EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerSize.x);
+        tower.TowerSize.y = (short)EditorGUI.IntField(new Rect(startX + spaceX + fWidth + 3, startY, fWidth, height), tower.TowerSize.y);
+
+        cont = new GUIContent("建造音效:", "");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        tower.BuildSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.BuildSE, typeof(AudioClip), false);
+
+        if (TowerCanAttack(tower))
+        {
+            cont = new GUIContent("攻擊音效:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            tower.AttackSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.AttackSE, typeof(AudioClip), false);
+        }
+
+        if(tower.towerType == TowerType.Special)
+        {
+            cont = new GUIContent("特殊音效:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            tower.SpecialMusic = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.SpecialMusic, typeof(AudioClip), false);
+        }
 
         startX = cachedX;
         spaceX = 110;
@@ -347,7 +372,7 @@ public class TowerEditorWindow : UnitEditorWindow
         float height = 18;
         float spaceY = height + 4;
 
-        GUI.Box(new Rect(startX, startY - 3, 220, statContentHeight - startY + spaceY + 3), "");
+        GUI.Box(new Rect(startX, startY - 3, 200, statContentHeight - startY + spaceY + 3), "");
 
         if (tower != null)
         {
@@ -379,7 +404,7 @@ public class TowerEditorWindow : UnitEditorWindow
         {
             cont = new GUIContent("發射物體:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.TowerBullet = (Bullet)EditorGUI.ObjectField(new Rect(startX + spaceX - 50, startY, 4 * fWidth - 20, height), levelData.TowerBullet, typeof(Bullet), false);
+            levelData.TowerBullet = (Bullet)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), levelData.TowerBullet, typeof(Bullet), false);
 
             cont = new GUIContent("發射物速度:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);

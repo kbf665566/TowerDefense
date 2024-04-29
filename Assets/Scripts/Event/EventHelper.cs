@@ -5,31 +5,31 @@ using UnityEngine;
 
 public class EventHelper : MonoBehaviour
 {
-    public static EventHandler<GameEvent.SceneChangeEventArgs> fuck;
+    public static EventHandler<GameEvent.SceneChangeEventArgs> test;
     // Start is called before the first frame update
     void Start()
     {
-        fuck += sss;
-        fuck += ddd;
-        fuck += eee;
-        fuck.Invoke(this,GameEvent.SceneChangeEventArgs.CreateEvent(""));
+        test += sss;
+        test += ddd;
+        test += eee;
+        test.Invoke(this,GameEvent.SceneChangeEventArgs.CreateEvent(""));
     }
     [ContextMenu("q")]
     private void q()
     {
-        fuck.Invoke(this, GameEvent.SceneChangeEventArgs.CreateEvent(""));
+        test.Invoke(this, GameEvent.SceneChangeEventArgs.CreateEvent(""));
     }
     private void sss(object s, GameEvent.SceneChangeEventArgs e)
     {
-        Debug.Log("fuck");
+        Debug.Log("test sss");
     }
     private void ddd(object s, GameEvent.SceneChangeEventArgs e)
     {
-        Debug.Log("fuck you");
+        Debug.Log("test ddd");
     }
     private void eee(object s, GameEvent.SceneChangeEventArgs e)
     {
-        Debug.Log("faq");
+        Debug.Log("test eee");
     }
 
 
@@ -37,15 +37,15 @@ public class EventHelper : MonoBehaviour
      * On Other Scripts
     private void Awake()
     {
-        EventHelper.fuck += sss;
+        EventHelper.test += sss;
     }
     private void OnDisable()
     {
-        EventHelper.fuck -= sss;
+        EventHelper.test -= sss;
     }
     private void sss(object s, GameEvent.SceneChangeEventArgs e)
     {
-        Debug.Log("fuck your mother");
+        Debug.Log("test sss over");
     }
     */
 }

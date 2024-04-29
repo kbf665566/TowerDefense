@@ -56,3 +56,9 @@ MonoBehaviour:
     CanSlowEnemy: 0
     CanStunEnemy: 0
     TowerInformation: Test
+    TowerSize:
+      x: 0
+      y: 0
+    AttackSE: {fileID: 0}
+    BuildSE: {fileID: 0}
+    SpecialMusic: {fileID: 0}
