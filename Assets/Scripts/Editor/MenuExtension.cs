@@ -15,4 +15,10 @@ public class MenuExtension : EditorWindow
     {
         EnemyEditorWindow.Init();
     }
+
+    [MenuItem("Tools/TowerDefense/WaveEditor", false, 10)]
+    static void OpenWaveEditor()
+    {
+        LevelEditorWindow.Init();
+    }
 }

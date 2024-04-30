@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 
 public class EditorDataManager : EditorWindow
@@ -10,8 +11,10 @@ public class EditorDataManager : EditorWindow
         if (init) return;
         LoadTower();
         LoadEnemy();
+        LoadLevel();
     }
 
+    #region 塔
     private static Towers towers;
     private static List<TowerData> towerList = new List<TowerData>();
     public static List<TowerData> TowerList => towerList;
@@ -34,6 +37,8 @@ public class EditorDataManager : EditorWindow
         {
             if (towerList[i] != null)
             {
+                if (towerIDList.Contains(towerList[i].Id))
+                    towerList[i].Id = GenerateNewID(towerIDList);
                 towerIDList.Add(towerList[i].Id);
             }
             else
@@ -57,7 +62,8 @@ public class EditorDataManager : EditorWindow
         }
 
         towerNameList = new string[tempList.Count];
-        for (int i = 0; i < tempList.Count; i++) towerNameList[i] = tempList[i];
+        for (int i = 0; i < tempList.Count; i++)
+            towerNameList[i] = tempList[i];
     }
 
 
@@ -88,7 +94,9 @@ public class EditorDataManager : EditorWindow
         UpdateTowerNameList();
         SetDirtyTower();
     }
+    #endregion
 
+    #region 敵人
     private static Enemies enemies;
     private static List<EnemyData> enemyList = new List<EnemyData>();
     public static List<EnemyData> EnemyList => enemyList;
@@ -112,6 +120,8 @@ public class EditorDataManager : EditorWindow
         {
             if (enemyList[i] != null)
             {
+                if (enemyIDList.Contains(enemyList[i].Id))
+                    enemyList[i].Id = GenerateNewID(enemyIDList);
                 enemyIDList.Add(enemyList[i].Id);
             }
             else
@@ -135,7 +145,8 @@ public class EditorDataManager : EditorWindow
         }
 
         enemyNameList = new string[tempList.Count];
-        for (int i = 0; i < tempList.Count; i++) enemyNameList[i] = tempList[i];
+        for (int i = 0; i < tempList.Count; i++) 
+            enemyNameList[i] = tempList[i];
     }
 
 
@@ -166,8 +177,92 @@ public class EditorDataManager : EditorWindow
         UpdateEnemyNameList();
         SetDirtyEnemy();
     }
+    #endregion
 
-    private static int GenerateNewID(List<int> list)
+    #region 關卡
+
+    private static LevelData levelData;
+    private static List<Waves> levelDataList = new List<Waves>();
+    public static List<Waves> LevelDataList => levelDataList;
+    private static List<int> levelIDList = new List<int>();
+    public static List<int> LevelIDList => levelIDList;
+    private static string[] levelNameList = new string[0];
+    public static string[] LevelNameList => levelNameList;
+    private static string levelDatapath = "Assets/Data/LevelData.asset";
+
+    /// <summary>
+    /// 讀取Level資料
+    /// </summary>
+    private static void LoadLevel()
+    {
+        //載入指定路徑的檔案
+        levelData = AssetDatabase.LoadAssetAtPath<LevelData>(levelDatapath);
+        levelDataList = levelData.LevelDataList;
+
+        for (int i = 0; i < levelDataList.Count; i++)
+        {
+            if (levelDataList[i] != null)
+            {
+                if (levelIDList.Contains(levelDataList[i].Id))
+                    levelDataList[i].Id = GenerateNewID(levelIDList);
+                levelIDList.Add(levelDataList[i].Id);
+            }
+            else
+            {
+                levelDataList.RemoveAt(i);
+                i -= 1;
+            }
+        }
+        UpdateLevelNameList();
+    }
+    private static void UpdateLevelNameList()
+    {
+        List<string> tempList = new List<string>();
+        tempList.Add(" - ");
+        for (int i = 0; i < levelDataList.Count; i++)
+        {
+            string name = levelDataList[i].LevelName;
+            while (tempList.Contains(name)) name += ".";
+            tempList.Add(name);
+        }
+
+        levelNameList = new string[tempList.Count];
+        for (int i = 0; i < tempList.Count; i++)
+            levelNameList[i] = tempList[i];
+    }
+
+
+    public static void SetDirtyLevel()
+    {
+        EditorUtility.SetDirty(levelData);
+    }
+
+    public static int AddNewLevel(Waves newLevel)
+    {
+        if (levelDataList.Contains(newLevel)) return -1;
+
+        int ID = GenerateNewID(levelIDList);
+        newLevel.Id = ID;
+        levelIDList.Add(ID);
+        levelDataList.Add(newLevel);
+
+        UpdateLevelNameList();
+
+        SetDirtyLevel();
+
+        return levelDataList.Count - 1;
+    }
+    public static void RemoveLevel(int listID)
+    {
+        levelIDList.Remove(levelDataList[listID].Id);
+        levelDataList.RemoveAt(listID);
+        UpdateLevelNameList();
+        SetDirtyLevel();
+    }
+
+    #endregion
+
+    public static int GenerateNewID(List<int> list)
     {
         int ID = 0;
         while (list.Contains(ID)) ID += 1;

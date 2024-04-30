@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c89f4f98f2c60441ad36134b9e02a13, type: 3}
+  m_Name: LevelData
+  m_EditorClassIdentifier: 
+  LevelDataList:
+  - Id: 0
+    LevelName: TestLevel
+    LevelIcon: {fileID: 21300000, guid: a67b58d6cddcd4345b1e001340de5a76, type: 3}
+    WaveList:
+    - Id: 1
+      WaveEnemyList:
+      - EnemyPrefab: {fileID: 4850711738385815153, guid: 1e47ce422a8e6bf40ba2dd304d248f1d, type: 3}
+        SpawnAmount: 0
+        SpawnInterval: 0
+    - Id: 2
+      WaveEnemyList:
+      - EnemyPrefab: {fileID: 919132149155446097, guid: 7f5f612977317bf42b387b01eaed3538, type: 3}
+        SpawnAmount: 0
+        SpawnInterval: 0

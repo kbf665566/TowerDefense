@@ -30,10 +30,14 @@ public class TowerEditorWindow : UnitEditorWindow
         for (int i = 0; i < enumLength; i++)
         {
             towerTypeLabel[i] = ((TowerType)i).ToString();
-            if ((TowerType)i == TowerType.Normal) towerTypeTooltip[i] = "一般的攻擊塔";
-            if ((TowerType)i == TowerType.AOE) towerTypeTooltip[i] = "範圍攻擊塔";
-            if ((TowerType)i == TowerType.Support) towerTypeTooltip[i] = "輔助塔";
-            if ((TowerType)i == TowerType.Money) towerTypeTooltip[i] = "增加資源的塔";
+            if ((TowerType)i == TowerType.Normal) 
+                towerTypeTooltip[i] = "一般的攻擊塔";
+            if ((TowerType)i == TowerType.AOE) 
+                towerTypeTooltip[i] = "範圍攻擊塔";
+            if ((TowerType)i == TowerType.Support) 
+                towerTypeTooltip[i] = "輔助塔";
+            if ((TowerType)i == TowerType.Money) 
+                towerTypeTooltip[i] = "增加資源的塔";
         }
     }
 
@@ -55,8 +59,10 @@ public class TowerEditorWindow : UnitEditorWindow
         selectID = ID;
         GUI.FocusControl("");
 
-        if (selectID * 35 < scrollPos1.y) scrollPos1.y = selectID * 35;
-        if (selectID * 35 > scrollPos1.y + listVisibleRect.height - 40) scrollPos1.y = selectID * 35 - listVisibleRect.height + 40;
+        if (selectID * 35 < scrollPos1.y) 
+            scrollPos1.y = selectID * 35;
+        if (selectID * 35 > scrollPos1.y + listVisibleRect.height - 40) 
+            scrollPos1.y = selectID * 35 - listVisibleRect.height + 40;
     }
 
     void OnGUI()
@@ -65,7 +71,8 @@ public class TowerEditorWindow : UnitEditorWindow
 
         List<TowerData> towerList = EditorDataManager.TowerList;
 
-        if (GUI.Button(new Rect(window.position.width - 120, 5, 100, 25), "Save")) EditorDataManager.SetDirtyTower();
+        if (GUI.Button(new Rect(window.position.width - 120, 5, 100, 25), "Save")) 
+            EditorDataManager.SetDirtyTower();
 
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new tower:");
         TowerData newTower = null;
@@ -76,7 +83,8 @@ public class TowerEditorWindow : UnitEditorWindow
             newTower.Name = "NewTower";
             newTower.towerType = TowerType.Normal;
             int newSelectID = EditorDataManager.AddNewTower(newTower);
-            if (newSelectID != -1) SelectTower(newSelectID);
+            if (newSelectID != -1) 
+                SelectTower(newSelectID);
         }
 
         
@@ -85,19 +93,23 @@ public class TowerEditorWindow : UnitEditorWindow
         float startX = 5;
         float startY = 50;
 
+        //放大縮小左邊的List
         if (minimiseList)
         {
-            if (GUI.Button(new Rect(startX, startY - 20, 30, 18), ">>")) minimiseList = false;
+            if (GUI.Button(new Rect(startX, startY - 20, 30, 18), ">>"))
+                minimiseList = false;
         }
         else
         {
-            if (GUI.Button(new Rect(startX, startY - 20, 30, 18), "<<")) minimiseList = true;
+            if (GUI.Button(new Rect(startX, startY - 20, 30, 18), "<<"))
+                minimiseList = true;
         }
         Vector2 v2 = DrawTowerList(startX, startY, towerList);
 
         startX = v2.x + 25;
 
-        if (towerList.Count == 0) return;
+        if (towerList.Count == 0) 
+            return;
 
         selectID = Mathf.Clamp(selectID, 0, towerList.Count - 1);
 
@@ -128,7 +140,8 @@ public class TowerEditorWindow : UnitEditorWindow
         GUI.EndScrollView();
 
 
-        if (GUI.changed) EditorDataManager.SetDirtyTower();
+        if (GUI.changed) 
+            EditorDataManager.SetDirtyTower();
     }
 
     
@@ -136,11 +149,12 @@ public class TowerEditorWindow : UnitEditorWindow
     {
 
         float width = 260;
-        if (minimiseList) width = 60;
+        if (minimiseList)
+            width = 60;
 
         if (!minimiseList)
         {
-            if (GUI.Button(new Rect(startX + 180, startY - 20, 40, 18), "up"))
+            if (GUI.Button(new Rect(startX + 180, startY - 20, 45, 18), "up"))
             {
                 if (selectID > 0)
                 {
@@ -149,10 +163,11 @@ public class TowerEditorWindow : UnitEditorWindow
                     towerList[selectID - 1] = tower;
                     selectID -= 1;
 
-                    if (selectID * 35 < scrollPos1.y) scrollPos1.y = selectID * 35;
+                    if (selectID * 35 < scrollPos1.y) 
+                        scrollPos1.y = selectID * 35;
                 }
             }
-            if (GUI.Button(new Rect(startX + 222, startY - 20, 40, 18), "down"))
+            if (GUI.Button(new Rect(startX + 227, startY - 20, 45, 18), "down"))
             {
                 if (selectID < towerList.Count - 1)
                 {
@@ -161,7 +176,8 @@ public class TowerEditorWindow : UnitEditorWindow
                     towerList[selectID + 1] = tower;
                     selectID += 1;
 
-                    if (listVisibleRect.height - 35 < selectID * 35) scrollPos1.y = (selectID + 1) * 35 - listVisibleRect.height + 5;
+                    if (listVisibleRect.height - 35 < selectID * 35) 
+                        scrollPos1.y = (selectID + 1) * 35 - listVisibleRect.height + 5;
                 }
             }
         }
@@ -186,8 +202,10 @@ public class TowerEditorWindow : UnitEditorWindow
 
             if (minimiseList)
             {
-                if (selectID == i) GUI.color = new Color(0, 1f, 1f, 1f);
-                if (GUI.Button(new Rect(startX + 35, startY + (i * 35), 30, 30), "")) SelectTower(i);
+                if (selectID == i) 
+                    GUI.color = new Color(0, 1f, 1f, 1f);
+                if (GUI.Button(new Rect(startX + 35, startY + (i * 35), 30, 30), "")) 
+                    SelectTower(i);
                 GUI.color = Color.white;
 
                 continue;
@@ -195,19 +213,23 @@ public class TowerEditorWindow : UnitEditorWindow
 
 
 
-            if (selectID == i) GUI.color = new Color(0, 1f, 1f, 1f);
-            if (GUI.Button(new Rect(startX + 35, startY + (i * 35), 150, 30), towerList[i].Name)) SelectTower(i);
+            if (selectID == i) 
+                GUI.color = new Color(0, 1f, 1f, 1f);
+            if (GUI.Button(new Rect(startX + 35, startY + (i * 35), 150, 30), towerList[i].Name)) 
+                SelectTower(i);
             GUI.color = Color.white;
 
             if (deleteID == i)
             {
 
-                if (GUI.Button(new Rect(startX + 190, startY + (i * 35), 60, 15), "cancel")) deleteID = -1;
+                if (GUI.Button(new Rect(startX + 190, startY + (i * 35), 60, 15), "cancel")) 
+                    deleteID = -1;
 
                 GUI.color = Color.red;
                 if (GUI.Button(new Rect(startX + 190, startY + (i * 35) + 15, 60, 15), "confirm"))
                 {
-                    if (selectID >= deleteID) SelectTower(Mathf.Max(0, selectID - 1));
+                    if (selectID >= deleteID) 
+                        SelectTower(Mathf.Max(0, selectID - 1));
                     EditorDataManager.RemoveTower(deleteID);
                     deleteID = -1;
                 }
@@ -215,7 +237,8 @@ public class TowerEditorWindow : UnitEditorWindow
             }
             else
             {
-                if (GUI.Button(new Rect(startX + 190, startY + (i * 35), 60, 15), "remove")) deleteID = i;
+                if (GUI.Button(new Rect(startX + 190, startY + (i * 35), 60, 15), "remove")) 
+                    deleteID = i;
             }
         }
 
@@ -241,7 +264,8 @@ public class TowerEditorWindow : UnitEditorWindow
         cont = new GUIContent("Tower Type:");
         EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
         contL = new GUIContent[towerTypeLabel.Length];
-        for (int i = 0; i < contL.Length; i++) contL[i] = new GUIContent(towerTypeLabel[i], towerTypeTooltip[i]);
+        for (int i = 0; i < contL.Length; i++) 
+            contL[i] = new GUIContent(towerTypeLabel[i], towerTypeTooltip[i]);
         type = EditorGUI.Popup(new Rect(startX + 80, startY, width - 40, 15), new GUIContent(""), type, contL);
         tower.towerType = (TowerType)type;
         startX = cachedX;
@@ -334,11 +358,14 @@ public class TowerEditorWindow : UnitEditorWindow
                 EditorGUI.LabelField(new Rect(startX, startY, width, height), "Level " + (i + 1) + " Data");
                 v3 = DrawStat(tower.TowerLevelData[i], startX, startY + spaceY, statContentHeight, tower);
 
-                if (maxContentHeight < v3.y) maxContentHeight = v3.y;
+                if (maxContentHeight < v3.y) 
+                    maxContentHeight = v3.y;
 
                 startX = v3.x + 10;
-                if (startX > maxWidth) maxWidth = startX;
-                if (maxHeight < v3.y) maxHeight = v3.y;
+                if (startX > maxWidth) 
+                    maxWidth = startX;
+                if (maxHeight < v3.y)
+                    maxHeight = v3.y;
             }
             statContentHeight = maxContentHeight;
             startY = maxHeight;
