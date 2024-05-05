@@ -1,21 +1,23 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-/// <summary> ¨C¤@²Õ¼Ä¤H </summary>
+/// <summary> æ¯ä¸€çµ„æ•µäºº </summary>
 public class WaveEnemy
 {
     public GameObject EnemyPrefab;
-    /// <summary> ¤@¦¸²£¥Íªº¶q </summary>
+    /// <summary> ä¸€æ¬¡ç”¢ç”Ÿçš„é‡ </summary>
     public int SpawnAmount;
-    /// <summary> ²£¥Íªº¶¡¹j </summary>
+    /// <summary> ç”¢ç”Ÿçš„é–“éš” </summary>
     public float SpawnInterval = 0.5f;
+    /// <summary> è¦èµ°çš„è·¯å¾‘ </summary>
+    public int PathId;
 }
 
 [Serializable]
-/// <summary> ¨C¤@ªiªº©Ò¦³¼Ä¤H </summary>
+/// <summary> æ¯ä¸€æ³¢çš„æ‰€æœ‰æ•µäºº </summary>
 public class WaveData
 {
     public int Id;
@@ -23,11 +25,10 @@ public class WaveData
 }
 
 [Serializable]
-/// <summary> ¨C¤@Ãöªº©Ò¦³¼Ä¤H </summary>
+/// <summary> æ¯ä¸€é—œçš„æ‰€æœ‰æ•µäºº </summary>
 public class Waves
 {
     public int Id;
     public string LevelName;
-    public Sprite LevelIcon;
     public List<WaveData> WaveList;
 }

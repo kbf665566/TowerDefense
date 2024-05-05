@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEditor;
@@ -36,8 +36,10 @@ public class EnemyEditorWindow : UnitEditorWindow
         selectID = ID;
         GUI.FocusControl("");
 
-        if (selectID * 35 < scrollPos1.y) scrollPos1.y = selectID * 35;
-        if (selectID * 35 > scrollPos1.y + listVisibleRect.height - 40) scrollPos1.y = selectID * 35 - listVisibleRect.height + 40;
+        if (selectID * 35 < scrollPos1.y) 
+            scrollPos1.y = selectID * 35;
+        if (selectID * 35 > scrollPos1.y + listVisibleRect.height - 40) 
+            scrollPos1.y = selectID * 35 - listVisibleRect.height + 40;
     }
 
     void OnGUI()
@@ -45,9 +47,6 @@ public class EnemyEditorWindow : UnitEditorWindow
         if (window == null) Init();
 
         List<EnemyData> enemyList = EditorDataManager.EnemyList;
-
-        if (GUI.Button(new Rect(window.position.width - 120, 5, 100, 25), "Save")) 
-            EditorDataManager.SetDirtyEnemy();
 
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new Enemy:");
         EnemyData newEnemy = null;
@@ -67,7 +66,7 @@ public class EnemyEditorWindow : UnitEditorWindow
         float startX = 5;
         float startY = 50;
 
-        //©ñ¤jÁY¤p¥ªÃäªºList
+        //æ”¾å¤§ç¸®å°å·¦é‚Šçš„List
         if (minimiseList)
         {
             if (GUI.Button(new Rect(startX, startY - 20, 30, 18), ">>"))
@@ -227,11 +226,11 @@ public class EnemyEditorWindow : UnitEditorWindow
         spaceX = 110;
         startY += 30;
 
-        cont = new GUIContent("¬O§_§K¬Ì½w³t:");
+        cont = new GUIContent("æ˜¯å¦å…ç–«ç·©é€Ÿ:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         enemy.ImmuneSlow = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), enemy.ImmuneSlow);
 
-        cont = new GUIContent("¬O§_§K¬ÌÀ»·w:");
+        cont = new GUIContent("æ˜¯å¦å…ç–«æ“Šæšˆ:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         enemy.ImmuneStun = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), enemy.ImmuneStun);
 
@@ -241,15 +240,15 @@ public class EnemyEditorWindow : UnitEditorWindow
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         enemy.HP = EditorGUI.FloatField(new Rect(startX + spaceX, startY, 40, height), enemy.HP);
 
-        cont = new GUIContent("³t«×:");
+        cont = new GUIContent("é€Ÿåº¦:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         enemy.Speed = EditorGUI.FloatField(new Rect(startX + spaceX, startY, 40, height), enemy.Speed);
 
-        cont = new GUIContent("¶Ë®`:");
+        cont = new GUIContent("å‚·å®³:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         enemy.Damage = EditorGUI.IntField(new Rect(startX + spaceX, startY, 40, height), enemy.Damage);
 
-        cont = new GUIContent("¥i¨ú±oªº¸ê·½:");
+        cont = new GUIContent("å¯å–å¾—çš„è³‡æº:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         enemy.Value = EditorGUI.IntField(new Rect(startX + spaceX, startY, 40, height), enemy.Value);
 

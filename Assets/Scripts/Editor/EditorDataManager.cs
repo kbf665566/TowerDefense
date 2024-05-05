@@ -1,20 +1,34 @@
+ï»¿using Codice.Client.BaseCommands;
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 
 public class EditorDataManager : EditorWindow
 {
     private static bool init = false;
+    private static Texture2D consoleBackground;
+    public static GUIStyle BoxStyle;
     public static void Init()
     {
         if (init) return;
+
+        consoleBackground = new Texture2D(1, 1, TextureFormat.RGBAFloat, false);
+        consoleBackground.SetPixel(0, 0, new Color(1, 1, 1, 1f));
+        consoleBackground.Apply();
+
+        BoxStyle = new GUIStyle(GUIStyle.none);
+        BoxStyle.normal.background = consoleBackground;
+
         LoadTower();
         LoadEnemy();
         LoadLevel();
+        LoadMap();
     }
 
-    #region ¶ğ
+    #region å¡”
     private static Towers towers;
     private static List<TowerData> towerList = new List<TowerData>();
     public static List<TowerData> TowerList => towerList;
@@ -25,11 +39,11 @@ public class EditorDataManager : EditorWindow
     private static string towerDatapath = "Assets/Data/TowerData.asset";
 
     /// <summary>
-    /// Åª¨úTower¸ê®Æ
+    /// è®€å–Towerè³‡æ–™
     /// </summary>
     private static void LoadTower()
     {
-        //¸ü¤J«ü©w¸ô®|ªºÀÉ®×
+        //è¼‰å…¥æŒ‡å®šè·¯å¾‘çš„æª”æ¡ˆ
         towers = AssetDatabase.LoadAssetAtPath<Towers>(towerDatapath);
         towerList = towers.TowerList;
 
@@ -96,7 +110,7 @@ public class EditorDataManager : EditorWindow
     }
     #endregion
 
-    #region ¼Ä¤H
+    #region æ•µäºº
     private static Enemies enemies;
     private static List<EnemyData> enemyList = new List<EnemyData>();
     public static List<EnemyData> EnemyList => enemyList;
@@ -108,11 +122,11 @@ public class EditorDataManager : EditorWindow
 
 
     /// <summary>
-    /// Åª¨úEnemy¸ê®Æ
+    /// è®€å–Enemyè³‡æ–™
     /// </summary>
     private static void LoadEnemy()
     {
-        //¸ü¤J«ü©w¸ô®|ªºÀÉ®×
+        //è¼‰å…¥æŒ‡å®šè·¯å¾‘çš„æª”æ¡ˆ
         enemies = AssetDatabase.LoadAssetAtPath<Enemies>(enemyDatapath);
         enemyList = enemies.EnemyList;
 
@@ -179,7 +193,7 @@ public class EditorDataManager : EditorWindow
     }
     #endregion
 
-    #region Ãö¥d
+    #region é—œå¡
 
     private static LevelData levelData;
     private static List<Waves> levelDataList = new List<Waves>();
@@ -191,11 +205,11 @@ public class EditorDataManager : EditorWindow
     private static string levelDatapath = "Assets/Data/LevelData.asset";
 
     /// <summary>
-    /// Åª¨úLevel¸ê®Æ
+    /// è®€å–Levelè³‡æ–™
     /// </summary>
     private static void LoadLevel()
     {
-        //¸ü¤J«ü©w¸ô®|ªºÀÉ®×
+        //è¼‰å…¥æŒ‡å®šè·¯å¾‘çš„æª”æ¡ˆ
         levelData = AssetDatabase.LoadAssetAtPath<LevelData>(levelDatapath);
         levelDataList = levelData.LevelDataList;
 
@@ -262,6 +276,89 @@ public class EditorDataManager : EditorWindow
 
     #endregion
 
+    #region åœ°åœ–
+    private static Maps maps;
+    private static List<MapData> mapList = new List<MapData>();
+    public static List<MapData> MapList => mapList;
+    private static List<int> mapIDList = new List<int>();
+    public static List<int> MapListIDList => mapIDList;
+    private static string[] mapNameList = new string[0];
+    public static string[] MapListNameList => mapNameList;
+    private static string mapDatapath = "Assets/Data/MapData.asset";
+
+    /// <summary>
+    /// è®€å–Mapè³‡æ–™
+    /// </summary>
+    private static void LoadMap()
+    {
+        //è¼‰å…¥æŒ‡å®šè·¯å¾‘çš„æª”æ¡ˆ
+        maps = AssetDatabase.LoadAssetAtPath<Maps>(mapDatapath);
+        mapList = maps.MapDataList;
+
+        for (int i = 0; i < mapList.Count; i++)
+        {
+            if (mapList[i] != null)
+            {
+                if (mapIDList.Contains(mapList[i].Id))
+                    mapList[i].Id = GenerateNewID(mapIDList);
+                mapIDList.Add(mapList[i].Id);
+            }
+            else
+            {
+                mapList.RemoveAt(i);
+                i -= 1;
+            }
+        }
+
+        UpdateMapNameList();
+    }
+    private static void UpdateMapNameList()
+    {
+        List<string> tempList = new List<string>();
+        tempList.Add(" - ");
+        for (int i = 0; i < mapList.Count; i++)
+        {
+            string name = mapList[i].MapName;
+            while (tempList.Contains(name)) name += ".";
+            tempList.Add(name);
+        }
+
+        mapNameList = new string[tempList.Count];
+        for (int i = 0; i < tempList.Count; i++)
+            mapNameList[i] = tempList[i];
+    }
+
+
+    public static void SetDirtyMap()
+    {
+        EditorUtility.SetDirty(maps);
+    }
+
+    public static int AddNewMap(MapData newmap)
+    {
+        if (mapList.Contains(newmap)) return -1;
+
+        int ID = GenerateNewID(mapIDList);
+        newmap.Id = ID;
+        mapIDList.Add(ID);
+        mapList.Add(newmap);
+
+        UpdateMapNameList();
+
+        SetDirtyMap();
+
+        return mapList.Count - 1;
+    }
+    public static void RemoveMap(int listID)
+    {
+        mapIDList.Remove(mapList[listID].Id);
+        mapList.RemoveAt(listID);
+        UpdateMapNameList();
+        SetDirtyMap();
+    }
+    #endregion
+
+
     public static int GenerateNewID(List<int> list)
     {
         int ID = 0;
@@ -269,3 +366,14 @@ public class EditorDataManager : EditorWindow
         return ID;
     }
 }
+/*
+ public static void DrawUILine(Color color, int thickness = 2, int padding = 10)
+{
+    Rect r = EditorGUILayout.GetControlRect(GUILayout.Height(padding+thickness));
+    r.height = thickness;
+    r.y+=padding/2;
+    r.x-=2;
+    r.width +=6;
+    EditorGUI.DrawRect(r, color);
+}
+ */

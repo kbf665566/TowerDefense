@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -10,7 +10,7 @@ public class TowerData
     public List<TowerLevelData> TowerLevelData;
     public Sprite TowerIcon;
     public TowerType towerType;
-    /// <summary> ¬O§_¨Ï¥Îµo®gª« </summary>
+    /// <summary> æ˜¯å¦ä½¿ç”¨ç™¼å°„ç‰© </summary>
     public bool IsUseBullet;
     public bool CanSlowEnemy;
     public bool CanStunEnemy;
@@ -24,56 +24,56 @@ public class TowerData
 [Serializable]
 public enum TowerType
 {
-    /// <summary> ¤@¯ëªº§ğÀ»¶ğ </summary>
+    /// <summary> ä¸€èˆ¬çš„æ”»æ“Šå¡” </summary>
     Normal,
-    /// <summary> »²§U¶ğ </summary>
+    /// <summary> è¼”åŠ©å¡” </summary>
     Support,
-    /// <summary> ½d³ò§ğÀ»¶ğ </summary>
+    /// <summary> ç¯„åœæ”»æ“Šå¡” </summary>
     AOE,
-    /// <summary> ¼W¥[¸ê·½ªº¶ğ </summary>
+    /// <summary> å¢åŠ è³‡æºçš„å¡” </summary>
     Money,
     Special,
 }
 [Serializable]
 public class TowerLevelData
 {
-    /// <summary> §ğÀ» </summary>
+    /// <summary> æ”»æ“Š </summary>
     public float Damage;
-    /// <summary> ®gµ{ </summary>
+    /// <summary> å°„ç¨‹ </summary>
     public float ShootRange;
-    /// <summary> §ğ³t </summary>
+    /// <summary> æ”»é€Ÿ </summary>
     public float FireRate;
-    /// <summary> ¨Ï¥Îªºµo®gª« </summary>
+    /// <summary> ä½¿ç”¨çš„ç™¼å°„ç‰© </summary>
     public Bullet TowerBullet;
-    /// <summary> µo®gª«³t«× </summary>
+    /// <summary> ç™¼å°„ç‰©é€Ÿåº¦ </summary>
     public float BulletSpeed;
-    /// <summary> µo®gª«Ãz¬µ½d³ò </summary>
+    /// <summary> ç™¼å°„ç‰©çˆ†ç‚¸ç¯„åœ </summary>
     public float BulletExplosionRadius;
 
-    //Support¥Î
-    /// <summary> Buff¼W¥[ªº§ğÀ» </summary>
+    //Supportç”¨
+    /// <summary> Buffå¢åŠ çš„æ”»æ“Š </summary>
     public float BuffAddDamage;
-    /// <summary> Buff¼W¥[ªº½d³ò </summary>
+    /// <summary> Buffå¢åŠ çš„ç¯„åœ </summary>
     public float BuffAddRange;
-    /// <summary> Buff¼W¥[ªº§ğ³t </summary>
+    /// <summary> Buffå¢åŠ çš„æ”»é€Ÿ </summary>
     public float BuffAddFireRate;
 
-    //Money¥Î
-    /// <summary> ¨C¦¸Ä²µo¯à¨ú±o¨ìªº¸ê·½ </summary>
+    //Moneyç”¨
+    /// <summary> æ¯æ¬¡è§¸ç™¼èƒ½å–å¾—åˆ°çš„è³‡æº </summary>
     public int GetMoney;
 
     //Debuff
-    /// <summary> ½w³tªºµ{«× </summary>
+    /// <summary> ç·©é€Ÿçš„ç¨‹åº¦ </summary>
     public float SlowAmount;
-    /// <summary> ½w³tªº«ùÄò®É¶¡ </summary>
+    /// <summary> ç·©é€Ÿçš„æŒçºŒæ™‚é–“ </summary>
     public float SlowDuration;
 
-    /// <summary> À»·wªº¾÷²v </summary>
+    /// <summary> æ“Šæšˆçš„æ©Ÿç‡ </summary>
     public float StunProbability;
-    /// <summary> À»·wªº«ùÄò®É¶¡ </summary>
+    /// <summary> æ“Šæšˆçš„æŒçºŒæ™‚é–“ </summary>
     public float StunDuration;
 
-    //»ù¿ú
+    //åƒ¹éŒ¢
     public int BuildUpgradeCost;
     public int SoldPrice;
 

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +33,7 @@ public class BuildManager : MonoBehaviour
     {
         if (instance != null)
         {
-            Debug.LogError("¦³¦h­ÓBuildManager");
+            Debug.LogError("æœ‰å¤šå€‹BuildManager");
             return;
         }
         instance = this;

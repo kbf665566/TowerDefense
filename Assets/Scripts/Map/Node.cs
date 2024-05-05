@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
@@ -43,7 +43,7 @@ public class Node : MonoBehaviour
     {
         if (gameManager.Money < blueprint.Cost)
         {
-            Debug.Log("½a");
+            Debug.Log("çª®");
             return;
         }
 
@@ -60,7 +60,7 @@ public class Node : MonoBehaviour
     {
         if (gameManager.Money < turretBlueprint.Cost)
         {
-            Debug.Log("½a");
+            Debug.Log("çª®");
             return;
         }
 

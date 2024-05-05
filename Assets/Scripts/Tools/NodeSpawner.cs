@@ -1,11 +1,11 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Color = UnityEngine.Color;
 
 /// <summary>
-/// ¥Í¦¨¦a¹Ï
+/// ç”Ÿæˆåœ°åœ–
 /// </summary>
 public class NodeSpawner : MonoBehaviour
 {
@@ -21,7 +21,7 @@ public class NodeSpawner : MonoBehaviour
     [SerializeField] private Transform end;
     private Transform startObj;
     private Transform endObj;
-
+    
     [SerializeField] private Transform wayPoint;
     private List<Transform> wayPoints = new List<Transform>();
 
@@ -207,11 +207,11 @@ public class NodeSpawner : MonoBehaviour
     }
 
     public void DebugDrawGrid(Vector3 origin, int numRows, int numCols, Color color)
-    {//¦b Scene ¸Ì­±µe¥X¹ïÀ³ªº®æ½u
+    {//åœ¨ Scene è£¡é¢ç•«å‡ºå°æ‡‰çš„æ ¼ç·š
         float width = (numCols * nodeOffset.x);
         float height = (numRows * nodeOffset.y);
 
-        // ¤ô¥­
+        // æ°´å¹³
         for (int i = 0; i < numRows + 1; i++)
         {
             Vector3 startPos = origin + i * nodeOffset.x * Vector3.forward;
@@ -219,7 +219,7 @@ public class NodeSpawner : MonoBehaviour
             Debug.DrawLine(startPos, endPos, color);
         }
 
-        // ««ª½
+        // å‚ç›´
         for (int i = 0; i < numCols + 1; i++)
         {
             Vector3 startPos = origin + i * nodeOffset.x * Vector3.right;

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +16,7 @@ public class LevelEditorWindow : UnitEditorWindow
         window = (LevelEditorWindow)GetWindow(typeof(LevelEditorWindow));
 
         EditorDataManager.Init();
+        selectID = -1;
     }
 
     private Vector2 scrollPos1;
@@ -36,7 +37,7 @@ public class LevelEditorWindow : UnitEditorWindow
 
     private int deleteWaveID = -1;
     private int deleteEnemyID = -1;
-    /// <summary> Àx¦s«ö¤F­þ­ÓWaveªº¼Ä¤HªºRemove </summary>
+    /// <summary> å„²å­˜æŒ‰äº†å“ªå€‹Waveçš„æ•µäººçš„Remove </summary>
     private int clickWaveID = -1;
 
     void SelectLevel(int ID)
@@ -48,6 +49,15 @@ public class LevelEditorWindow : UnitEditorWindow
             scrollPos1.y = selectID * 35;
         if (selectID * 35 > scrollPos1.y + listVisibleRect.height - 40) 
             scrollPos1.y = selectID * 35 - listVisibleRect.height + 40;
+
+        var waves = EditorDataManager.LevelDataList[selectID];
+        waveIDList.Clear();
+        for (int i = 0; i < waves.WaveList.Count; i++)
+        {
+            if (waveIDList.Contains(waves.WaveList[i].Id))
+                waves.WaveList[i].Id = EditorDataManager.GenerateNewID(waveIDList);
+            waveIDList.Add(waves.WaveList[i].Id);
+        }
     }
 
     void OnGUI()
@@ -55,9 +65,6 @@ public class LevelEditorWindow : UnitEditorWindow
         if (window == null) Init();
 
         List<Waves> levelDataList = EditorDataManager.LevelDataList;
-
-        if (GUI.Button(new Rect(window.position.width - 120, 5, 100, 25), "Save")) 
-            EditorDataManager.SetDirtyLevel();
 
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new Level:");
         Waves newLevel = null;
@@ -77,7 +84,7 @@ public class LevelEditorWindow : UnitEditorWindow
         float startX = 5;
         float startY = 50;
 
-        //©ñ¤jÁY¤p¥ªÃäªºList
+        //æ”¾å¤§ç¸®å°å·¦é‚Šçš„List
         if (minimiseList)
         {
             if (GUI.Button(new Rect(startX, startY - 20, 30, 18), ">>")) 
@@ -93,6 +100,9 @@ public class LevelEditorWindow : UnitEditorWindow
         startX = v2.x + 25;
 
         if (levelDataList.Count == 0) return;
+
+        if (selectID == -1)
+            SelectLevel(0);
 
         selectID = Mathf.Clamp(selectID, 0, levelDataList.Count - 1);
 
@@ -165,8 +175,6 @@ public class LevelEditorWindow : UnitEditorWindow
 
         for (int i = 0; i < levelDataList.Count; i++)
         {
-            DrawSprite(new Rect(startX, startY + (i * 35), 30, 30), levelDataList[i].LevelIcon);
-           
             if (minimiseList)
             {
                 if (selectID == i) 
@@ -218,31 +226,24 @@ public class LevelEditorWindow : UnitEditorWindow
     {
         Waves waves = levelDataList[selectID];
 
-        waveIDList.Clear();
-        for(int i = 0;i<waves.WaveList.Count;i++)
-        {
-            if (waveIDList.Contains(waves.WaveList[i].Id))
-                waves.WaveList[i].Id = EditorDataManager.GenerateNewID(waveIDList);
-            waveIDList.Add(waves.WaveList[i].Id);
-        }
-
         float cachedY = startY;
         float cachedX = startX;
 
-        v3 = DrawIconAndName(waves.LevelName, waves.LevelIcon, startX, startY); startY = v3.y;
-
+        cont = new GUIContent("é—œå¡åç¨±:");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        EditorGUI.TextField(new Rect(startX + spaceX - 35, startY, width - 5, height), waves.LevelName);
 
         startX = cachedX;
         spaceX = 110;
         startY += 30;
 
-        cont = new GUIContent("Ãö¥d¤º®e:", "³]©w¨Cªiªº¼Ä¤H");
+        cont = new GUIContent("é—œå¡å…§å®¹:", "è¨­å®šæ¯æ³¢çš„æ•µäºº");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
 
 
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, 150, 17), "Add new Wave:");
 
-        //·s¼W·sªº¤@ªi¼Ä¤H
+        //æ–°å¢žæ–°çš„ä¸€æ³¢æ•µäºº
         if (GUI.Button(new Rect(startX + spaceX, startY, 140, 17), "Add Wave"))
         {
             WaveData newWave = new WaveData();
@@ -253,10 +254,10 @@ public class LevelEditorWindow : UnitEditorWindow
 
         for (int i = 0; i < waves.WaveList.Count; i++)
         {
-            cont = new GUIContent("²Ä" +( i + 1) +"ªi:");
+            cont = new GUIContent("ç¬¬" +( i + 1) +"æ³¢:");
             EditorGUI.LabelField(new Rect(startX + 5, startY += spaceY * 2, width, height), cont);
 
-            //·s¼W·sªº¼Ä¤H
+            //æ–°å¢žæ–°çš„æ•µäºº
             if (GUI.Button(new Rect(startX + 50, startY + 2, 100, 17), "Add Enemy"))
             {
                 WaveEnemy newWaveEnemy = new WaveEnemy();
@@ -296,27 +297,31 @@ public class LevelEditorWindow : UnitEditorWindow
         {
             cont = new GUIContent("Enemy Prefab:", "");
             EditorGUI.LabelField(new Rect(startX, startY += (spaceY + 3) * i, width, height), cont);
-            enemyList[i].EnemyPrefab = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX -20 , startY, 80, height), enemyList[i].EnemyPrefab, typeof(GameObject), false);
+            enemyList[i].EnemyPrefab = (GameObject)EditorGUI.ObjectField(new Rect(startX += spaceX -20, startY, 80, height), enemyList[i].EnemyPrefab, typeof(GameObject), false);
 
-            cont = new GUIContent("²£¥Íªº¼Æ¶q:");
-            EditorGUI.LabelField(new Rect(startX + spaceX + width - 70, startY , width, height), cont);
-            enemyList[i].SpawnAmount = EditorGUI.IntField(new Rect(startX + spaceX + width, startY, 40, height), enemyList[i].SpawnAmount);
+            cont = new GUIContent("ç”¢ç”Ÿçš„æ•¸é‡:");
+            EditorGUI.LabelField(new Rect(startX += spaceX, startY , width, height), cont);
+            enemyList[i].SpawnAmount = EditorGUI.IntField(new Rect(startX  += spaceX - 30, startY, 40, height), enemyList[i].SpawnAmount);
 
-            cont = new GUIContent("²£¥Í¶¡¹j:");
-            EditorGUI.LabelField(new Rect(startX + spaceX * 2 + width - 60, startY, width, height), cont);
-            enemyList[i].SpawnInterval = EditorGUI.FloatField(new Rect(startX + spaceX * 2 + width, startY, 40, height), enemyList[i].SpawnInterval);
+            cont = new GUIContent("ç”¢ç”Ÿé–“éš”:");
+            EditorGUI.LabelField(new Rect(startX += spaceX - 50, startY, width, height), cont);
+            enemyList[i].SpawnInterval = EditorGUI.FloatField(new Rect(startX += spaceX - 50, startY, 40, height), enemyList[i].SpawnInterval);
+
+            cont = new GUIContent("PathId:","è¦èµ°å“ªå€‹è·¯å¾‘");
+            EditorGUI.LabelField(new Rect(startX += spaceX - 50, startY, width, height), cont);
+            enemyList[i].PathId = EditorGUI.IntField(new Rect(startX += spaceX - 60, startY, 40, height), enemyList[i].PathId);
 
             if (deleteEnemyID == i && Id == clickWaveID)
             {
 
-                if (GUI.Button(new Rect(startX + spaceX * 4 + 50, startY, 60, 15), "cancel"))
+                if (GUI.Button(new Rect(startX + spaceX  + 30, startY, 60, 15), "cancel"))
                 {
                     deleteEnemyID = -1;
                     clickWaveID = -1;
                 }
 
                 GUI.color = Color.red;
-                if (GUI.Button(new Rect(startX + spaceX * 4 - 10, startY, 60, 15), "confirm"))
+                if (GUI.Button(new Rect(startX + spaceX - 30, startY, 60, 15), "confirm"))
                 {
                     enemyList.RemoveAt(i);
                     deleteEnemyID = -1;
@@ -326,7 +331,7 @@ public class LevelEditorWindow : UnitEditorWindow
             }
             else
             {
-                if (GUI.Button(new Rect(startX + spaceX * 4 - 10, startY, 100, 17), "Remove Enemy"))
+                if (GUI.Button(new Rect(startX + spaceX - 30, startY, 100, 17), "Remove Enemy"))
                 {
                     deleteEnemyID = i;
                     clickWaveID = Id;

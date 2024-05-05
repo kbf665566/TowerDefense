@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ public static class GridExtension
     public static float HalfUnitSize => GridUnitSize * .5f;
 
     /// <summary>
-    /// ºô®æ´«ºâ¥@¬É®y¼Ğ (ºô®æ¤¤¤ß)
+    /// ç¶²æ ¼æ›ç®—ä¸–ç•Œåº§æ¨™ (ç¶²æ ¼ä¸­å¿ƒ)
     /// </summary>
     /// <param name="pos"></param>
     /// <returns></returns>
@@ -18,7 +18,7 @@ public static class GridExtension
     }
 
     /// <summary>
-    /// ºô®æ´«ºâ¥@¬É®y¼Ğ (ºô®æ¥ª¤U¨¤)
+    /// ç¶²æ ¼æ›ç®—ä¸–ç•Œåº§æ¨™ (ç¶²æ ¼å·¦ä¸‹è§’)
     /// </summary>
     /// <param name="pos"></param>
     /// <returns></returns>
@@ -28,11 +28,11 @@ public static class GridExtension
     }
 
     /// <summary>
-    /// ¨ú±o³æ¦ì¤¤¤ß¥@¬É®y¼Ğ
+    /// å–å¾—å–®ä½ä¸­å¿ƒä¸–ç•Œåº§æ¨™
     /// </summary>
-    /// <param name="centerGrid">°_©lºô®æ¦ì¸m</param>
-    /// <param name="size">¦û¦a¤j¤p</param>
-    /// <returns>¦û¦a¤¤¤ß¥@¬É®y¼Ğ</returns>
+    /// <param name="centerGrid">èµ·å§‹ç¶²æ ¼ä½ç½®</param>
+    /// <param name="size">ä½”åœ°å¤§å°</param>
+    /// <returns>ä½”åœ°ä¸­å¿ƒä¸–ç•Œåº§æ¨™</returns>
     public static Vector3 CalculateCenterPos(this Vector2Short centerGrid, Vector2Short size)
     {
         var sPos = centerGrid.ToWorldPos();
@@ -50,7 +50,7 @@ public static class GridExtension
     }
 
     /// <summary>
-    /// ¨ú±oª«¥óÁãÂIºô®æ®y¼Ğ (¥ª¤U¨¤)
+    /// å–å¾—ç‰©ä»¶éŒ¨é»ç¶²æ ¼åº§æ¨™ (å·¦ä¸‹è§’)
     /// </summary>
     /// <param name="pos"></param>
     /// <param name="unitSize"></param>
@@ -63,7 +63,7 @@ public static class GridExtension
         return pos.ToGridViewPos();
     }
     /// <summary>
-    /// ¥@¬É®y¼ĞÂà´«¬°µøÄ±ºô®æ
+    /// ä¸–ç•Œåº§æ¨™è½‰æ›ç‚ºè¦–è¦ºç¶²æ ¼
     /// </summary>
     /// <param name="pos"></param>
     /// <returns></returns>

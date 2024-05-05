@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -16,9 +16,15 @@ public class MenuExtension : EditorWindow
         EnemyEditorWindow.Init();
     }
 
-    [MenuItem("Tools/TowerDefense/WaveEditor", false, 10)]
+    [MenuItem("Tools/TowerDefense/LevelEditor", false, 10)]
     static void OpenWaveEditor()
     {
         LevelEditorWindow.Init();
+    }
+
+    [MenuItem("Tools/TowerDefense/MapEditor", false, 10)]
+    static void OpenMapEditor()
+    {
+        MapEditorWindow.Init();
     }
 }

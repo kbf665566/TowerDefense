@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38b38bfd197ff4b42b24aef9623f003c, type: 3}
+  m_Name: MapData
+  m_EditorClassIdentifier: 
+  MapDataList:
+  - Id: 1
+    MapName: 
+    SceneName: 
+    MapIcon: {fileID: 0}
+    MapSize:
+      x: 30
+      y: 30
+    EnemyPathList:
+    - Id: 0
+      Path:
+      - GridPos:
+          x: 0
+          y: 0
+      - GridPos:
+          x: 0
+          y: 5
+      - GridPos:
+          x: 10
+          y: 5
+      - GridPos:
+          x: 10
+          y: 3
+      - GridPos:
+          x: 5
+          y: 3
+    - Id: 1
+      Path:
+      - GridPos:
+          x: 10
+          y: 10
+      - GridPos:
+          x: 10
+          y: 15
+    BlockGridList:
+    - BlockPrefab: {fileID: 0}
+      GridPos:
+        x: 5
+        y: 10
+      Size:
+        x: 2
+        y: 2
+    - BlockPrefab: {fileID: 0}
+      GridPos:
+        x: 0
+        y: 0
+      Size:
+        x: 3
+        y: 3
+    WavesId: 0
+    Waves:
+      Id: 0
+      LevelName: 
+      WaveList: []

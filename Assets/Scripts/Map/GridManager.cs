@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +10,7 @@ public class GridManager
     public Vector2Short GridSize { get; private set; }
     private HashSet<GridData> emptyGridList;
 
-    /// <summary> Àx¦sºô®æ </summary>
+    /// <summary> å„²å­˜ç¶²æ ¼ </summary>
     private GridData[,] gridMap;
     private Vector2Short tempGridPos;
 
@@ -50,7 +50,7 @@ public class GridManager
 
     public void ResetGrid()
     {
-        //­«¸m ºô®æ¸ê°T
+        //é‡ç½® ç¶²æ ¼è³‡è¨Š
         for (short x = 0; x < GridSize.x; x++)
         {
             for (short y = 0; y < GridSize.y; y++)
@@ -63,20 +63,20 @@ public class GridManager
     }
 
     /// <summary>
-    /// ³]©wºô®æª¬ºA
+    /// è¨­å®šç¶²æ ¼ç‹€æ…‹
     /// </summary>
     /// <param name="gridPos"></param>
     /// <param name="gridState"></param>
     public void SetGridState(Vector2Short gridPos, GridState gridState)
     {
-        // ºô®æ¸ê®Æ
+        // ç¶²æ ¼è³‡æ–™
         var gridData = GetGridData(gridPos);
-        // ³]©wºô®æª¬ºA
+        // è¨­å®šç¶²æ ¼ç‹€æ…‹
         gridData.GridState = gridState;
     }
 
     /// <summary>
-    /// ¨ú±oºô®æ¸ê®Æ
+    /// å–å¾—ç¶²æ ¼è³‡æ–™
     /// </summary>
     /// <param name="gridPos"></param>
     /// <returns></returns>
@@ -93,10 +93,10 @@ public class GridManager
     }
 
     /// <summary>
-    /// ¬O§_¥i«Ø¿v
+    /// æ˜¯å¦å¯å»ºç¯‰
     /// </summary>
-    /// <param name="pos">ÀË¬d¦ì¸m</param>
-    /// <param name="unitSize">ÀË¬d½d³ò</param>
+    /// <param name="pos">æª¢æŸ¥ä½ç½®</param>
+    /// <param name="unitSize">æª¢æŸ¥ç¯„åœ</param>
     /// <returns></returns>
     public bool CheckCanBuild(Vector2Short pos, Vector2Short unitSize)
     {
@@ -110,7 +110,7 @@ public class GridManager
                 if (gridData == null)
                     return false;
 
-                //ÀË¬d¬O§_¦³»ÙÃªª«©Î¨ä¥L¶ğ
+                //æª¢æŸ¥æ˜¯å¦æœ‰éšœç¤™ç‰©æˆ–å…¶ä»–å¡”
                 if (gridData.CanBuild == false)
                     return false;
             }
@@ -120,7 +120,7 @@ public class GridManager
 
 
     /// <summary>
-    /// ©ñ¸m¶ğ
+    /// æ”¾ç½®å¡”
     /// </summary>
     /// <param name="towerUid"></param>
     /// <param name="towerPos"></param>
@@ -135,7 +135,7 @@ public class GridManager
     }
 
     /// <summary>
-    /// ²¾°£¶ğ
+    /// ç§»é™¤å¡”
     /// </summary>
     /// <param name="anchorGridPos"></param>
     /// <param name="unitSize"></param>
@@ -145,7 +145,7 @@ public class GridManager
     }
 
     /// <summary>
-    /// ³]©w»ÙÃª¦a¶ô
+    /// è¨­å®šéšœç¤™åœ°å¡Š
     /// </summary>
     /// <param name="pos"></param>
     /// <param name="unitSize"></param>
@@ -156,7 +156,7 @@ public class GridManager
 
 
     /// <summary>
-    /// §ó·sºô®æ
+    /// æ›´æ–°ç¶²æ ¼
     /// </summary>
     /// <param name="uid"></param>
     /// <param name="anchorGridPos"></param>

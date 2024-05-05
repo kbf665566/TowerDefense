@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
@@ -11,7 +11,7 @@ public class TowerManager : MonoBehaviour
 
     public LineRenderer LineDrawer;
     [Range(6, 60)]   //creates a slider - more than 60 is hard to notice
-    float ThetaScale = 0.01f;//§ïÅÜ§Îª¬
+    float ThetaScale = 0.01f;//æ”¹è®Šå½¢ç‹€
     public float radius = 50f;
     private int Size;
     private float Theta = 0f;
@@ -31,7 +31,7 @@ public class TowerManager : MonoBehaviour
 
 
     private void DrawTowerRange()
-    {//§Q¥Îµe¤@­ÓÃä«D±`¦hªº¦hÃä§Îªº¤è¦¡¨Óµe¥X¶ê§Î½d³ò
+    {//åˆ©ç”¨ç•«ä¸€å€‹é‚Šéå¸¸å¤šçš„å¤šé‚Šå½¢çš„æ–¹å¼ä¾†ç•«å‡ºåœ“å½¢ç¯„åœ
         LineDrawer.enabled = true;
         Theta = 0f;
         Size = (int)((1f / ThetaScale) + 1f);

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using TMPro;
 using UnityEngine;
 
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     {
         if (instance != null)
         {
-            Debug.LogError("¦³¦h­ÓGameManager");
+            Debug.LogError("æœ‰å¤šå€‹GameManager");
             return;
         }
         instance = this;

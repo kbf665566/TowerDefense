@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,13 +11,13 @@ public class EnemyData
     public Sprite EnemyIcon;
     public float HP;
     public float Speed;
-    /// <summary> ¥i¥H¨ú±oªº¸ê·½ </summary>
+    /// <summary> å¯ä»¥å–å¾—çš„è³‡æº </summary>
     public int Value;
-    /// <summary> ¹ïª±®a³y¦¨ªº¶Ë®` </summary>
+    /// <summary> å°ç©å®¶é€ æˆçš„å‚·å®³ </summary>
     public int Damage;
-    /// <summary> §K¬Ì½w³t </summary>
+    /// <summary> å…ç–«ç·©é€Ÿ </summary>
     public bool ImmuneSlow;
-    /// <summary> §K¬ÌÀ»·w </summary>
+    /// <summary> å…ç–«æ“Šæšˆ </summary>
     public bool ImmuneStun;
     public GameObject EnemyPrefab;
 

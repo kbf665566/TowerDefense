@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,13 +31,13 @@ public class TowerEditorWindow : UnitEditorWindow
         {
             towerTypeLabel[i] = ((TowerType)i).ToString();
             if ((TowerType)i == TowerType.Normal) 
-                towerTypeTooltip[i] = "¤@¯ëªº§ğÀ»¶ğ";
+                towerTypeTooltip[i] = "ä¸€èˆ¬çš„æ”»æ“Šå¡”";
             if ((TowerType)i == TowerType.AOE) 
-                towerTypeTooltip[i] = "½d³ò§ğÀ»¶ğ";
+                towerTypeTooltip[i] = "ç¯„åœæ”»æ“Šå¡”";
             if ((TowerType)i == TowerType.Support) 
-                towerTypeTooltip[i] = "»²§U¶ğ";
+                towerTypeTooltip[i] = "è¼”åŠ©å¡”";
             if ((TowerType)i == TowerType.Money) 
-                towerTypeTooltip[i] = "¼W¥[¸ê·½ªº¶ğ";
+                towerTypeTooltip[i] = "å¢åŠ è³‡æºçš„å¡”";
         }
     }
 
@@ -71,9 +71,6 @@ public class TowerEditorWindow : UnitEditorWindow
 
         List<TowerData> towerList = EditorDataManager.TowerList;
 
-        if (GUI.Button(new Rect(window.position.width - 120, 5, 100, 25), "Save")) 
-            EditorDataManager.SetDirtyTower();
-
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new tower:");
         TowerData newTower = null;
 
@@ -93,7 +90,7 @@ public class TowerEditorWindow : UnitEditorWindow
         float startX = 5;
         float startY = 50;
 
-        //©ñ¤jÁY¤p¥ªÃäªºList
+        //æ”¾å¤§ç¸®å°å·¦é‚Šçš„List
         if (minimiseList)
         {
             if (GUI.Button(new Rect(startX, startY - 20, 30, 18), ">>"))
@@ -275,25 +272,25 @@ public class TowerEditorWindow : UnitEditorWindow
         startX += spaceX * 2.5f;
         startY = cachedY;
         float fWidth = 35;
-        cont = new GUIContent("¶ğªº¤j¤p(x,y):", "");
+        cont = new GUIContent("å¡”çš„å¤§å°(x,y):", "");
         EditorGUI.LabelField(new Rect(startX, startY , width, height), cont);
         tower.TowerSize.x = (short)EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerSize.x);
         tower.TowerSize.y = (short)EditorGUI.IntField(new Rect(startX + spaceX + fWidth + 3, startY, fWidth, height), tower.TowerSize.y);
 
-        cont = new GUIContent("«Ø³y­µ®Ä:", "");
+        cont = new GUIContent("å»ºé€ éŸ³æ•ˆ:", "");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         tower.BuildSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.BuildSE, typeof(AudioClip), false);
 
         if (TowerCanAttack(tower))
         {
-            cont = new GUIContent("§ğÀ»­µ®Ä:", "");
+            cont = new GUIContent("æ”»æ“ŠéŸ³æ•ˆ:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             tower.AttackSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.AttackSE, typeof(AudioClip), false);
         }
 
         if(tower.towerType == TowerType.Special)
         {
-            cont = new GUIContent("¯S®í­µ®Ä:", "");
+            cont = new GUIContent("ç‰¹æ®ŠéŸ³æ•ˆ:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             tower.SpecialMusic = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.SpecialMusic, typeof(AudioClip), false);
         }
@@ -304,23 +301,24 @@ public class TowerEditorWindow : UnitEditorWindow
 
         if (tower.towerType == TowerType.Normal)
         {
-            cont = new GUIContent("¬O§_¨Ï¥Îµo®gª«:");
+            cont = new GUIContent("æ˜¯å¦ä½¿ç”¨ç™¼å°„ç‰©:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             tower.IsUseBullet = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), tower.IsUseBullet);
         }
 
         if(TowerCanAttack(tower))
         {
-            cont = new GUIContent("¬O§_¥i½w³t¼Ä¤H:");
+            cont = new GUIContent("æ˜¯å¦å¯ç·©é€Ÿæ•µäºº:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             tower.CanSlowEnemy = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), tower.CanSlowEnemy);
 
-            cont = new GUIContent("¬O§_¥iÀ»·w¼Ä¤H:");
+            cont = new GUIContent("æ˜¯å¦å¯æ“Šæšˆæ•µäºº:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             tower.CanStunEnemy = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), tower.CanStunEnemy);
         }
 
-        if (startX + spaceX + width > maxWidth) maxWidth = startX + spaceX + width;
+        if (startX + spaceX + width > maxWidth) 
+            maxWidth = startX + spaceX + width;
 
 
         float maxY = startY;
@@ -331,7 +329,8 @@ public class TowerEditorWindow : UnitEditorWindow
         GUI.Label(new Rect(startX, startY, 120, height), cont);
         if (GUI.Button(new Rect(startX + spaceX, startY, 50, 15), "-1"))
         {
-            if (tower.TowerLevelData.Count > 1) tower.TowerLevelData.RemoveAt(tower.TowerLevelData.Count - 1);
+            if (tower.TowerLevelData.Count > 1) 
+                tower.TowerLevelData.RemoveAt(tower.TowerLevelData.Count - 1);
         }
         if (GUI.Button(new Rect(startX + 165, startY, 50, 15), "+1"))
         {
@@ -377,7 +376,7 @@ public class TowerEditorWindow : UnitEditorWindow
 
         GUIStyle style = new GUIStyle("TextArea");
         style.wordWrap = true;
-        cont = new GUIContent("¶ğªº¸ê°T: ", "");
+        cont = new GUIContent("å¡”çš„è³‡è¨Š: ", "");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, 400, 20), cont);
         tower.TowerInformation = EditorGUI.TextArea(new Rect(startX, startY + spaceY - 3, 530, 50), tower.TowerInformation, style);
 
@@ -403,42 +402,42 @@ public class TowerEditorWindow : UnitEditorWindow
 
         if (tower != null)
         {
-            cont = new GUIContent("«Ø³y/¤É¯Å ®ø¯Ó:");
+            cont = new GUIContent("å»ºé€ /å‡ç´š æ¶ˆè€—:");
             EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
             levelData.BuildUpgradeCost = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuildUpgradeCost);
 
-            cont = new GUIContent("½æ»ù:");
+            cont = new GUIContent("è³£åƒ¹:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.SoldPrice = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SoldPrice);
         }
 
         if (TowerCanAttack(tower))
         {
-            cont = new GUIContent("¶Ë®`:", "");
+            cont = new GUIContent("å‚·å®³:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.Damage = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.Damage);
 
-            cont = new GUIContent("®gµ{:", "");
+            cont = new GUIContent("å°„ç¨‹:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.ShootRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.ShootRange);
 
-            cont = new GUIContent("§ğ³t:", "");
+            cont = new GUIContent("æ”»é€Ÿ:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.FireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.FireRate);
         }
 
         if (tower.IsUseBullet && tower.towerType == TowerType.Normal)
         {
-            cont = new GUIContent("µo®gª«Åé:", "");
+            cont = new GUIContent("ç™¼å°„ç‰©é«”:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.TowerBullet = (Bullet)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), levelData.TowerBullet, typeof(Bullet), false);
 
-            cont = new GUIContent("µo®gª«³t«×:", "");
+            cont = new GUIContent("ç™¼å°„ç‰©é€Ÿåº¦:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.BulletSpeed = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletSpeed);
 
 
-            cont = new GUIContent("µo®gª«Ãz¬µ½d³ò:", "");
+            cont = new GUIContent("ç™¼å°„ç‰©çˆ†ç‚¸ç¯„åœ:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.BulletExplosionRadius = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletExplosionRadius);
         }
@@ -447,11 +446,11 @@ public class TowerEditorWindow : UnitEditorWindow
         if(tower.CanSlowEnemy && TowerCanAttack(tower))
         {
             tower.CanStunEnemy = false;
-            cont = new GUIContent("½w³tµ{«×:", "");
+            cont = new GUIContent("ç·©é€Ÿç¨‹åº¦:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.SlowAmount = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SlowAmount);
 
-            cont = new GUIContent("½w³t¬í¼Æ:", "");
+            cont = new GUIContent("ç·©é€Ÿç§’æ•¸:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.SlowDuration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SlowDuration);
         }
@@ -459,41 +458,41 @@ public class TowerEditorWindow : UnitEditorWindow
         if (tower.CanStunEnemy && TowerCanAttack(tower))
         {
             tower.CanSlowEnemy = false;
-            cont = new GUIContent("À»·w¾÷²v:", "");
+            cont = new GUIContent("æ“Šæšˆæ©Ÿç‡:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.StunProbability = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.StunProbability);
 
-            cont = new GUIContent("À»·w¬í¼Æ:", "");
+            cont = new GUIContent("æ“Šæšˆç§’æ•¸:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.StunDuration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.StunDuration);
         }
 
         if(tower.towerType == TowerType.Support)
         {
-            cont = new GUIContent("¼vÅT½d³ò:", "");
+            cont = new GUIContent("å½±éŸ¿ç¯„åœ:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.ShootRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.ShootRange);
 
-            cont = new GUIContent("Buff¼W¥[§ğÀ»:", "");
+            cont = new GUIContent("Buffå¢åŠ æ”»æ“Š:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.BuffAddDamage = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuffAddDamage);
 
-            cont = new GUIContent("Buff¼W¥[½d³ò:", "");
+            cont = new GUIContent("Buffå¢åŠ ç¯„åœ:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.BuffAddRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuffAddRange);
 
-            cont = new GUIContent("Buff¼W¥[§ğ³t:", "");
+            cont = new GUIContent("Buffå¢åŠ æ”»é€Ÿ:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.BuffAddFireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuffAddFireRate);
         }
 
         if(tower.towerType == TowerType.Money)
         {
-            cont = new GUIContent("§ğ³t:", "");
+            cont = new GUIContent("æ”»é€Ÿ:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.FireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.FireRate);
 
-            cont = new GUIContent("¨ú±oªº¸ê·½¶q:", "");
+            cont = new GUIContent("å–å¾—çš„è³‡æºé‡:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.GetMoney = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.GetMoney);
         }

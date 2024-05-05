@@ -1,10 +1,10 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [Serializable]
 [CreateAssetMenu(menuName = "TowerDefense/LevelData")]
-/// <summary> °O¿ı¨C­ÓÃö¥d°t¸m </summary>
+/// <summary> è¨˜éŒ„æ¯å€‹é—œå¡é…ç½® </summary>
 public class LevelData : ScriptableObject
 {
     public List<Waves> LevelDataList;

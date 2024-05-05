@@ -1,25 +1,25 @@
-
+ï»¿
 public class GridData 
 {
 
         /// <summary>
-        /// ºô®æ¦ì¸m
+        /// ç¶²æ ¼ä½ç½®
         /// </summary>
         public Vector2Short GridPos;
         /// <summary>
-        /// ºô®æ¤Wªº¶ğ
+        /// ç¶²æ ¼ä¸Šçš„å¡”
         /// </summary>
         public long TowerUid;
         /// <summary>
-        /// ºô®æª¬ºA
+        /// ç¶²æ ¼ç‹€æ…‹
         /// </summary>
         public GridState GridState;
         /// <summary>
-        /// ¬O§_¥i¥H«Ø¿v
+        /// æ˜¯å¦å¯ä»¥å»ºç¯‰
         /// </summary>
         public bool CanBuild => GridState != GridState.Block && GridState != GridState.Building;
         /// <summary>
-        /// ­«Å|¤¤
+        /// é‡ç–Šä¸­
         /// </summary>
         public bool NowOverlap => TowerUid != 0;
 
@@ -31,14 +31,14 @@ public class GridData
 }
 
 /// <summary>
-/// ºô®æª¬ºA
+/// ç¶²æ ¼ç‹€æ…‹
 /// </summary>
 public enum GridState
 {
-    /// <summary> ªÅ®æ  </summary>
+    /// <summary> ç©ºæ ¼  </summary>
     Empty,
-    /// <summary> «Ø¿v </summary>
+    /// <summary> å»ºç¯‰ </summary>
     Building,
-    /// <summary> »ÙÃª </summary>
+    /// <summary> éšœç¤™ </summary>
     Block,
 }
