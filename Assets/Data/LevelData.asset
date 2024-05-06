@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: LevelData
   m_EditorClassIdentifier: 
   LevelDataList:
-  - Id: 0
+  - Id: 1
     LevelName: TestLevel
-    LevelIcon: {fileID: 21300000, guid: a67b58d6cddcd4345b1e001340de5a76, type: 3}
     WaveList:
     - Id: 1
       WaveEnemyList:
       - EnemyPrefab: {fileID: 4850711738385815153, guid: 1e47ce422a8e6bf40ba2dd304d248f1d, type: 3}
         SpawnAmount: 0
         SpawnInterval: 0
+        PathId: 0
     - Id: 2
       WaveEnemyList:
       - EnemyPrefab: {fileID: 919132149155446097, guid: 7f5f612977317bf42b387b01eaed3538, type: 3}
         SpawnAmount: 0
         SpawnInterval: 0
+        PathId: 0

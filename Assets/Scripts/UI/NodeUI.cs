@@ -12,6 +12,10 @@ public class NodeUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI upgradeCostText;
     [SerializeField] private TextMeshProUGUI sellPriceText;
     [SerializeField] private Button upgradeBtn;
+
+    [SerializeField] private GameObject upgradeAndSellMenu;
+    [SerializeField] private GameObject buildMenu;
+
     private void Awake()
     {
         ui.SetActive(false);
