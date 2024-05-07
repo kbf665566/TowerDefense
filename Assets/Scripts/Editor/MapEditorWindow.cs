@@ -1,6 +1,7 @@
 ﻿using Codice.Client.BaseCommands;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class MapEditorWindow : UnitEditorWindow
@@ -65,8 +66,15 @@ public class MapEditorWindow : UnitEditorWindow
 
         List<MapData> mapList = EditorDataManager.MapList;
 
-        if (GUI.Button(new Rect(window.position.width - 120, 5, 100, 25), "Save"))
-            EditorDataManager.SetDirtyMap();
+        //依據設定的資料產生場景
+        if (GUI.Button(new Rect(window.position.width - 120, 5, 100, 25), "CreateMap"))
+        {
+            CreateEmptyScene(mapList[selectID].SceneName);
+
+            GameObject obj = (GameObject)Instantiate(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/Map.prefab", typeof(GameObject)));
+            obj.name = "Map";
+            NodeSpawner nodeSpawner = (NodeSpawner)FindObjectOfType(typeof(NodeSpawner));
+        }
 
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new Map:");
         MapData newMap = null;
@@ -535,5 +543,17 @@ public class MapEditorWindow : UnitEditorWindow
         {
             GUI.Box(new Rect(startX + (drawBoxSize + mapGridOffset) * blockGridList[i].GridPos.x, startY + tempY - (drawBoxSize + mapGridOffset) * blockGridList[i].GridPos.y, blockGridList[i].Size.x * (drawBoxSize + mapGridOffset), -blockGridList[i].Size.y * (drawBoxSize + mapGridOffset)), "", EditorDataManager.BoxStyle);
         }
+    }
+
+    private void CreateEmptyScene(string sceneName)
+    {
+        var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects);
+        scene.name = sceneName;
+        GameObject camObj = Camera.main.gameObject; 
+        DestroyImmediate(camObj);
+        Light light = FindObjectOfType<Light>();
+        if (light != null) DestroyImmediate(light.gameObject);
+
+        RenderSettings.skybox = null;
     }
 }

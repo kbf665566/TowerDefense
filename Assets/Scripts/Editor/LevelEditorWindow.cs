@@ -293,10 +293,11 @@ public class LevelEditorWindow : UnitEditorWindow
 
     private Vector2 DrawWaveEnemyList(float startX, float startY,int Id, List<WaveEnemy> enemyList)
     {
+        float cachedX = startX;
         for (int i = 0; i < enemyList.Count; i++)
         {
             cont = new GUIContent("Enemy Prefab:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += (spaceY + 3) * i, width, height), cont);
+            EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
             enemyList[i].EnemyPrefab = (GameObject)EditorGUI.ObjectField(new Rect(startX += spaceX -20, startY, 80, height), enemyList[i].EnemyPrefab, typeof(GameObject), false);
 
             cont = new GUIContent("產生的數量:");
@@ -337,6 +338,8 @@ public class LevelEditorWindow : UnitEditorWindow
                     clickWaveID = Id;
                 }
             }
+            startX = cachedX;
+            startY += spaceY;
         }
 
         return new Vector2(startX, startY);

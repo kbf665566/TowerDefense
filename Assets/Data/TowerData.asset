@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: TowerData
   m_EditorClassIdentifier: 
   TowerList:
-  - Id: 1
-    Name: TestTower
+  - Id: 0
+    Name: MachineGun
     TowerLevelData:
     - Damage: 10
-      ShootRange: 50
+      ShootRange: 10
       FireRate: 1
       TowerBullet: {fileID: 0}
-      BulletSpeed: 0
+      BulletSpeed: 70
       BulletExplosionRadius: 0
       BuffAddDamage: 0
       BuffAddRange: 0
@@ -32,12 +32,12 @@ MonoBehaviour:
       StunDuration: 0
       BuildUpgradeCost: 100
       SoldPrice: 50
-      towerPrefab: {fileID: 0}
-    - Damage: 100
-      ShootRange: 500
+      towerPrefab: {fileID: 4989766366829307538, guid: ee4561289e7fdb248a1644d1903699ed, type: 3}
+    - Damage: 15
+      ShootRange: 15
       FireRate: 1
       TowerBullet: {fileID: 0}
-      BulletSpeed: 0
+      BulletSpeed: 70
       BulletExplosionRadius: 0
       BuffAddDamage: 0
       BuffAddRange: 0
@@ -47,23 +47,131 @@ MonoBehaviour:
       SlowDuration: 0
       StunProbability: 0
       StunDuration: 0
-      BuildUpgradeCost: 300
-      SoldPrice: 50
-      towerPrefab: {fileID: 0}
-    TowerIcon: {fileID: 21300000, guid: f3882090d04ea794a9e3a33f1fd9f685, type: 3}
+      BuildUpgradeCost: 250
+      SoldPrice: 150
+      towerPrefab: {fileID: 7446358324573418757, guid: a834e7113c9804c40aed783f077e8aaf, type: 3}
+    TowerIcon: {fileID: 21300000, guid: 155e22b74aae4b244b97bd7c739ad71c, type: 3}
     towerType: 0
     IsUseBullet: 1
     CanSlowEnemy: 0
     CanStunEnemy: 0
     TowerInformation: Test
     TowerSize:
-      x: 0
-      y: 0
-    AttackSE: {fileID: 0}
-    BuildSE: {fileID: 0}
-    RemoveSE: {fileID: 0}
+      x: 1
+      y: 1
+    AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
+    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 01e0e2d3367124c909e8666c4241940c, type: 3}
     SpecialMusic: {fileID: 0}
-    AttackParticle: {fileID: 0}
+    AttackParticle: {fileID: 1337568691461264, guid: a4e0e87699dbd400aaf85d616d2618f8, type: 3}
     NormalParticle: {fileID: 0}
-    BuildParticle: {fileID: 0}
-    RemoveParticle: {fileID: 0}
+    BuildParticle: {fileID: 1395313577031670, guid: c559c1920b5d04e6d83aa4464fba5c68, type: 3}
+    RemoveParticle: {fileID: 1082826025734650, guid: 7a0476686964e41ac8320b7cf37868c2, type: 3}
+  - Id: 1
+    Name: RocketTower
+    TowerLevelData:
+    - Damage: 30
+      ShootRange: 20
+      FireRate: 2
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 90
+      BulletExplosionRadius: 5
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
+      GetMoney: 0
+      SlowAmount: 0
+      SlowDuration: 0
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 200
+      SoldPrice: 100
+      towerPrefab: {fileID: 7188800286066414852, guid: 852e13cd1fee71043be2067ce73f8c58, type: 3}
+    - Damage: 60
+      ShootRange: 30
+      FireRate: 2
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 90
+      BulletExplosionRadius: 5
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
+      GetMoney: 0
+      SlowAmount: 0
+      SlowDuration: 0
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 500
+      SoldPrice: 250
+      towerPrefab: {fileID: 734770038192874344, guid: ec8c3254c961f9748b35cf1a1d8a00f1, type: 3}
+    TowerIcon: {fileID: 21300000, guid: f689a1e93fcb8b346b0ed6e7400eb56c, type: 3}
+    towerType: 0
+    IsUseBullet: 1
+    CanSlowEnemy: 0
+    CanStunEnemy: 0
+    TowerInformation: TestTestTestTestTestTestTest
+    TowerSize:
+      x: 1
+      y: 1
+    AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
+    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 01e0e2d3367124c909e8666c4241940c, type: 3}
+    SpecialMusic: {fileID: 0}
+    AttackParticle: {fileID: 1337568691461264, guid: a4e0e87699dbd400aaf85d616d2618f8, type: 3}
+    NormalParticle: {fileID: 0}
+    BuildParticle: {fileID: 1395313577031670, guid: c559c1920b5d04e6d83aa4464fba5c68, type: 3}
+    RemoveParticle: {fileID: 1082826025734650, guid: 7a0476686964e41ac8320b7cf37868c2, type: 3}
+  - Id: 2
+    Name: LaserTower
+    TowerLevelData:
+    - Damage: 15
+      ShootRange: 15
+      FireRate: 0.5
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 0
+      BulletExplosionRadius: 0
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
+      GetMoney: 0
+      SlowAmount: 0.3
+      SlowDuration: 1
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 300
+      SoldPrice: 150
+      towerPrefab: {fileID: 8812975634281693221, guid: 769c5d595497c9046b38b765dc5be34e, type: 3}
+    - Damage: 30
+      ShootRange: 20
+      FireRate: 0.5
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 0
+      BulletExplosionRadius: 0
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
+      GetMoney: 0
+      SlowAmount: 0.4
+      SlowDuration: 1.1
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 550
+      SoldPrice: 300
+      towerPrefab: {fileID: 8601639495670701164, guid: 6228e1a459de3154a928296315916e3b, type: 3}
+    TowerIcon: {fileID: 21300000, guid: f3882090d04ea794a9e3a33f1fd9f685, type: 3}
+    towerType: 0
+    IsUseBullet: 0
+    CanSlowEnemy: 1
+    CanStunEnemy: 0
+    TowerInformation: "\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66"
+    TowerSize:
+      x: 2
+      y: 2
+    AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
+    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 01e0e2d3367124c909e8666c4241940c, type: 3}
+    SpecialMusic: {fileID: 0}
+    AttackParticle: {fileID: 3530344801603080052, guid: bd442e5b853db514babf8971ca4ba2d7, type: 3}
+    NormalParticle: {fileID: 0}
+    BuildParticle: {fileID: 8638717983530209315, guid: ade08a66334c1784389e3a583ca0e59e, type: 3}
+    RemoveParticle: {fileID: 1082826025734650, guid: 7a0476686964e41ac8320b7cf37868c2, type: 3}

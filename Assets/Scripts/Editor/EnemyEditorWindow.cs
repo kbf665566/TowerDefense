@@ -88,7 +88,7 @@ public class EnemyEditorWindow : UnitEditorWindow
 
         cont = new GUIContent("Enemy Prefab:");
         EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
-        EditorGUI.ObjectField(new Rect(startX + 90, startY, 185, height), enemyList[selectID].EnemyPrefab, typeof(GameObject), false);
+        enemyList[selectID].EnemyPrefab = (GameObject)EditorGUI.ObjectField(new Rect(startX + 90, startY, 185, height), enemyList[selectID].EnemyPrefab, typeof(GameObject), false);
 
         startY += spaceY + 10;
 
