@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TowerData
   m_EditorClassIdentifier: 
   TowerList:
-  - Id: 0
+  - Id: 1
     Name: TestTower
     TowerLevelData:
     - Damage: 10
@@ -47,7 +47,7 @@ MonoBehaviour:
       SlowDuration: 0
       StunProbability: 0
       StunDuration: 0
-      BuildUpgradeCost: 200
+      BuildUpgradeCost: 300
       SoldPrice: 50
       towerPrefab: {fileID: 0}
     TowerIcon: {fileID: 21300000, guid: f3882090d04ea794a9e3a33f1fd9f685, type: 3}
@@ -61,4 +61,9 @@ MonoBehaviour:
       y: 0
     AttackSE: {fileID: 0}
     BuildSE: {fileID: 0}
+    RemoveSE: {fileID: 0}
     SpecialMusic: {fileID: 0}
+    AttackParticle: {fileID: 0}
+    NormalParticle: {fileID: 0}
+    BuildParticle: {fileID: 0}
+    RemoveParticle: {fileID: 0}

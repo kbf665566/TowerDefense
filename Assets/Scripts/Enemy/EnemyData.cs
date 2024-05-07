@@ -20,5 +20,5 @@ public class EnemyData
     /// <summary> 免疫擊暈 </summary>
     public bool ImmuneStun;
     public GameObject EnemyPrefab;
-
+    public AudioClip DeadSE;
 }

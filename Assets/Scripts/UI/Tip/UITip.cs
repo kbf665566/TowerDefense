@@ -8,11 +8,12 @@ public class UITip : MonoBehaviour
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI informationText;
     [SerializeField] private RectTransform rect;
+    [SerializeField] private GameObject context;
     //邊界
     private Vector2 margin = new Vector2(50, 50);
     void Start()
     {
-       gameObject.SetActive(false);
+        context.SetActive(false);
     }
 
     public void SetTip(Vector3 targetPos,string title,string information)
@@ -26,7 +27,7 @@ public class UITip : MonoBehaviour
             rect.sizeDelta = new Vector2(rect.sizeDelta.x, informationText.renderedHeight + 30f);
         }
         ClampToWindow(rect,transform.parent.GetComponent<RectTransform>());
-        gameObject.SetActive(true);
+        context.SetActive(true);
     }
 
     /// <summary>

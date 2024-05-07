@@ -79,6 +79,9 @@ public class TowerEditorWindow : UnitEditorWindow
             newTower = new TowerData();
             newTower.Name = "NewTower";
             newTower.towerType = TowerType.Normal;
+            newTower.TowerSize = Vector2Short.One;
+            newTower.TowerLevelData = new List<TowerLevelData>();
+            newTower.TowerLevelData.Add(new TowerLevelData());
             int newSelectID = EditorDataManager.AddNewTower(newTower);
             if (newSelectID != -1) 
                 SelectTower(newSelectID);
@@ -109,17 +112,6 @@ public class TowerEditorWindow : UnitEditorWindow
             return;
 
         selectID = Mathf.Clamp(selectID, 0, towerList.Count - 1);
-
-        cont = new GUIContent("Tower Prefab:");
-        EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
-
-        if (towerList[selectID].TowerLevelData == null)
-        {
-            towerList[selectID].TowerLevelData = new List<TowerLevelData>();
-            towerList[selectID].TowerLevelData.Add(new TowerLevelData());
-        }
-
-        EditorGUI.ObjectField(new Rect(startX + 90, startY, 185, height), towerList[selectID].TowerLevelData[0].towerPrefab, typeof(GameObject), false);
 
         startY += spaceY + 10;
 
@@ -267,7 +259,8 @@ public class TowerEditorWindow : UnitEditorWindow
         tower.towerType = (TowerType)type;
         startX = cachedX;
 
-        v3 = DrawIconAndName(tower.Name,tower.TowerIcon, startX, startY); startY = v3.y;
+        v3 = DrawIconAndName(tower, startX, startY); 
+        startY = v3.y;
 
         startX += spaceX * 2.5f;
         startY = cachedY;
@@ -281,11 +274,33 @@ public class TowerEditorWindow : UnitEditorWindow
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         tower.BuildSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.BuildSE, typeof(AudioClip), false);
 
+        cont = new GUIContent("建造特效:", "");
+        EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
+        tower.BuildParticle = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.BuildParticle, typeof(GameObject), false);
+
+        cont = new GUIContent("拆除音效:", "");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        tower.RemoveSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.RemoveSE, typeof(AudioClip), false);
+
+        cont = new GUIContent("拆除特效:", "");
+        EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
+        tower.RemoveParticle = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.RemoveParticle, typeof(GameObject), false);
+
         if (TowerCanAttack(tower))
         {
             cont = new GUIContent("攻擊音效:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             tower.AttackSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.AttackSE, typeof(AudioClip), false);
+
+            cont = new GUIContent("攻擊特效:", "");
+            EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
+            tower.AttackParticle = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.AttackParticle, typeof(GameObject), false);
+        }
+        else
+        {
+            cont = new GUIContent("一般特效:", "");
+            EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY += spaceY, width, height), cont);
+            tower.NormalParticle = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.NormalParticle, typeof(GameObject), false);
         }
 
         if(tower.towerType == TowerType.Special)
@@ -326,7 +341,7 @@ public class TowerEditorWindow : UnitEditorWindow
         startX = cachedX;
 
         cont = new GUIContent("LevelData:", "");
-        GUI.Label(new Rect(startX, startY, 120, height), cont);
+        GUI.Label(new Rect(startX, startY += spaceY, 120, height), cont);
         if (GUI.Button(new Rect(startX + spaceX, startY, 50, 15), "-1"))
         {
             if (tower.TowerLevelData.Count > 1) 
@@ -342,32 +357,11 @@ public class TowerEditorWindow : UnitEditorWindow
         startY = Mathf.Max(maxY + 20, 240);
         startX = cachedX;
 
-        float maxHeight = 0;
-        float maxContentHeight = 0;
-
-
-        minimiseStat = EditorGUI.Foldout(new Rect(startX, startY += spaceY, width, height), minimiseStat, "Show Stats");
+        minimiseStat = EditorGUI.Foldout(new Rect(startX, startY += spaceY +10, width, height), minimiseStat, "Show Stats");
         if (!minimiseStat)
         {
-            startY += spaceY;
-            startX += 15;
-
-            for (int i = 0; i < tower.TowerLevelData.Count; i++)
-            {
-                EditorGUI.LabelField(new Rect(startX, startY, width, height), "Level " + (i + 1) + " Data");
-                v3 = DrawStat(tower.TowerLevelData[i], startX, startY + spaceY, statContentHeight, tower);
-
-                if (maxContentHeight < v3.y) 
-                    maxContentHeight = v3.y;
-
-                startX = v3.x + 10;
-                if (startX > maxWidth) 
-                    maxWidth = startX;
-                if (maxHeight < v3.y)
-                    maxHeight = v3.y;
-            }
-            statContentHeight = maxContentHeight;
-            startY = maxHeight;
+            v3 = DrawStat(tower, startX, startY);
+            startY = v3.y;
         }
 
         startX = cachedX;
@@ -386,11 +380,38 @@ public class TowerEditorWindow : UnitEditorWindow
     }
 
 
+    public static Vector3 DrawIconAndName(TowerData tower, float startX, float startY)
+    {
+        float cachedX = startX;
+        float cachedY = startY;
+
+        DrawSprite(new Rect(startX, startY, 60, 60), tower.TowerIcon);
+        startX += 65;
+
+        cont = new GUIContent("名稱:");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        tower.Name = EditorGUI.TextField(new Rect(startX + spaceX - 65, startY, width - 5, height), tower.Name);
+
+        cont = new GUIContent("Icon:");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        tower.TowerIcon = (Sprite)EditorGUI.ObjectField(new Rect(startX + spaceX - 65, startY, width - 5, height), tower.TowerIcon, typeof(Sprite), false);
+
+        startX -= 65;
+        startY = cachedY;
+        startX += 35 + spaceX + width;
+        GUI.color = Color.white;
+
+
+        float contentWidth = startX - cachedX + spaceX + 25;
+
+        return new Vector3(startX, startY + spaceY, contentWidth);
+    }
+
+
     private bool minimiseStat = false;
 
-    private float statContentHeight = 0;
 
-    public static Vector3 DrawStat(TowerLevelData levelData, float startX, float startY, float statContentHeight, TowerData tower)
+    public Vector3 DrawStat(TowerData tower, float startX, float startY)
     {
         float width = 150;
         float fWidth = 35;
@@ -398,107 +419,118 @@ public class TowerEditorWindow : UnitEditorWindow
         float height = 18;
         float spaceY = height + 4;
 
-        GUI.Box(new Rect(startX, startY - 3, 200, statContentHeight - startY + spaceY + 3), "");
+        float cachedY = startY;
+        startX += 10;
 
-        if (tower != null)
+        for (int i = 0; i < tower.TowerLevelData.Count; i++)
         {
-            cont = new GUIContent("建造/升級 消耗:");
-            EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
-            levelData.BuildUpgradeCost = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuildUpgradeCost);
+            startY = cachedY;
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), "Level " + (i + 1) + " Data");
+            if (tower != null)
+            {
+                cont = new GUIContent("建造/升級 消耗:");
+                EditorGUI.LabelField(new Rect(startX += 6, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].BuildUpgradeCost = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].BuildUpgradeCost);
 
-            cont = new GUIContent("賣價:");
+                cont = new GUIContent("賣價:");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].SoldPrice = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].SoldPrice);
+            }
+
+            if (TowerCanAttack(tower))
+            {
+                cont = new GUIContent("傷害:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].Damage = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].Damage);
+
+                cont = new GUIContent("射程:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].ShootRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].ShootRange);
+
+                cont = new GUIContent("攻速:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].FireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].FireRate);
+            }
+
+            if (tower.IsUseBullet && tower.towerType == TowerType.Normal)
+            {
+                cont = new GUIContent("發射物體:", "每次攻擊要幾秒");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].TowerBullet = (Bullet)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), tower.TowerLevelData[i].TowerBullet, typeof(Bullet), false);
+
+                cont = new GUIContent("發射物速度:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].BulletSpeed = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].BulletSpeed);
+
+
+                cont = new GUIContent("發射物爆炸範圍:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].BulletExplosionRadius = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].BulletExplosionRadius);
+            }
+
+
+            if (tower.CanSlowEnemy && TowerCanAttack(tower))
+            {
+                tower.CanStunEnemy = false;
+                cont = new GUIContent("緩速程度:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].SlowAmount = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].SlowAmount);
+
+                cont = new GUIContent("緩速秒數:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].SlowDuration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].SlowDuration);
+            }
+
+            if (tower.CanStunEnemy && TowerCanAttack(tower))
+            {
+                tower.CanSlowEnemy = false;
+                cont = new GUIContent("擊暈機率:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].StunProbability = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].StunProbability);
+
+                cont = new GUIContent("擊暈秒數:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].StunDuration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].StunDuration);
+            }
+
+            if (tower.towerType == TowerType.Support)
+            {
+                cont = new GUIContent("影響範圍:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].ShootRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].ShootRange);
+
+                cont = new GUIContent("Buff增加攻擊:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].BuffAddDamage = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].BuffAddDamage);
+
+                cont = new GUIContent("Buff增加範圍:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].BuffAddRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].BuffAddRange);
+
+                cont = new GUIContent("Buff增加攻速:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].BuffAddFireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].BuffAddFireRate);
+            }
+
+            if (tower.towerType == TowerType.Money)
+            {
+                cont = new GUIContent("攻速:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].FireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].FireRate);
+
+                cont = new GUIContent("取得的資源量:", "");
+                EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+                tower.TowerLevelData[i].GetMoney = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerLevelData[i].GetMoney);
+            }
+
+            cont = new GUIContent("塔 模型:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.SoldPrice = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SoldPrice);
+            tower.TowerLevelData[i].towerPrefab = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), tower.TowerLevelData[i].towerPrefab, typeof(GameObject), false);
+
+            startX += spaceX + 80;
         }
 
-        if (TowerCanAttack(tower))
-        {
-            cont = new GUIContent("傷害:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.Damage = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.Damage);
-
-            cont = new GUIContent("射程:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.ShootRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.ShootRange);
-
-            cont = new GUIContent("攻速:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.FireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.FireRate);
-        }
-
-        if (tower.IsUseBullet && tower.towerType == TowerType.Normal)
-        {
-            cont = new GUIContent("發射物體:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.TowerBullet = (Bullet)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), levelData.TowerBullet, typeof(Bullet), false);
-
-            cont = new GUIContent("發射物速度:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.BulletSpeed = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletSpeed);
-
-
-            cont = new GUIContent("發射物爆炸範圍:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.BulletExplosionRadius = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletExplosionRadius);
-        }
-
-        
-        if(tower.CanSlowEnemy && TowerCanAttack(tower))
-        {
-            tower.CanStunEnemy = false;
-            cont = new GUIContent("緩速程度:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.SlowAmount = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SlowAmount);
-
-            cont = new GUIContent("緩速秒數:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.SlowDuration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SlowDuration);
-        }
-
-        if (tower.CanStunEnemy && TowerCanAttack(tower))
-        {
-            tower.CanSlowEnemy = false;
-            cont = new GUIContent("擊暈機率:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.StunProbability = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.StunProbability);
-
-            cont = new GUIContent("擊暈秒數:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.StunDuration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.StunDuration);
-        }
-
-        if(tower.towerType == TowerType.Support)
-        {
-            cont = new GUIContent("影響範圍:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.ShootRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.ShootRange);
-
-            cont = new GUIContent("Buff增加攻擊:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.BuffAddDamage = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuffAddDamage);
-
-            cont = new GUIContent("Buff增加範圍:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.BuffAddRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuffAddRange);
-
-            cont = new GUIContent("Buff增加攻速:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.BuffAddFireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BuffAddFireRate);
-        }
-
-        if(tower.towerType == TowerType.Money)
-        {
-            cont = new GUIContent("攻速:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.FireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.FireRate);
-
-            cont = new GUIContent("取得的資源量:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.GetMoney = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.GetMoney);
-        }
-
-
-        return new Vector3(startX + 220, startY, statContentHeight);
+        return new Vector3(startX, startY);
     }
 
     private static bool TowerCanAttack(TowerData tower)

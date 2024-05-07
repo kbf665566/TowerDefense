@@ -16,9 +16,19 @@ public class TowerData
     public bool CanStunEnemy;
     public string TowerInformation;
     public Vector2Short TowerSize;
+    //-----音效---------
     public AudioClip AttackSE;
     public AudioClip BuildSE;
+    public AudioClip RemoveSE;
     public AudioClip SpecialMusic;
+    //------------------
+
+    //-----特效---------
+    public GameObject AttackParticle;
+    public GameObject NormalParticle;
+    public GameObject BuildParticle;
+    public GameObject RemoveParticle;
+    //------------------
 }
 
 [Serializable]

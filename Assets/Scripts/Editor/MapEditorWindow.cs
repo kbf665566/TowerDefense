@@ -112,7 +112,7 @@ public class MapEditorWindow : UnitEditorWindow
 
         cont = new GUIContent("場景名稱:","程式讀取用");
         EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
-        EditorGUI.TextField(new Rect(startX + spaceX - 35, startY, width - 5, height), mapList[selectID].SceneName);
+        mapList[selectID].SceneName = EditorGUI.TextField(new Rect(startX + spaceX - 35, startY, width - 5, height), mapList[selectID].SceneName);
 
 
         startY += spaceY + 10;
@@ -250,7 +250,8 @@ public class MapEditorWindow : UnitEditorWindow
         float cachedX = startX;
         float fWidth = 35;
 
-        v3 = DrawIconAndName(map.MapName, map.MapIcon, startX, startY); startY = v3.y;
+        v3 = DrawIconAndName(map, startX, startY); 
+        startY = v3.y;
 
         startX = cachedX;
         spaceX = 110;
@@ -348,6 +349,23 @@ public class MapEditorWindow : UnitEditorWindow
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         map.WavesId = EditorGUI.IntField(new Rect(startX + spaceX, startY, 40, height), map.WavesId);
 
+        bool hasWavesData = false;
+        for(int i = 0;i<EditorDataManager.LevelIDList.Count;i++)
+        {
+            if(map.WavesId == EditorDataManager.LevelIDList[i])
+            {
+                hasWavesData = true;
+                break;
+            }
+        }
+        if(!hasWavesData)
+        {
+            GUI.color = Color.red;
+            cont = new GUIContent("<----無資料", "");
+            EditorGUI.LabelField(new Rect(startX + spaceX + 50 , startY, 80, height), cont);
+            GUI.color = Color.white;
+        }
+
         cont = new GUIContent("顯示地圖:", "是否顯示地圖");
         EditorGUI.LabelField(new Rect(startX, startY + spaceY * 2.5f, width, height), cont);
         showMap = EditorGUI.Toggle(new Rect(startX + spaceX, startY + spaceY * 2.5f, 40, height), showMap);
@@ -383,6 +401,33 @@ public class MapEditorWindow : UnitEditorWindow
 
         GUI.color = Color.white;
         return new Vector2(startX, startY);
+    }
+
+    public static Vector3 DrawIconAndName(MapData map, float startX, float startY)
+    {
+        float cachedX = startX;
+        float cachedY = startY;
+
+        DrawSprite(new Rect(startX, startY, 60, 60), map.MapIcon);
+        startX += 65;
+
+        cont = new GUIContent("名稱:");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        map.MapName = EditorGUI.TextField(new Rect(startX + spaceX - 65, startY, width - 5, height), map.MapName);
+
+        cont = new GUIContent("Icon:");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        map.MapIcon = (Sprite)EditorGUI.ObjectField(new Rect(startX + spaceX - 65, startY, width - 5, height), map.MapIcon, typeof(Sprite), false);
+
+        startX -= 65;
+        startY = cachedY;
+        startX += 35 + spaceX + width;
+        GUI.color = Color.white;
+
+
+        float contentWidth = startX - cachedX + spaceX + 25;
+
+        return new Vector3(startX, startY + spaceY, contentWidth);
     }
 
     private Vector2 DrawEnemyPathSetting(float startX, float startY,float width,EnemyPathData enemyPath)
@@ -437,7 +482,7 @@ public class MapEditorWindow : UnitEditorWindow
             startX = tempX;
             cont = new GUIContent("Block Prefab:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width + 60, height), cont);
-            EditorGUI.ObjectField(new Rect(startX + 112, startY, 120, height), blockGridList[i].BlockPrefab, typeof(GameObject), false);
+            blockGridList[i].BlockPrefab = (GameObject)EditorGUI.ObjectField(new Rect(startX + 112, startY, 120, height), blockGridList[i].BlockPrefab, typeof(GameObject), false);
 
             startY += (spaceY + 10);
         }
@@ -479,7 +524,7 @@ public class MapEditorWindow : UnitEditorWindow
                     if (Vector2Short.Distance(Vector2Short.Zero, enemyPathList[i].Path[j].GridPos) > Vector2Short.Distance(Vector2Short.Zero, enemyPathList[i].Path[j + 1].GridPos))
                         GUI.Box(new Rect(startX + (drawBoxSize + mapGridOffset) * enemyPathList[i].Path[j].GridPos.x + drawBoxSize / 2, startY + tempY - (drawBoxSize + mapGridOffset) * enemyPathList[i].Path[j].GridPos.y - drawBoxSize + mapGridOffset, -(enemyPathList[i].Path[j].GridPos.x - enemyPathList[i].Path[j + 1].GridPos.x) * (drawBoxSize + mapGridOffset), 2), "", EditorDataManager.BoxStyle);
                     else
-                        GUI.Box(new Rect(startX + (drawBoxSize + mapGridOffset) * enemyPathList[i].Path[j].GridPos.x + drawBoxSize / 2, startY + tempY - (drawBoxSize + mapGridOffset) * enemyPathList[i].Path[j].GridPos.y - drawBoxSize + mapGridOffset, enemyPathList[i].Path[j + 1].GridPos.x * (drawBoxSize + mapGridOffset) , 2), "", EditorDataManager.BoxStyle);
+                        GUI.Box(new Rect(startX + (drawBoxSize + mapGridOffset) * enemyPathList[i].Path[j].GridPos.x + drawBoxSize / 2, startY + tempY - (drawBoxSize + mapGridOffset) * enemyPathList[i].Path[j].GridPos.y - drawBoxSize + mapGridOffset, (enemyPathList[i].Path[j + 1].GridPos.x - enemyPathList[i].Path[j].GridPos.x) * (drawBoxSize + mapGridOffset) , 2), "", EditorDataManager.BoxStyle);
                 }
             }
         }

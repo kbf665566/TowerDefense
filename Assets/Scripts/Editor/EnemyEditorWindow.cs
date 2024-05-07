@@ -220,7 +220,8 @@ public class EnemyEditorWindow : UnitEditorWindow
         float cachedY = startY;
         float cachedX = startX;
 
-        v3 = DrawIconAndName(enemy.Name, enemy.EnemyIcon, startX, startY); startY = v3.y;
+        v3 = DrawIconAndName(enemy, startX, startY); 
+        startY = v3.y;
 
         startX = cachedX;
         spaceX = 110;
@@ -238,21 +239,52 @@ public class EnemyEditorWindow : UnitEditorWindow
         startX += spaceX * 3;
         cont = new GUIContent("HP:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        enemy.HP = EditorGUI.FloatField(new Rect(startX + spaceX, startY, 40, height), enemy.HP);
+        enemy.HP = EditorGUI.FloatField(new Rect(startX + spaceX, startY, 50, height), enemy.HP);
 
         cont = new GUIContent("速度:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        enemy.Speed = EditorGUI.FloatField(new Rect(startX + spaceX, startY, 40, height), enemy.Speed);
+        enemy.Speed = EditorGUI.FloatField(new Rect(startX + spaceX, startY, 50, height), enemy.Speed);
 
         cont = new GUIContent("傷害:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        enemy.Damage = EditorGUI.IntField(new Rect(startX + spaceX, startY, 40, height), enemy.Damage);
+        enemy.Damage = EditorGUI.IntField(new Rect(startX + spaceX, startY, 50, height), enemy.Damage);
 
         cont = new GUIContent("可取得的資源:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        enemy.Value = EditorGUI.IntField(new Rect(startX + spaceX, startY, 40, height), enemy.Value);
+        enemy.Value = EditorGUI.IntField(new Rect(startX + spaceX, startY, 50, height), enemy.Value);
+
+        cont = new GUIContent("死亡音效:");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        enemy.DeadSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 80, height), enemy.DeadSE, typeof(AudioClip), false);
 
         return new Vector2(startX, startY);
+    }
+
+    public static Vector3 DrawIconAndName(EnemyData enemy, float startX, float startY)
+    {
+        float cachedX = startX;
+        float cachedY = startY;
+
+        DrawSprite(new Rect(startX, startY, 60, 60), enemy.EnemyIcon);
+        startX += 65;
+
+        cont = new GUIContent("名稱:");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        enemy.Name = EditorGUI.TextField(new Rect(startX + spaceX - 65, startY, width - 5, height), enemy.Name);
+
+        cont = new GUIContent("Icon:");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        enemy.EnemyIcon = (Sprite)EditorGUI.ObjectField(new Rect(startX + spaceX - 65, startY, width - 5, height), enemy.EnemyIcon, typeof(Sprite), false);
+
+        startX -= 65;
+        startY = cachedY;
+        startX += 35 + spaceX + width;
+        GUI.color = Color.white;
+
+
+        float contentWidth = startX - cachedX + spaceX + 25;
+
+        return new Vector3(startX, startY + spaceY, contentWidth);
     }
 
 }
