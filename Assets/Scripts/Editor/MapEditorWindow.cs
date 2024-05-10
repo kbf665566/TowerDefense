@@ -1,4 +1,5 @@
 ﻿using Codice.Client.BaseCommands;
+using Game;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -71,9 +72,26 @@ public class MapEditorWindow : UnitEditorWindow
         {
             CreateEmptyScene(mapList[selectID].SceneName);
 
-            GameObject obj = (GameObject)Instantiate(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/Map.prefab", typeof(GameObject)));
-            obj.name = "Map";
+            GameObject mapObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/Map.prefab", typeof(GameObject)));
+            mapObj.name = "Map";
             NodeSpawner nodeSpawner = (NodeSpawner)FindObjectOfType(typeof(NodeSpawner));
+            nodeSpawner.SetData(mapList[selectID]);
+
+            GameObject gridDebuggerObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/GridDebugger.prefab", typeof(GameObject)));
+            gridDebuggerObj.name = "GridDebugger";
+            GridDebugger gridDebugger = (GridDebugger)FindObjectOfType(typeof(GridDebugger));
+            gridDebugger.Create(mapList[selectID].MapSize);
+
+            GameObject levelUICanvasObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/UI/Level/LevelUICanvas.prefab", typeof(GameObject)));
+            levelUICanvasObj.name = "LevelUICanvas";
+
+            GameObject nodeUIObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/UI/Level/NodeUI.prefab", typeof(GameObject)));
+            nodeUIObj.name = "NodeUI";
+
+            GameObject cameraControllerObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Camera/CameraController.prefab", typeof(GameObject)));
+            cameraControllerObj.name = "CameraController";
+            CameraController cameraController = (CameraController)FindObjectOfType(typeof(CameraController));
+            cameraController.SetCamera(mapList[selectID].MapSize);
         }
 
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new Map:");
@@ -353,9 +371,17 @@ public class MapEditorWindow : UnitEditorWindow
         map.MapSize.x = (short)EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), map.MapSize.x);
         map.MapSize.y = (short)EditorGUI.IntField(new Rect(startX + spaceX + fWidth + 3, startY, fWidth, height), map.MapSize.y);
 
+        cont = new GUIContent("起始資源:", "");
+        EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
+        map.StartMoney = EditorGUI.IntField(new Rect(startX + spaceX * 2 + 60 , startY, fWidth, height), map.StartMoney);
+
         cont = new GUIContent("WavesId:", "要使用的Waves的Id");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         map.WavesId = EditorGUI.IntField(new Rect(startX + spaceX, startY, 40, height), map.WavesId);
+
+        cont = new GUIContent("起始生命:", "");
+        EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
+        map.StartLive = EditorGUI.IntField(new Rect(startX + spaceX * 2 + 60, startY, fWidth, height), map.StartLive);
 
         bool hasWavesData = false;
         for(int i = 0;i<EditorDataManager.LevelIDList.Count;i++)

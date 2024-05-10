@@ -5,10 +5,10 @@ using UnityEngine;
 
 public static partial class GameEvent
 {
-    public class TurretBuildEvent : GameEventArgs<TurretBuildEvent>
+    public class TowerBuildEvent : GameEventArgs<TowerBuildEvent>
     {
         public TurretBlueprint bluePrint { get; set; }
-        public static TurretBuildEvent CreateEvent(TurretBlueprint turretBlueprint)
+        public static TowerBuildEvent CreateEvent(TurretBlueprint turretBlueprint)
         {
             var @event = CreateEvent();
             @event.bluePrint = turretBlueprint;
@@ -16,12 +16,12 @@ public static partial class GameEvent
         }
     }
 
-    public class TurretUpgradeEvent : GameEventArgs<TurretUpgradeEvent>
+    public class TowerUpgradeEvent : GameEventArgs<TowerUpgradeEvent>
     {
 
     }
 
-    public class TurretSellEvent : GameEventArgs<TurretSellEvent>
+    public class TowerSellEvent : GameEventArgs<TowerSellEvent>
     {
 
     }

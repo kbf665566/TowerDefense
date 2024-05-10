@@ -5,13 +5,13 @@ using UnityEngine;
 
 public static partial class GameEvent
 {
-    public class NodeSelectEventArgs : GameEventArgs<NodeSelectEventArgs>
+    public class NodeSelectEvent : GameEventArgs<NodeSelectEvent>
     {
-        public Node Node { get; set; }
-        public static NodeSelectEventArgs CreateEvent(Node node)
+        public Vector2Short GridPos { get; set; }
+        public static NodeSelectEvent CreateEvent(Vector2Short GridPos)
         {
             var @event = CreateEvent();
-            @event.Node = node;
+            @event.GridPos = GridPos;
             return @event;
         }
     }

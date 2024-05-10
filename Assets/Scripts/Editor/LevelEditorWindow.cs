@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEditor;
-using System;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class LevelEditorWindow : UnitEditorWindow
 {

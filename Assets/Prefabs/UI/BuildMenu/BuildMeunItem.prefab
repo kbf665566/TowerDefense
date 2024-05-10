@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a26014b92a3866b4ab91071d5f1720e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turretImage: {fileID: 4481541673671325232}
+  towerImage: {fileID: 4481541673671325232}
   costText: {fileID: 7952098975458342844}
 --- !u!1 &6961075522882463941
 GameObject:

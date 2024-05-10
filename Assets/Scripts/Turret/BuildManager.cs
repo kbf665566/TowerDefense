@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Game;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,14 +22,21 @@ public class BuildManager : MonoBehaviour
     [SerializeField] private GameObject sellEffect;
     public GameObject SellEffect => sellEffect;
 
+    private GridManager gridManager;
+
     public bool CanBuild { get { return turretToBuild != null; } }
-    public bool HasMoney { get { return gameManager.Money >= turretToBuild.Cost; } }
 
     private Node selectNode;
     public delegate void NodeSelected(Node node);
     public static NodeSelected nodeSelected;
     public delegate void NodeCancelSelected();
     public static NodeCancelSelected nodeCancelSelected;
+
+#if UNITY_EDITOR
+    private GridDebugger gridDebugger;
+#endif
+
+    /*建一個Prefab用來顯示選取、預覽的網格狀態*/
     private void Awake()
     {
         if (instance != null)
@@ -37,14 +45,32 @@ public class BuildManager : MonoBehaviour
             return;
         }
         instance = this;
-        nodeSelected += SelectNode;
-        nodeCancelSelected += DeselectNode;
-    }
 
-    public void SelectTurretToBuild(TurretBlueprint turret)
+        var mapData = gameManager.NowMapData;
+        gridManager = new GridManager(Vector2Short.Zero, mapData.MapSize, mapData.GetBlockGridPosList(mapData.BlockGridList), mapData.GetEnemyPathPosList(mapData.EnemyPathList));
+
+    #if UNITY_EDITOR
+        gridDebugger = new GridDebugger();
+        gridDebugger.Create(gameManager.NowMapData.MapSize);
+    #endif
+
+}
+
+public void SelectTurretToBuild(TurretBlueprint turret)
     {
         turretToBuild = turret;
         nodeCancelSelected?.Invoke();
+    }
+
+    public GridState GetGridState(Vector2Short gridPos)
+    {
+        var gridState = gridManager.GetGridState(gridPos.x,gridPos.y);
+        return gridState;
+    }
+    public GridState GetGridState(int x,int y)
+    {
+        var gridState = gridManager.GetGridState(x, y);
+        return gridState;
     }
 
     private void SelectNode(Node node)

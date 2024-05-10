@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Game;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,6 @@ public class GridManager
 {
     private Vector2Short startGridPos;
     public Vector2Short StartGridPos => startGridPos;
-    private Vector2Short endGridPos;
     public Vector2Short GridSize { get; private set; }
     private HashSet<GridData> emptyGridList;
 
@@ -14,11 +14,16 @@ public class GridManager
     private GridData[,] gridMap;
     private Vector2Short tempGridPos;
 
-    public GridManager(Vector2Short startGridPos, Vector2Short mapSize)
+    public GridManager(Vector2Short startGridPos, Vector2Short mapSize, List<Vector2Short> blockGridList, List<Vector2Short> enemyPathList)
     {
         this.startGridPos = startGridPos;
         GridMapInitialize(mapSize);
-        endGridPos = startGridPos + mapSize;
+
+        for (int i = 0; i < blockGridList.Count; i++)
+            SetBlockGrid(blockGridList[i]);
+
+        for (int i = 0; i < enemyPathList.Count; i++)
+            SetEnemyPathGrid(enemyPathList[i]);
 
         tempGridPos = new Vector2Short();
     }
@@ -55,7 +60,7 @@ public class GridManager
         {
             for (short y = 0; y < GridSize.y; y++)
             {
-                if (gridMap[x, y].GridState == GridState.Block)
+                if (gridMap[x, y].GridState == GridState.Block || gridMap[x, y].GridState == GridState.EnemyPath)
                     continue;
                 gridMap[x, y].Clear();
             }
@@ -84,6 +89,16 @@ public class GridManager
     {
         gridPos -= startGridPos;
         return gridMap[gridPos.x, gridPos.y];
+    }
+
+    /// <summary>
+    /// 取得網格狀態
+    /// </summary>
+    /// <param name="gridPos"></param>
+    /// <returns></returns>
+    public GridState GetGridState(int x,int y)
+    {
+        return gridMap[x, y].GridState;
     }
 
     public long GetGridTowerUid(Vector2Short gridPos)
@@ -154,6 +169,26 @@ public class GridManager
         UpdateGridInfo(0, pos, unitSize, GridState.Block);
     }
 
+    /// <summary>
+    /// 設定障礙地塊
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="unitSize"></param>
+    public void SetBlockGrid(Vector2Short pos)
+    {
+        UpdateGridInfo(0, pos, Vector2Short.One, GridState.Block);
+    }
+
+    /// <summary>
+    /// 設定敵人路徑地塊
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="unitSize"></param>
+    public void SetEnemyPathGrid(Vector2Short pos)
+    {
+        UpdateGridInfo(0, pos, Vector2Short.One, GridState.EnemyPath);
+    }
+
 
     /// <summary>
     /// 更新網格
@@ -174,12 +209,15 @@ public class GridManager
                 if (grid == null)
                     continue;
 
-                if (grid.GridState == GridState.Block) continue;
+                if (grid.GridState == GridState.Block || grid.GridState == GridState.EnemyPath) continue;
 
                 if (grid.CanBuild == false) continue;
 
                 grid.TowerUid = uid;
                 grid.GridState = gridState;
+#if UNITY_EDITOR
+                gridDebugger.ChangeColor(x,y,gridState);
+#endif
                 UpdateEmptyList(grid);
                 continue;
 
@@ -199,7 +237,7 @@ public class GridManager
                 if (grid == null)
                     continue;
 
-                if (grid.GridState == GridState.Block) continue;
+                if (grid.GridState == GridState.Block || grid.GridState == GridState.EnemyPath) continue;
 
                 if (x < 0 || y < 0 || x == size.x || y == size.y)
                 {
@@ -242,4 +280,14 @@ public class GridManager
         
         return emptyGridList.Contains(grid);
     }
+
+
+#if UNITY_EDITOR
+    private GridDebugger gridDebugger;
+
+    public void SetDebugger(GridDebugger gridDebugger)
+    {
+        this.gridDebugger = gridDebugger;
+    }
+#endif
 }

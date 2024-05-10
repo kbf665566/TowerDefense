@@ -17,7 +17,7 @@ public class GridData
         /// <summary>
         /// 是否可以建築
         /// </summary>
-        public bool CanBuild => GridState != GridState.Block && GridState != GridState.Building;
+        public bool CanBuild => GridState != GridState.Block && GridState != GridState.Building && GridState != GridState.EnemyPath;
         /// <summary>
         /// 重疊中
         /// </summary>
@@ -41,4 +41,8 @@ public enum GridState
     Building,
     /// <summary> 障礙 </summary>
     Block,
+    /// <summary> 敵人路徑 </summary>
+    EnemyPath,
+    /// <summary> 預覽 </summary>
+    Preview,
 }

@@ -41,7 +41,8 @@ public class Enemy : MonoBehaviour
 
         WaveSpawner.EnemiesAlive--;
 
-        gameManager.AddMoney(value);
+        //發送死亡事件
+        //gameManager.AddMoney(value);
         Destroy(gameObject);
     }
 

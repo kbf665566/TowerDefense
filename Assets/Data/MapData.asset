@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: MapData
   m_EditorClassIdentifier: 
   MapDataList:
-  - Id: 0
+  - Id: 3
     MapName: "\u6E2C\u8A66\u5834\u666F"
     SceneName: TestLevel
+    StartLive: 20
+    StartMoney: 400
     MapIcon: {fileID: 21300006, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
     MapSize:
       x: 30
@@ -66,11 +68,43 @@ MonoBehaviour:
         y: 2
     - BlockPrefab: {fileID: 0}
       GridPos:
-        x: 0
-        y: 0
+        x: 15
+        y: 18
       Size:
         x: 3
         y: 3
+    WavesId: 0
+    Waves:
+      Id: 0
+      LevelName: 
+      WaveList: []
+  - Id: 4
+    MapName: rrrrrrr
+    SceneName: rrrrr
+    StartLive: 0
+    StartMoney: 0
+    MapIcon: {fileID: 21300000, guid: 372e7b39fc8f34549ac25d8757965a2c, type: 3}
+    MapSize:
+      x: 0
+      y: 0
+    EnemyPathList: []
+    BlockGridList: []
+    WavesId: 0
+    Waves:
+      Id: 0
+      LevelName: 
+      WaveList: []
+  - Id: 5
+    MapName: ttttttt
+    SceneName: tttttt
+    StartLive: 0
+    StartMoney: 0
+    MapIcon: {fileID: 21300000, guid: 0f061b4bd0275bc4eb60f2af31e7375a, type: 3}
+    MapSize:
+      x: 0
+      y: 0
+    EnemyPathList: []
+    BlockGridList: []
     WavesId: 0
     Waves:
       Id: 0

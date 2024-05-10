@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Color = UnityEngine.Color;
 
@@ -10,26 +11,26 @@ using Color = UnityEngine.Color;
 public class NodeSpawner : MonoBehaviour
 {
     #region Node
-    [SerializeField] private Transform node;
+    [SerializeField] private Transform nodeObj;
     private List<Transform> nodes = new List<Transform>();
     [SerializeField] private Vector3 nodeSize = Vector3.one;
-    [SerializeField] Vector2 nodeOffset = Vector2.zero;
     #endregion
 
     #region path
     [SerializeField] private Transform start;
     [SerializeField] private Transform end;
-    private Transform startObj;
-    private Transform endObj;
-    
-    [SerializeField] private Transform wayPoint;
+    private List<Transform> startObjList = new List<Transform>();
+    private List<Transform> endObjList = new List<Transform>();
+
+    [SerializeField] private Transform wayPointObj;
     private List<Transform> wayPoints = new List<Transform>();
 
-    [SerializeField] private Transform path;
-    private List<Transform> pathList = new List<Transform>();
+    [SerializeField] private Transform pathObj;
+    private List<Transform> pathObjList = new List<Transform>();
     //[FormerlySerializedAs("path")]
-    [SerializeField] private List<Vector2Short> enemyPath = new List<Vector2Short>();
-    private List<Vector2Short> dontSpawNodeList = new List<Vector2Short>();
+    private EnemyPathData[] enemyPathArray;
+    private List<Vector2Short> blockGridList = new List<Vector2Short>();
+    private List<Vector2Short> enemyPathNodeList = new List<Vector2Short>();
     #endregion
 
 
@@ -39,17 +40,46 @@ public class NodeSpawner : MonoBehaviour
     [SerializeField] private Vector2Short mapSize;
     [SerializeField] private bool showGrid = true;
 
-    [ContextMenu("Generate Nodes")]
-    public void SpawNode()
+
+    public void SetData(MapData mapData)
     {
-        node.localScale = nodeSize;
+        DeleteNode();
+
+        mapSize = mapData.MapSize;
+
+        enemyPathArray = new EnemyPathData[mapData.EnemyPathList.Count];
+        for (int i = 0; i < enemyPathArray.Length; i++)
+        {
+            enemyPathArray[i] = new EnemyPathData();
+            enemyPathArray[i].Path = new List<EnemyPath>();
+        }
+
+        //敵人路徑
+        for (int i =0;i<mapData.EnemyPathList.Count;i++)
+        {
+            for (int j = 0; j < mapData.EnemyPathList[i].Path.Count; j++)
+            {
+                enemyPathArray[i].Path.Add(mapData.EnemyPathList[i].Path[j]);
+            }
+        }
+
+        //障礙物
+        blockGridList = mapData.GetBlockGridPosList(mapData.BlockGridList);
+
+        SetPath();
+        SpawNode();
+    }
+
+    List<Vector2Short> tempList = new List<Vector2Short>();
+    private void SpawNode()
+    {
+        nodeObj.localScale = nodeSize;
         if (mapSize.x > 0 && mapSize.y > 0)
         {
-            DeleteNode();
-            SetPath();
-
-            List<Vector2Short> tempList = new List<Vector2Short>();
-            foreach (var g in dontSpawNodeList)
+            tempList.Clear();
+            foreach (var g in enemyPathNodeList)
+                tempList.Add(g);
+            foreach (var g in blockGridList)
                 tempList.Add(g);
 
             for (int i = 0; i < mapSize.x; i++)
@@ -68,8 +98,8 @@ public class NodeSpawner : MonoBehaviour
                     }
                     if (canSpawn)
                     {
-                        var tempPos = new Vector3(nodeParent.position.x + i * nodeOffset.x, 0, nodeParent.position.y + j * nodeOffset.y);
-                        var tempObj = Instantiate(node);
+                        var tempPos = new Vector3(nodeParent.position.x + i, 0, nodeParent.position.y + j);
+                        var tempObj = Instantiate(nodeObj);
                         tempObj.name = "Node("+i+","+j+")";
                         tempObj.SetParent(nodeParent);
                         tempObj.transform.position = tempPos;
@@ -79,28 +109,35 @@ public class NodeSpawner : MonoBehaviour
             }
 
             start.localScale = nodeSize;
-            var startPos = new Vector3(pathParent.position.x + enemyPath[0].x * nodeOffset.x, nodeSize.y, pathParent.position.y + +enemyPath[0].y * nodeOffset.y);
-            var tempstartObj = Instantiate(start);
-            tempstartObj.SetParent(pathParent);
-            tempstartObj.transform.position = startPos;
-            startObj = tempstartObj;
-
             end.localScale = nodeSize;
-            var endPos = new Vector3(pathParent.position.x + enemyPath[enemyPath.Count - 1].x * nodeOffset.x, nodeSize.y, pathParent.position.y + +enemyPath[enemyPath.Count - 1].y * nodeOffset.y);
-            var tempEndObj = Instantiate(end);
-            tempEndObj.SetParent(pathParent);
-            tempEndObj.transform.position = endPos;
-            endObj = tempstartObj;
+            for (int i =0;i<enemyPathArray.Length;i++)
+            {
+                
+                var startPos = new Vector3(pathParent.position.x + enemyPathArray[i].Path[0].GridPos.x, nodeSize.y, pathParent.position.y + +enemyPathArray[i].Path[0].GridPos.y);
+                var tempstartObj = Instantiate(start);
+                tempstartObj.SetParent(pathParent);
+                tempstartObj.transform.position = startPos;
+                startObjList.Add(tempstartObj);
+
+                
+                var endPos = new Vector3(pathParent.position.x + enemyPathArray[i].Path[enemyPathArray[i].Path.Count - 1].GridPos.x, nodeSize.y, pathParent.position.y + enemyPathArray[i].Path[enemyPathArray[i].Path.Count - 1].GridPos.y);
+                var tempEndObj = Instantiate(end);
+                tempEndObj.SetParent(pathParent);
+                tempEndObj.transform.position = endPos;
+                endObjList.Add(tempEndObj);
+            }
         }
     }
-    [ContextMenu("Delete Nodes")]
-    public void DeleteNode()
+
+
+    private void DeleteNode()
     {
         nodes.Clear();
-        pathList.Clear();
+        pathObjList.Clear();
         wayPoints.Clear();
-        startObj = null;
-        endObj = null;
+        startObjList.Clear();
+        endObjList.Clear();
+        blockGridList.Clear();
 
         for (int i = pathParent.childCount - 1; i >= 0; i--)
             DestroyImmediate(pathParent.GetChild(i).gameObject);
@@ -110,49 +147,32 @@ public class NodeSpawner : MonoBehaviour
             DestroyImmediate(wayPointParent.GetChild(i).gameObject);
     }
 
-    public void SetPath()
+    private void SetPath()
     {
-        dontSpawNodeList.Clear();
-        if (enemyPath.Count < 1) return;
-
-        for (int i =0;i<enemyPath.Count-1;i++)
+        for(int i =0;i< enemyPathArray.Length;i++)
         {
-            AddDontSpawnNodes(enemyPath[i], enemyPath[i + 1]);
+            for (int j = 0; j < enemyPathArray[i].Path.Count - 1; j++)
+            {
+                AddDontSpawnNodes(enemyPathArray[i].Path[j].GridPos, enemyPathArray[i].Path[j + 1].GridPos);
+            }
         }
 
-        for (int i = 1; i < enemyPath.Count; i++)
+        for (int i = 0; i < enemyPathArray.Length; i++)
         {
-            var tempPos = new Vector3(nodeParent.position.x + enemyPath[i].x * nodeOffset.x, 1.5f, nodeParent.position.z + enemyPath[i].y * nodeOffset.y);
-            var tempObj = Instantiate(wayPoint);
-            tempObj.name = "WayPoint " + i + "";
-            tempObj.SetParent(wayPointParent);
-            tempObj.transform.position = tempPos;
-            wayPoints.Add(tempObj);
+            for (int j = 0; j < enemyPathArray[i].Path.Count; j++)
+            {
+                var tempPos = new Vector3(nodeParent.position.x + enemyPathArray[i].Path[j].GridPos.x, 1.5f, nodeParent.position.z + enemyPathArray[i].Path[j].GridPos.y);
+                var tempObj = Instantiate(wayPointObj);
+                tempObj.name = "WayPoint " + i + "";
+                tempObj.SetParent(wayPointParent);
+                tempObj.transform.position = tempPos;
+                wayPoints.Add(tempObj);
+            }
         }
     }
     
     private void AddDontSpawnNodes(Vector2Short node1, Vector2Short node2)
     {
-        var tempObj = Instantiate(path);
-
-        var child = path.GetChild(0);
-        child.localScale = new Vector3(nodeSize.x + (nodeOffset.x - nodeSize.x) , nodeSize.y , nodeSize.z + (nodeOffset.y - nodeSize.z));
-        child.localPosition = new Vector3(child.localScale.x / 2,0, child.localScale.z/2);
-        var scaleX = Math.Abs(node1.x - node2.x) > 0 ? Math.Abs(node1.x - node2.x) + 1 : 1;
-        var scaleZ = Math.Abs(node1.y - node2.y) > 0 ? Math.Abs(node1.y - node2.y) + 1 : 1;
-
-        tempObj.localScale = new Vector3(scaleX, nodeSize.y , scaleZ);
-        tempObj.SetParent(pathParent);
-        Vector3 tempPos;
-        if (Vector2Short.Distance(Vector2Short.GridPosZero(), node1) > Vector2Short.Distance(Vector2Short.GridPosZero(), node2))
-            tempPos = new Vector3((pathParent.position.x + node2.x * nodeOffset.x) - nodeOffset.x / 2, 0, (pathParent.position.y + node2.y * nodeOffset.y) - nodeOffset.y / 2);
-        else
-            tempPos = new Vector3((pathParent.position.x + node1.x * nodeOffset.x) - nodeOffset.x / 2, 0, (pathParent.position.y + node1.y * nodeOffset.y) - nodeOffset.y / 2);
-
-        tempObj.transform.position = tempPos;
-        pathList.Add(tempObj);
-
-
         if (node1.x < node2.x)
         {
             for (int i = node1.x; i <= node2.x; i++)
@@ -161,14 +181,14 @@ public class NodeSpawner : MonoBehaviour
                 {
                     for (int j = node1.y; j <= node2.y; j++)
                     {
-                        dontSpawNodeList.Add(new Vector2Short(i, j));
+                        SpawnEnemyPath(new Vector2Short(i, j));
                     }
                 }
                 else
                 {
                     for (int j = node1.y; j >= node2.y; j--)
                     {
-                        dontSpawNodeList.Add(new Vector2Short(i, j));
+                        SpawnEnemyPath(new Vector2Short(i, j));
                     }
                 }
             }
@@ -181,23 +201,38 @@ public class NodeSpawner : MonoBehaviour
                 {
                     for (int j = node1.y; j <= node2.y; j++)
                     {
-                        dontSpawNodeList.Add(new Vector2Short(i, j));
+                        SpawnEnemyPath(new Vector2Short(i, j));
                     }
                 }
                 else
                 {
                     for (int j = node1.y; j >= node2.y; j--)
                     {
-                        dontSpawNodeList.Add(new Vector2Short(i, j));
+                        SpawnEnemyPath(new Vector2Short(i, j));
                     }
                 }
             }
         }
     }
 
+    private void SpawnEnemyPath(Vector2Short node)
+    {
+        if (!enemyPathNodeList.Contains(node))
+        {
+            enemyPathNodeList.Add(node);
+
+            var tempObj = Instantiate(pathObj);
+            tempObj.localScale = nodeSize;
+            tempObj.SetParent(pathParent);
+            tempObj.transform.position = new Vector3(node.x, 0, node.y);
+            pathObjList.Add(tempObj);
+        }
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        return;
         if (showGrid)
         {
             Vector3 origin = new Vector3(transform.position.x - nodeSize.x / 2, 3f, transform.position.z - nodeSize.z / 2);
@@ -206,15 +241,15 @@ public class NodeSpawner : MonoBehaviour
         }
     }
 
-    public void DebugDrawGrid(Vector3 origin, int numRows, int numCols, Color color)
+    private void DebugDrawGrid(Vector3 origin, int numRows, int numCols, Color color)
     {//在 Scene 裡面畫出對應的格線
-        float width = (numCols * nodeOffset.x);
-        float height = (numRows * nodeOffset.y);
+        float width = numCols;
+        float height = numRows;
 
         // 水平
         for (int i = 0; i < numRows + 1; i++)
         {
-            Vector3 startPos = origin + i * nodeOffset.x * Vector3.forward;
+            Vector3 startPos = origin + i * Vector3.forward;
             Vector3 endPos = startPos + width * Vector3.right;
             Debug.DrawLine(startPos, endPos, color);
         }
@@ -222,22 +257,22 @@ public class NodeSpawner : MonoBehaviour
         // 垂直
         for (int i = 0; i < numCols + 1; i++)
         {
-            Vector3 startPos = origin + i * nodeOffset.x * Vector3.right;
+            Vector3 startPos = origin + i *  Vector3.right;
             Vector3 endPos = startPos + height * Vector3.forward;
             Debug.DrawLine(startPos, endPos, color);
         }
     }
 
-    public void DrawEnemyPath()
+    private void DrawEnemyPath()
     {
-        if (enemyPath.Count < 2)
-            return;
-
-        for (int i = 0; i < enemyPath.Count - 1; i++)
+        for (int i = 0; i < enemyPathArray.Length; i++)
         {
-            Vector3 startPos = new Vector3(nodeParent.position.x + enemyPath[i].x * nodeOffset.x, 3f, nodeParent.position.z + enemyPath[i].y * nodeOffset.y);
-            Vector3 endPos = new Vector3(nodeParent.position.x + enemyPath[i + 1].x * nodeOffset.x, 3f, nodeParent.position.z + enemyPath[i + 1].y * nodeOffset.y);
-            Debug.DrawLine(startPos, endPos, Color.red);
+            for (int j = 0; j < enemyPathArray[i].Path.Count - 1; j++)
+            {
+                Vector3 startPos = new Vector3(nodeParent.position.x + enemyPathArray[i].Path[j].GridPos.x, 3f, nodeParent.position.z + enemyPathArray[i].Path[j].GridPos.y);
+                Vector3 endPos = new Vector3(nodeParent.position.x + enemyPathArray[i].Path[j + 1].GridPos.x, 3f, nodeParent.position.z + enemyPathArray[i].Path[j + 1].GridPos.y);
+                Debug.DrawLine(startPos, endPos, Color.red);
+            }
         }
     }
 #endif

@@ -1,20 +1,33 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float panSpeed = 30f;
-    [SerializeField] private float panBorderThicknes = 10f;
-    [SerializeField] private float scrollSpeed = 5f;
+    [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float scrollSpeed = 10f;
+    [SerializeField] private Rect bound = new Rect(0,0,29,29);
 
-    [SerializeField] private float minY = 10f;
-    [SerializeField] private float maxY = 80f;
+    [SerializeField] private float minY = 5f;
+    [SerializeField] private float maxY = 15f;
+
+    [SerializeField] private Transform followTarget;
+    [SerializeField] private BoxCollider cameraConfine;
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+
     private bool canMove = true;
     // Start is called before the first frame update
     void Start()
     {
         canMove = true;
+    }
+
+    public void SetCamera(Vector2Short mapSize)
+    {
+        bound = new Rect(0,0,mapSize.x - 1,mapSize.y - 1);
+        cameraConfine.size = new Vector3(mapSize.x + 5, 40f, mapSize.y + 5);
+        cameraConfine.transform.position = new Vector3(mapSize.x / 2 , 0 , mapSize.y / 4);
     }
 
     // Update is called once per frame
@@ -23,22 +36,26 @@ public class CameraController : MonoBehaviour
         if (!canMove)
             return;
 
-        if(Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - panBorderThicknes)
-            transform.Translate(Vector3.forward * panSpeed * Time.deltaTime, Space.World);
-        if (Input.GetKey(KeyCode.S) || Input.mousePosition.y <= panBorderThicknes)
-            transform.Translate(Vector3.back * panSpeed * Time.deltaTime, Space.World);
-        if (Input.GetKey(KeyCode.D) || Input.mousePosition.x >= Screen.width - panBorderThicknes)
-            transform.Translate(Vector3.right * panSpeed * Time.deltaTime, Space.World);
-        if (Input.GetKey(KeyCode.A) || Input.mousePosition.x <= panBorderThicknes)
-            transform.Translate(Vector3.left * panSpeed * Time.deltaTime, Space.World);
-
+        if(Input.GetKey(KeyCode.W) && (followTarget.localPosition + Vector3.forward).z < bound.yMax)
+        {
+            followTarget.Translate(Vector3.forward * moveSpeed * Time.deltaTime,Space.World);
+        }
+        if (Input.GetKey(KeyCode.A) && (followTarget.localPosition + Vector3.left).x > bound.xMin)
+        {
+            followTarget.Translate(Vector3.left * moveSpeed * Time.deltaTime, Space.World);
+        }
+        if (Input.GetKey(KeyCode.S) && (followTarget.localPosition + Vector3.back).z > bound.yMin)
+        {
+            followTarget.Translate(Vector3.back * moveSpeed * Time.deltaTime, Space.World);
+        }
+        if (Input.GetKey(KeyCode.D) && (followTarget.localPosition + Vector3.right).x < bound.xMax)
+        {
+            followTarget.Translate(Vector3.right * moveSpeed * Time.deltaTime, Space.World);
+        }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        Vector3 pos = transform.position;
-
-        pos.y -= scroll * 1000 * scrollSpeed * Time.deltaTime;
-        pos.y = Mathf.Clamp(pos.y,minY,maxY);
-        transform.position = pos;
+        virtualCamera.m_Lens.OrthographicSize -= scroll * scrollSpeed * 25f * Time.deltaTime;
+        virtualCamera.m_Lens.OrthographicSize = Mathf.Clamp(virtualCamera.m_Lens.OrthographicSize, minY,maxY);
     }
 
     private void OnEnable()

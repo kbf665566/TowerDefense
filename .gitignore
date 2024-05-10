@@ -75,3 +75,5 @@ crashlytics-build.properties
 
 # Font
 *.TTC
+
+/[Aa]ssets/[Tt]est/*

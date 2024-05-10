@@ -1,41 +1,14 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
-
+using System.IO;
+/// <summary>
+/// 管理整個遊戲
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    [SerializeField] Transform wayPointParent;
-    private Transform[] wayPoints;
-    public Transform[] WayPoints
-    { get 
-        {
-            if (wayPoints == null)
-            {
-                wayPoints = new Transform[wayPointParent.childCount];
-                for (int i = 0; i < wayPoints.Length; i++)
-                    wayPoints[i] = wayPointParent.GetChild(i);
-            }
-            return wayPoints;
-        } 
-    }
-
-    #region Money
-    [SerializeField] private int startMoney = 400;
-    private int money;
-    public int Money => money;
-    [SerializeField] private TextMeshProUGUI moneyText;
-    #endregion
-
-    #region Live
-    [SerializeField] private int startLive = 20;
-    private int live;
-    public int Live => live;
-    [SerializeField] private TextMeshProUGUI liveText;
-    #endregion
-
-    private int levelToUnlock = 2;
 
     private bool gameIsOver = false;
     [SerializeField] GameObject gameOverUI;
@@ -43,6 +16,13 @@ public class GameManager : MonoBehaviour
     public delegate void OnGameOver();
     public static OnGameOver onGameOver;
 
+    public Maps MapData;
+    public LevelData LevelData;
+    public Towers TowerData;
+    public Enemies EnemyData;
+
+    private MapData nowMapData;
+    public MapData NowMapData => nowMapData;
 
     private void Awake()
     {
@@ -52,12 +32,14 @@ public class GameManager : MonoBehaviour
             return;
         }
         instance = this;
+
+        DontDestroyOnLoad(gameObject);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        ResetGame();
+       
     }
 
     private void Update()
@@ -70,39 +52,10 @@ public class GameManager : MonoBehaviour
 
     private void ResetGame()
     {
-        money = startMoney;
-        moneyText.text = money.ToString();
-        live = startLive;
-        liveText.text = live.ToString();
         gameIsOver = false;
         gameOverUI.SetActive(false);
     }
 
-    public void CostMoney(int cost)
-    {
-        money -= cost;
-        moneyText.text = money.ToString();
-    }
-
-    public void AddMoney(int add)
-    {
-        money += add;
-        moneyText.text = money.ToString();
-    }
-
-    public void LostLive(int lost)
-    {
-        live = live - lost <= 0 ? 0 : live - lost; 
-        liveText.text = live.ToString();
-        if (live <= 0)
-            onGameOver?.Invoke();
-    }
-
-    public void AddLive(int add)
-    {
-        live += add;
-        liveText.text = live.ToString();
-    }
 
     private void EndGame()
     {
@@ -116,12 +69,10 @@ public class GameManager : MonoBehaviour
         gameWinUI.SetActive(true);
     }
 
-    [ContextMenu("SetWayPoint")]
-    public void SetWayPoint()
+    public MapData SelectMap(int id)
     {
-        wayPoints = new Transform[wayPointParent.childCount];
-        for (int i = 0; i < wayPoints.Length; i++)
-            wayPoints[i] = wayPointParent.GetChild(i);
+        nowMapData = MapData.GetData(id);
+        return nowMapData;
     }
 
     private void OnEnable()

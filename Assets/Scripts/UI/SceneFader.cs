@@ -18,6 +18,11 @@ public class SceneFader : MonoBehaviour
         StartCoroutine(FadeOut(scene));
     }
 
+    public void FadeTo(object s, GameEvent.SceneChangeEvent e)
+    {
+        StartCoroutine(FadeOut(e.SceneName));
+    }
+
     private IEnumerator FadeIn()
     {
         float t = 1f;
@@ -44,5 +49,10 @@ public class SceneFader : MonoBehaviour
         }
 
         SceneManager.LoadScene(scene);
+    }
+
+    private void OnEnable()
+    {
+        EventHelper.SceneChangedEvent += FadeTo;
     }
 }

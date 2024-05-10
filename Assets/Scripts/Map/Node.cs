@@ -22,7 +22,7 @@ public class Node : MonoBehaviour
     private bool isUpgrade = false;
     public bool IsUpgrade => isUpgrade;
     private BuildManager buildManager => BuildManager.instance;
-    private GameManager gameManager => GameManager.instance;
+    private LevelManager levelManager => LevelManager.instance;
     private void Start()
     {
         render = GetComponent<Renderer>();
@@ -41,13 +41,13 @@ public class Node : MonoBehaviour
 
     public void BuildTurret(TurretBlueprint blueprint)
     {
-        if (gameManager.Money < blueprint.Cost)
+        if (levelManager.Money < blueprint.Cost)
         {
             Debug.Log("窮");
             return;
         }
 
-        gameManager.CostMoney(blueprint.Cost);
+        levelManager.CostMoney(blueprint.Cost);
 
         GameObject _turret = Instantiate(blueprint.turretPrefab, GetBuildPos(blueprint.BuildOffset), Quaternion.identity);
         turret = _turret;
@@ -58,13 +58,13 @@ public class Node : MonoBehaviour
 
     public void UpgradeTurret()
     {
-        if (gameManager.Money < turretBlueprint.Cost)
+        if (levelManager.Money < turretBlueprint.Cost)
         {
             Debug.Log("窮");
             return;
         }
 
-        gameManager.CostMoney(turretBlueprint.Cost);
+        levelManager.CostMoney(turretBlueprint.Cost);
 
         Destroy(turret);
 
@@ -78,7 +78,7 @@ public class Node : MonoBehaviour
 
     public void SellTurret()
     {
-        gameManager.AddMoney(turretBlueprint.GetSellPirce());
+        levelManager.AddMoney(turretBlueprint.GetSellPirce());
         Destroy(turret);
 
         GameObject effect = Instantiate(buildManager.SellEffect, GetBuildPos(turretBlueprint.BuildOffset), Quaternion.identity);
@@ -93,34 +93,6 @@ public class Node : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
-
-        if (turret != null)
-        {
-            BuildManager.nodeSelected?.Invoke(this);
-            return;
-        }
-
-        if (!buildManager.CanBuild)
-            return;
-
-        BuildTurret(buildManager.TurretTobuild);
-    }
-
-    private void OnMouseEnter()
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
-        if (!buildManager.CanBuild)
-            return;
-
-        if(buildManager.HasMoney)
-            render.material.color = hoverColor;
-        else
-            render.material.color = notEnoughMoneyColor;
-
-    }
-    private void OnMouseExit()
-    {
-        render.material.color = startColor;
+        EventHelper.NodeSelectedEvent.Invoke(this, GameEvent.NodeSelectEvent.CreateEvent(pos));
     }
 }

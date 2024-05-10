@@ -11,6 +11,10 @@ public class MapData
     public string MapName;
     /// <summary> 程式讀取用 </summary>
     public string SceneName;
+    /// <summary> 起始生命 </summary>
+    public int StartLive;
+    /// <summary> 起始資源 </summary>
+    public int StartMoney;
     public Sprite MapIcon;
     public Vector2Short MapSize;
     public List<EnemyPathData> EnemyPathList = new List<EnemyPathData>();
@@ -18,6 +22,76 @@ public class MapData
     public int WavesId;
     [HideInInspector]
     public Waves Waves;
+
+
+
+    public List<Vector2Short> GetBlockGridPosList(List<BlockData> blockDatas)
+    {
+        var blockGridPosList = new List<Vector2Short>();
+        for (int i = 0; i < blockDatas.Count; i++)
+        {
+            for (int x = blockDatas[i].GridPos.x; x < blockDatas[i].GridPos.x + blockDatas[i].Size.x; x++)
+            {
+                for (int y = blockDatas[i].GridPos.y; y < blockDatas[i].GridPos.y + blockDatas[i].Size.y; y++)
+                {
+                    blockGridPosList.Add(new Vector2Short(x, y));
+                }
+            }
+        }
+        return blockGridPosList;
+    }
+
+    public List<Vector2Short> GetEnemyPathPosList(List<EnemyPathData> enemyPathDatas)
+    {
+        var enemyPathPosList = new List<Vector2Short>();
+        for (int i = 0; i < enemyPathDatas.Count; i++)
+        {
+            for (int j = 0; j < enemyPathDatas[i].Path.Count - 1; j++)
+            {
+                if (enemyPathDatas[i].Path[j].GridPos.x < enemyPathDatas[i].Path[j].GridPos.x)
+                {
+                    for (int x = enemyPathDatas[i].Path[j].GridPos.x; x <= enemyPathDatas[i].Path[j].GridPos.x; x++)
+                    {
+                        if (enemyPathDatas[i].Path[j].GridPos.y < enemyPathDatas[i].Path[j].GridPos.y)
+                        {
+                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y <= enemyPathDatas[i].Path[j].GridPos.y; y++)
+                            {
+                                enemyPathPosList.Add(new Vector2Short(x, y));
+                            }
+                        }
+                        else
+                        {
+                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y >= enemyPathDatas[i].Path[j].GridPos.y; y--)
+                            {
+                                enemyPathPosList.Add(new Vector2Short(x, y));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int x = enemyPathDatas[i].Path[j].GridPos.x; x >= enemyPathDatas[i].Path[j].GridPos.x; x--)
+                    {
+                        if (enemyPathDatas[i].Path[j].GridPos.y < enemyPathDatas[i].Path[j].GridPos.y)
+                        {
+                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y <= enemyPathDatas[i].Path[j].GridPos.y; y++)
+                            {
+                                enemyPathPosList.Add(new Vector2Short(x, y));
+                            }
+                        }
+                        else
+                        {
+                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y >= enemyPathDatas[i].Path[j].GridPos.y; y--)
+                            {
+                                enemyPathPosList.Add(new Vector2Short(x, y));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return enemyPathPosList;
+    }
 }
 
 [Serializable]
