@@ -8,35 +8,16 @@ public class BuildManager : MonoBehaviour
     public static BuildManager instance;
     private GameManager gameManager => GameManager.instance;
 
-    private TurretBlueprint turretToBuild;
-    public TurretBlueprint TurretTobuild => turretToBuild;
-
-    [SerializeField]private GameObject standardTurretPrefab;
-    public GameObject StandardTurretPrefab => standardTurretPrefab;
-
-    [SerializeField] private GameObject missleLauncherPrefab;
-    public GameObject MissleLauncherPrefab => missleLauncherPrefab;
-
-    [SerializeField] private GameObject buildEffect;
-    public GameObject BuildEffect => buildEffect;
-    [SerializeField] private GameObject sellEffect;
-    public GameObject SellEffect => sellEffect;
+    private Dictionary<int, TowerInLevel> nowTowers = new Dictionary<int, TowerInLevel>();
+    [SerializeField] private Transform towerParent;
 
     private GridManager gridManager;
 
-    public bool CanBuild { get { return turretToBuild != null; } }
-
-    private Node selectNode;
-    public delegate void NodeSelected(Node node);
-    public static NodeSelected nodeSelected;
-    public delegate void NodeCancelSelected();
-    public static NodeCancelSelected nodeCancelSelected;
-
 #if UNITY_EDITOR
     private GridDebugger gridDebugger;
+    public GridDebugger GridDebugger => gridDebugger;
 #endif
 
-    /*建一個Prefab用來顯示選取、預覽的網格狀態*/
     private void Awake()
     {
         if (instance != null)
@@ -46,21 +27,20 @@ public class BuildManager : MonoBehaviour
         }
         instance = this;
 
+#if UNITY_EDITOR
+        if(gridDebugger == null)
+            gridDebugger = FindObjectOfType<GridDebugger>();
+#endif
+
         var mapData = gameManager.NowMapData;
         gridManager = new GridManager(Vector2Short.Zero, mapData.MapSize, mapData.GetBlockGridPosList(mapData.BlockGridList), mapData.GetEnemyPathPosList(mapData.EnemyPathList));
 
-    #if UNITY_EDITOR
-        gridDebugger = new GridDebugger();
-        gridDebugger.Create(gameManager.NowMapData.MapSize);
-    #endif
-
-}
-
-public void SelectTurretToBuild(TurretBlueprint turret)
-    {
-        turretToBuild = turret;
-        nodeCancelSelected?.Invoke();
+#if UNITY_EDITOR
+        gridDebugger.SetUp();
+#endif
     }
+
+
 
     public GridState GetGridState(Vector2Short gridPos)
     {
@@ -69,30 +49,88 @@ public void SelectTurretToBuild(TurretBlueprint turret)
     }
     public GridState GetGridState(int x,int y)
     {
+        if (gridManager.IsExistGrid(new Vector2Short(x, y)) == false)
+            return GridState.Block;
+
         var gridState = gridManager.GetGridState(x, y);
         return gridState;
     }
 
-    private void SelectNode(Node node)
+    public void BuildTower(object s,GameEvent.TowerBuildEvent e)
     {
-        if(selectNode == node)
-        {
-            nodeCancelSelected?.Invoke();
-            return;
-        }
+        var towerData = gameManager.TowerData.GetData(e.Id);
+        var uid = GenerateUid();
 
-        selectNode = node;
-        turretToBuild = null;
+        if(towerData != null)
+        {
+            TowerInLevel newTower = null;
+            var worldPos = e.GridPos.ToWorldPos() + new Vector3(0, 2f, 0);
+
+            newTower = Instantiate(towerData.TowerLevelData[0].towerPrefab, worldPos, Quaternion.identity);
+            newTower.transform.SetParent(towerParent);
+
+            if (towerData.towerType == TowerType.Normal)
+                ((NormalTower)newTower).SetTower(uid, towerData);
+            else if (towerData.towerType == TowerType.AOE)
+                ((AOETower)newTower).SetTower(uid, towerData);
+            else if (towerData.towerType == TowerType.Support)
+                ((SupportTower)newTower).SetTower(uid, towerData);
+            else if (towerData.towerType == TowerType.Money)
+                ((MoneyTower)newTower).SetTower(uid, towerData);
+
+            gridManager.PlaceTower(uid,e.GridPos,towerData.TowerSize);
+            nowTowers.Add(uid,newTower);
+
+            //發出建造特效事件
+            EventHelper.EffectShowEvent.Invoke(this,GameEvent.GameEffectShowEvent.CreateEvent(worldPos,towerData.BuildParticle));
+
+#if UNITY_EDITOR
+            gridDebugger.ChangeColor(e.GridPos,towerData.TowerSize,GridState.Building);
+#endif
+        }
+    }
+
+    public void SellTower(object s, GameEvent.TowerSellEvent e)
+    {
+
+    }
+
+    public void UpgradeTower(object s, GameEvent.TowerUpgradeEvent e)
+    {
+        if(nowTowers.TryGetValue(e.Uid,out var tower))
+        {
+            tower.LevelUp();
+        }
+    }
+
+    public bool CheckCanBuild(Vector2Short size,Vector2Short pos)
+    {
+        return gridManager.CheckCanBuild(pos,size);
     }
 
     public void DeselectNode()
     {
-        selectNode = null;
+
     }
 
     private void OnDisable()
     {
-        nodeSelected -= SelectNode;
-        nodeCancelSelected -= DeselectNode;
+        EventHelper.TowerBuiltEvent -= BuildTower;
+        EventHelper.TowerSoldEvent -= SellTower;
+        EventHelper.TowerUpgradedEvent -= UpgradeTower;
+    }
+
+    private void OnEnable()
+    {
+        EventHelper.TowerBuiltEvent += BuildTower;
+        EventHelper.TowerSoldEvent += SellTower;
+        EventHelper.TowerUpgradedEvent += UpgradeTower;
+    }
+
+    private int GenerateUid()
+    {
+        int uid = 0;
+        while (nowTowers.ContainsKey(uid)) uid += 1;
+        return uid;
     }
 }

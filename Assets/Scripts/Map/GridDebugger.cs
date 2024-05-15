@@ -78,7 +78,31 @@ namespace Game
             }
         }
 
-        private void OnEnable()
+        public void ChangeColor(Vector2Short gridPos,Vector2Short size, GridState gridState)
+        {
+            for (int x = gridPos.x; x < gridPos.x + size.x; x++)
+            {
+                for (int y = gridPos.y; y < gridPos.y + size.y; y++)
+                {
+                    var grid = childs.Find(z => z.name.Equals($"({x}, {y})"));
+                    if (grid != null)
+                    {
+                        if (gridState == GridState.Building)
+                            grid.GetComponent<TextMesh>().color = Color.blue;
+                        else if (gridState == GridState.Empty)
+                            grid.GetComponent<TextMesh>().color = Color.white;
+                        else if (gridState == GridState.EnemyPath)
+                            grid.GetComponent<TextMesh>().color = Color.red;
+                        else if (gridState == GridState.Block)
+                            grid.GetComponent<TextMesh>().color = Color.black;
+                        else if (gridState == GridState.Preview)
+                            grid.GetComponent<TextMesh>().color = Color.green;
+                    }
+                }
+            }
+        }
+
+        public void SetUp()
         {
             if (childs.Count != 0)
             {

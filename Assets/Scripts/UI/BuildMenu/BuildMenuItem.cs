@@ -35,9 +35,9 @@ public class BuildMenuItem : MonoBehaviour,IPointerExitHandler,IPointerMoveHandl
     public void OnPointerMove(PointerEventData eventData)
     {
         //減低更新位置的頻率
-        if (Time.frameCount % interval == 0)
-        {
+        //if (Time.frameCount % interval == 0)
+        //{
             EventHelper.TipShowEvent.Invoke(this,GameEvent.ShowTipEvent.CreateEvent(towerData.Name,towerData.TowerInformation));
-        }
+       // }
     }
 }

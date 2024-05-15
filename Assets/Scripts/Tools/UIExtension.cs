@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIExtension
+public static class UIExtension
 {
     /// <summary>
     /// 計算面板不超過區域
@@ -19,5 +19,15 @@ public class UIExtension
         pos.y = Mathf.Clamp(panelRectTransform.localPosition.y, minPosition.y, maxPosition.y);
 
         panelRectTransform.localPosition = pos;
+    }
+
+    public static Transform GetTopParent(this Transform transform)
+    {
+        var temp = transform.parent;
+        while(temp.parent != null)
+        {
+            temp = temp.parent;
+        }
+        return temp;
     }
 }

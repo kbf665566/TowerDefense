@@ -28,7 +28,6 @@ public class GridManager
         tempGridPos = new Vector2Short();
     }
 
-
     private void GridMapInitialize(Vector2Short gridSize)
     {
         GridSize = gridSize;
@@ -216,7 +215,7 @@ public class GridManager
                 grid.TowerUid = uid;
                 grid.GridState = gridState;
 #if UNITY_EDITOR
-                gridDebugger.ChangeColor(x,y,gridState);
+                BuildManager.instance.GridDebugger.ChangeColor(x,y,gridState);
 #endif
                 UpdateEmptyList(grid);
                 continue;
@@ -281,13 +280,12 @@ public class GridManager
         return emptyGridList.Contains(grid);
     }
 
-
-#if UNITY_EDITOR
-    private GridDebugger gridDebugger;
-
-    public void SetDebugger(GridDebugger gridDebugger)
+    public bool IsExistGrid(Vector2Short gridPos)
     {
-        this.gridDebugger = gridDebugger;
+        var grid = GetGridData(gridPos);
+        if (grid == null)
+            return false;
+
+        return true;
     }
-#endif
 }

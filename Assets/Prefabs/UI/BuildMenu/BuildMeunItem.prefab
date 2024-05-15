@@ -311,6 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerImage: {fileID: 4481541673671325232}
   costText: {fileID: 7952098975458342844}
+  btn: {fileID: 3978771237563454237}
 --- !u!1 &6961075522882463941
 GameObject:
   m_ObjectHideFlags: 0

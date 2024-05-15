@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MapData
   m_EditorClassIdentifier: 
   MapDataList:
-  - Id: 3
+  - Id: 0
     MapName: "\u6E2C\u8A66\u5834\u666F"
     SceneName: TestLevel
     StartLive: 20
@@ -78,7 +78,7 @@ MonoBehaviour:
       Id: 0
       LevelName: 
       WaveList: []
-  - Id: 4
+  - Id: 1
     MapName: rrrrrrr
     SceneName: rrrrr
     StartLive: 0
@@ -94,7 +94,7 @@ MonoBehaviour:
       Id: 0
       LevelName: 
       WaveList: []
-  - Id: 5
+  - Id: 2
     MapName: ttttttt
     SceneName: tttttt
     StartLive: 0

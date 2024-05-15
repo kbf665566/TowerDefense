@@ -100,7 +100,7 @@ public class NodeSpawner : MonoBehaviour
                     {
                         var tempPos = new Vector3(nodeParent.position.x + i, 0, nodeParent.position.y + j);
                         var tempObj = Instantiate(nodeObj);
-                        tempObj.name = "Node("+i+","+j+")";
+                        tempObj.name = "("+i+","+j+")";
                         tempObj.SetParent(nodeParent);
                         tempObj.transform.position = tempPos;
                         nodes.Add(tempObj);

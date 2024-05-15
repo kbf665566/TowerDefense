@@ -32,7 +32,7 @@ MonoBehaviour:
       StunDuration: 0
       BuildUpgradeCost: 100
       SoldPrice: 50
-      towerPrefab: {fileID: 4989766366829307538, guid: ee4561289e7fdb248a1644d1903699ed, type: 3}
+      towerPrefab: {fileID: -538096426614295507, guid: ee4561289e7fdb248a1644d1903699ed, type: 3}
     - Damage: 15
       ShootRange: 15
       FireRate: 1
@@ -49,7 +49,7 @@ MonoBehaviour:
       StunDuration: 0
       BuildUpgradeCost: 250
       SoldPrice: 150
-      towerPrefab: {fileID: 7446358324573418757, guid: a834e7113c9804c40aed783f077e8aaf, type: 3}
+      towerPrefab: {fileID: 1736988171139976849, guid: a834e7113c9804c40aed783f077e8aaf, type: 3}
     TowerIcon: {fileID: 21300000, guid: 155e22b74aae4b244b97bd7c739ad71c, type: 3}
     towerType: 0
     IsUseBullet: 1
@@ -86,7 +86,7 @@ MonoBehaviour:
       StunDuration: 0
       BuildUpgradeCost: 200
       SoldPrice: 100
-      towerPrefab: {fileID: 7188800286066414852, guid: 852e13cd1fee71043be2067ce73f8c58, type: 3}
+      towerPrefab: {fileID: -7594727079982387, guid: 852e13cd1fee71043be2067ce73f8c58, type: 3}
     - Damage: 60
       ShootRange: 30
       FireRate: 2
@@ -103,7 +103,7 @@ MonoBehaviour:
       StunDuration: 0
       BuildUpgradeCost: 500
       SoldPrice: 250
-      towerPrefab: {fileID: 734770038192874344, guid: ec8c3254c961f9748b35cf1a1d8a00f1, type: 3}
+      towerPrefab: {fileID: -1750732485786913403, guid: ec8c3254c961f9748b35cf1a1d8a00f1, type: 3}
     TowerIcon: {fileID: 21300000, guid: f689a1e93fcb8b346b0ed6e7400eb56c, type: 3}
     towerType: 0
     IsUseBullet: 1
@@ -140,7 +140,7 @@ MonoBehaviour:
       StunDuration: 0
       BuildUpgradeCost: 300
       SoldPrice: 150
-      towerPrefab: {fileID: 8812975634281693221, guid: 769c5d595497c9046b38b765dc5be34e, type: 3}
+      towerPrefab: {fileID: 3235113332712108481, guid: 769c5d595497c9046b38b765dc5be34e, type: 3}
     - Damage: 30
       ShootRange: 20
       FireRate: 0.5
@@ -157,7 +157,7 @@ MonoBehaviour:
       StunDuration: 0
       BuildUpgradeCost: 550
       SoldPrice: 300
-      towerPrefab: {fileID: 8601639495670701164, guid: 6228e1a459de3154a928296315916e3b, type: 3}
+      towerPrefab: {fileID: -5650095106211780615, guid: 6228e1a459de3154a928296315916e3b, type: 3}
     TowerIcon: {fileID: 21300000, guid: f3882090d04ea794a9e3a33f1fd9f685, type: 3}
     towerType: 0
     IsUseBullet: 0

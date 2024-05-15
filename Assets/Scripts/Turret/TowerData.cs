@@ -87,5 +87,5 @@ public class TowerLevelData
     public int BuildUpgradeCost;
     public int SoldPrice;
 
-    public GameObject towerPrefab;
+    public TowerInLevel towerPrefab;
 }

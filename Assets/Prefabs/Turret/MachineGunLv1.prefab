@@ -1,5 +1,69 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3279591630999316500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5638096512043833296}
+  m_Layer: 0
+  m_Name: partToRotation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5638096512043833296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3279591630999316500}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.753, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2443599583186046586}
+  - {fileID: 7700876892319361536}
+  m_Father: {fileID: 3875420307138210171}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4922322222825274142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7700876892319361536}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7700876892319361536
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4922322222825274142}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.109, z: 1.153}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5638096512043833296}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4989766366829307538
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,6 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3875420307138210171}
+  - component: {fileID: -538096426614295507}
   m_Layer: 0
   m_Name: MachineGunLv1
   m_TagString: Untagged
@@ -29,16 +94,30 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4709004470819246679}
-  - {fileID: 2443599583186046586}
+  - {fileID: 5638096512043833296}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-538096426614295507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4989766366829307538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4328d59fc5e9a7a4abdc23d3939c4dc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 7700876892319361536}
+  partToRotation: {fileID: 5638096512043833296}
 --- !u!1001 &2443599583186441466
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 3875420307138210171}
+    m_TransformParent: {fileID: 5638096512043833296}
     m_Modifications:
     - target: {fileID: 100000, guid: ca1b398fbc1a64abaaf160449dab6c93, type: 3}
       propertyPath: m_Name
@@ -46,7 +125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ca1b398fbc1a64abaaf160449dab6c93, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ca1b398fbc1a64abaaf160449dab6c93, type: 3}
       propertyPath: m_LocalPosition.x
@@ -54,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ca1b398fbc1a64abaaf160449dab6c93, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.754
+      value: 0.0009999871
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ca1b398fbc1a64abaaf160449dab6c93, type: 3}
       propertyPath: m_LocalPosition.z

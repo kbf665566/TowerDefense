@@ -48,20 +48,20 @@ public class MapData
         {
             for (int j = 0; j < enemyPathDatas[i].Path.Count - 1; j++)
             {
-                if (enemyPathDatas[i].Path[j].GridPos.x < enemyPathDatas[i].Path[j].GridPos.x)
+                if (enemyPathDatas[i].Path[j].GridPos.x < enemyPathDatas[i].Path[j + 1].GridPos.x)
                 {
-                    for (int x = enemyPathDatas[i].Path[j].GridPos.x; x <= enemyPathDatas[i].Path[j].GridPos.x; x++)
+                    for (int x = enemyPathDatas[i].Path[j].GridPos.x; x <= enemyPathDatas[i].Path[j + 1].GridPos.x; x++)
                     {
-                        if (enemyPathDatas[i].Path[j].GridPos.y < enemyPathDatas[i].Path[j].GridPos.y)
+                        if (enemyPathDatas[i].Path[j].GridPos.y < enemyPathDatas[i].Path[j + 1].GridPos.y)
                         {
-                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y <= enemyPathDatas[i].Path[j].GridPos.y; y++)
+                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y <= enemyPathDatas[i].Path[j + 1].GridPos.y; y++)
                             {
                                 enemyPathPosList.Add(new Vector2Short(x, y));
                             }
                         }
                         else
                         {
-                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y >= enemyPathDatas[i].Path[j].GridPos.y; y--)
+                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y >= enemyPathDatas[i].Path[j + 1].GridPos.y; y--)
                             {
                                 enemyPathPosList.Add(new Vector2Short(x, y));
                             }
@@ -70,18 +70,18 @@ public class MapData
                 }
                 else
                 {
-                    for (int x = enemyPathDatas[i].Path[j].GridPos.x; x >= enemyPathDatas[i].Path[j].GridPos.x; x--)
+                    for (int x = enemyPathDatas[i].Path[j].GridPos.x; x >= enemyPathDatas[i].Path[j + 1].GridPos.x; x--)
                     {
-                        if (enemyPathDatas[i].Path[j].GridPos.y < enemyPathDatas[i].Path[j].GridPos.y)
+                        if (enemyPathDatas[i].Path[j].GridPos.y < enemyPathDatas[i].Path[j + 1].GridPos.y)
                         {
-                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y <= enemyPathDatas[i].Path[j].GridPos.y; y++)
+                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y <= enemyPathDatas[i].Path[j + 1].GridPos.y; y++)
                             {
                                 enemyPathPosList.Add(new Vector2Short(x, y));
                             }
                         }
                         else
                         {
-                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y >= enemyPathDatas[i].Path[j].GridPos.y; y--)
+                            for (int y = enemyPathDatas[i].Path[j].GridPos.y; y >= enemyPathDatas[i].Path[j + 1].GridPos.y; y--)
                             {
                                 enemyPathPosList.Add(new Vector2Short(x, y));
                             }

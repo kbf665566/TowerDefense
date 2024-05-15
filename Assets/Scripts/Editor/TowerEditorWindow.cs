@@ -362,7 +362,7 @@ public class TowerEditorWindow : UnitEditorWindow
         float maxContentHeight = 0;
 
 
-        minimiseStat = EditorGUI.Foldout(new Rect(startX, startY += spaceY + 5, width, height), minimiseStat, "Show Stats");
+        minimiseStat = EditorGUI.Foldout(new Rect(startX, startY += spaceY + 15, width, height), minimiseStat, "Show Stats");
         if (!minimiseStat)
         {
             startY += spaceY;
@@ -543,7 +543,7 @@ public class TowerEditorWindow : UnitEditorWindow
 
         cont = new GUIContent("塔 模型:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        levelData.towerPrefab = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), levelData.towerPrefab, typeof(GameObject), false);
+        levelData.towerPrefab = (TowerInLevel)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), levelData.towerPrefab, typeof(TowerInLevel), false);
 
 
         return new Vector3(startX + 220, startY, statContentHeight);

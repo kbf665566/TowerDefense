@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using System.IO;
+using UnityEngine.EventSystems;
 /// <summary>
 /// 管理整個遊戲
 /// </summary>
@@ -23,6 +24,9 @@ public class GameManager : MonoBehaviour
 
     private MapData nowMapData;
     public MapData NowMapData => nowMapData;
+
+    private bool disableClicked = false;
+    public bool DisableClicked => disableClicked;
 
     private void Awake()
     {
@@ -48,6 +52,8 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
             onGameOver?.Invoke();
 #endif
+
+        //EventSystem.current.
     }
 
     private void ResetGame()

@@ -85,13 +85,19 @@ public class MapEditorWindow : UnitEditorWindow
             GameObject levelUICanvasObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/UI/Level/LevelUICanvas.prefab", typeof(GameObject)));
             levelUICanvasObj.name = "LevelUICanvas";
 
-            GameObject nodeUIObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/UI/Level/NodeUI.prefab", typeof(GameObject)));
-            nodeUIObj.name = "NodeUI";
+            GameObject levelUICanvas_MoveObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/UI/Level/LevelUICanvas_Move.prefab", typeof(GameObject)));
+            levelUICanvas_MoveObj.name = "LevelUICanvas_Move";
 
             GameObject cameraControllerObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Camera/CameraController.prefab", typeof(GameObject)));
             cameraControllerObj.name = "CameraController";
             CameraController cameraController = (CameraController)FindObjectOfType(typeof(CameraController));
             cameraController.SetCamera(mapList[selectID].MapSize);
+
+            GameObject buildManager = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/BuildManager.prefab", typeof(GameObject)));
+            buildManager.name = "BuildManager";
+
+            GameObject gameEffectManager = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/GameEffectManager.prefab", typeof(GameObject)));
+            gameEffectManager.name = "GameEffectManager";
         }
 
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new Map:");
@@ -383,22 +389,6 @@ public class MapEditorWindow : UnitEditorWindow
         EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
         map.StartLive = EditorGUI.IntField(new Rect(startX + spaceX * 2 + 60, startY, fWidth, height), map.StartLive);
 
-        bool hasWavesData = false;
-        for(int i = 0;i<EditorDataManager.LevelIDList.Count;i++)
-        {
-            if(map.WavesId == EditorDataManager.LevelIDList[i])
-            {
-                hasWavesData = true;
-                break;
-            }
-        }
-        if(!hasWavesData)
-        {
-            GUI.color = Color.red;
-            cont = new GUIContent("<----無資料", "");
-            EditorGUI.LabelField(new Rect(startX + spaceX + 50 , startY, 80, height), cont);
-            GUI.color = Color.white;
-        }
 
         cont = new GUIContent("顯示地圖:", "是否顯示地圖");
         EditorGUI.LabelField(new Rect(startX, startY + spaceY * 2.5f, width, height), cont);
