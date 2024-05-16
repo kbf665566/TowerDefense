@@ -16,13 +16,16 @@ public class TowerInLevel : MonoBehaviour
     protected int nowLevel;
     public int NowLevel => nowLevel;
     protected TowerData towerData;
+    public TowerData TowerData => towerData;
+    protected Vector2Short gridPos;
+    public Vector2Short GridPos => gridPos;
 
     /// <summary>
     /// 建造塔的時候設定資料
     /// </summary>
     /// <param name="uid"></param>
     /// <param name="towerData"></param>
-    public virtual void SetTower(int uid,TowerData towerData)
+    public virtual void SetTower(int uid,TowerData towerData,Vector2Short gridPos)
     {
         this.uid = uid;
         id = towerData.Id;
@@ -30,6 +33,7 @@ public class TowerInLevel : MonoBehaviour
         nowLevel = 0;
         this.towerData = towerData;
         towerLevelData = towerData.TowerLevelData;
+        this.gridPos = gridPos;
     }
 
     public virtual void LevelUp()

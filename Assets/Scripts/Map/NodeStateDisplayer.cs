@@ -44,6 +44,28 @@ public class NodeStateDisplayer : MonoBehaviour
         }
     }
 
+    public void SelectTower(object s, GameEvent.TowerSelectEvent e)
+    {
+        var tower = buildManager.GetTower(e.Uid);
+        if (tower == null)
+            return;
+
+        var size = tower.TowerData.TowerSize;
+        var gridPos = tower.GridPos;
+
+        int index = 0;
+        for (int x = gridPos.x; x < gridPos.x + size.x; x++)
+        {
+            for (int y = gridPos.y; y < gridPos.y + size.y; y++)
+            {
+                stateDisplayers[index].color = GreenColor;
+                stateDisplayers[index].transform.localPosition = new Vector3(x, 0.7f, y);
+                stateDisplayers[index].gameObject.SetActive(true);
+                index++;
+            }
+        }
+    }
+
     public void HideState()
     {
         for (int i = 0; i < stateDisplayers.Length; i++)
@@ -62,9 +84,23 @@ public class NodeStateDisplayer : MonoBehaviour
         HideState();
     }
 
+    public void TowerUpgraded(object s, GameEvent.TowerUpgradeEvent e)
+    {
+        HideState();
+    }
+
+    public void TowerSold(object s, GameEvent.TowerSellEvent e)
+    {
+        HideState();
+    }
+
     public void TowerCanceledPreview(object s, GameEvent.TowerCancelPreviewEvent e)
     {
         HideState();
+
+        stateDisplayers[0].color = GreenColor;
+        stateDisplayers[0].transform.localPosition = new Vector3(e.GridPos.x, 0.7f, e.GridPos.y);
+        stateDisplayers[0].gameObject.SetActive(true);
     }
 
     [ContextMenu("Spawn")]
@@ -88,6 +124,9 @@ public class NodeStateDisplayer : MonoBehaviour
         EventHelper.NodeSelectedEvent += SelectNode;
         EventHelper.NodeCancelSelectedEvent += CancelSelectNode;
         EventHelper.TowerBuiltEvent += TowerBuilt;
+        EventHelper.TowerUpgradedEvent += TowerUpgraded;
+        EventHelper.TowerSoldEvent += TowerSold;
+        EventHelper.TowerSelectedEvent += SelectTower;
         EventHelper.TowerCanceledPreviewEvent += TowerCanceledPreview;
     }
 
@@ -97,6 +136,9 @@ public class NodeStateDisplayer : MonoBehaviour
         EventHelper.NodeSelectedEvent -= SelectNode;
         EventHelper.NodeCancelSelectedEvent -= CancelSelectNode;
         EventHelper.TowerBuiltEvent -= TowerBuilt;
+        EventHelper.TowerUpgradedEvent -= TowerUpgraded;
+        EventHelper.TowerSoldEvent -= TowerSold;
+        EventHelper.TowerSelectedEvent -= SelectTower;
         EventHelper.TowerCanceledPreviewEvent -= TowerCanceledPreview;
     }
 }

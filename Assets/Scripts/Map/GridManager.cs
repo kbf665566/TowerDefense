@@ -100,7 +100,7 @@ public class GridManager
         return gridMap[x, y].GridState;
     }
 
-    public long GetGridTowerUid(Vector2Short gridPos)
+    public int GetGridTowerUid(Vector2Short gridPos)
     {
         var gridData = GetGridData(gridPos);
         return gridData != null ? gridData.TowerUid : 0;
@@ -226,9 +226,9 @@ public class GridManager
 
     private void RemoveGridInfo(Vector2Short anchorGridPos, Vector2Short size)
     {
-        for (short x = -1; x < size.x + 1; x++)
+        for (short x = 0; x < size.x; x++)
         {
-            for (short y = -1; y < size.y + 1; y++)
+            for (short y = 0; y < size.y; y++)
             {
                 tempGridPos.SetPos(x, y);
                 tempGridPos = tempGridPos + anchorGridPos;
@@ -238,19 +238,13 @@ public class GridManager
 
                 if (grid.GridState == GridState.Block || grid.GridState == GridState.EnemyPath) continue;
 
-                if (x < 0 || y < 0 || x == size.x || y == size.y)
-                {
-                    if (grid.TowerUid == 0)
-                    {
-                        grid.GridState = GridState.Empty;
-                        UpdateEmptyList(grid);
-                    }
-                    continue;
-                }
 
 
                 grid.TowerUid = 0;
                 grid.GridState = GridState.Empty;
+#if UNITY_EDITOR
+                BuildManager.instance.GridDebugger.ChangeColor(tempGridPos.x, tempGridPos.y, GridState.Empty);
+#endif
                 UpdateEmptyList(grid);
             }
         }

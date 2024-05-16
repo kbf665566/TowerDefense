@@ -29,9 +29,9 @@ public class AOETower : TowerInLevel
     private float fireTimer;
 
     [SerializeField] private Transform firePoint;
-    public override void SetTower(int uid, TowerData towerData)
+    public override void SetTower(int uid, TowerData towerData, Vector2Short gridPos)
     {
-        base.SetTower(uid, towerData);
+        base.SetTower(uid, towerData,gridPos);
         towerType = TowerType.AOE;
         canSlow = towerData.CanSlowEnemy;
         canStun = towerData.CanStunEnemy;

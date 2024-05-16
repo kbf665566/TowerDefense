@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Color = UnityEngine.Color;
@@ -99,7 +100,7 @@ public class NodeSpawner : MonoBehaviour
                     if (canSpawn)
                     {
                         var tempPos = new Vector3(nodeParent.position.x + i, 0, nodeParent.position.y + j);
-                        var tempObj = Instantiate(nodeObj);
+                        var tempObj = (Transform)PrefabUtility.InstantiatePrefab(nodeObj);
                         tempObj.name = "("+i+","+j+")";
                         tempObj.SetParent(nodeParent);
                         tempObj.transform.position = tempPos;
@@ -114,14 +115,14 @@ public class NodeSpawner : MonoBehaviour
             {
                 
                 var startPos = new Vector3(pathParent.position.x + enemyPathArray[i].Path[0].GridPos.x, nodeSize.y, pathParent.position.y + +enemyPathArray[i].Path[0].GridPos.y);
-                var tempstartObj = Instantiate(start);
+                var tempstartObj = (Transform)PrefabUtility.InstantiatePrefab(start);
                 tempstartObj.SetParent(pathParent);
                 tempstartObj.transform.position = startPos;
                 startObjList.Add(tempstartObj);
 
                 
                 var endPos = new Vector3(pathParent.position.x + enemyPathArray[i].Path[enemyPathArray[i].Path.Count - 1].GridPos.x, nodeSize.y, pathParent.position.y + enemyPathArray[i].Path[enemyPathArray[i].Path.Count - 1].GridPos.y);
-                var tempEndObj = Instantiate(end);
+                var tempEndObj = (Transform)PrefabUtility.InstantiatePrefab(end);
                 tempEndObj.SetParent(pathParent);
                 tempEndObj.transform.position = endPos;
                 endObjList.Add(tempEndObj);
@@ -159,12 +160,16 @@ public class NodeSpawner : MonoBehaviour
 
         for (int i = 0; i < enemyPathArray.Length; i++)
         {
+            var tempWaypointParentObj = (Transform)PrefabUtility.InstantiatePrefab(wayPointParent);
+            tempWaypointParentObj.name = "Waypoints" + i;
+            tempWaypointParentObj.SetParent(transform);
+            wayPoints.Add(tempWaypointParentObj);
             for (int j = 0; j < enemyPathArray[i].Path.Count; j++)
             {
                 var tempPos = new Vector3(nodeParent.position.x + enemyPathArray[i].Path[j].GridPos.x, 1.5f, nodeParent.position.z + enemyPathArray[i].Path[j].GridPos.y);
-                var tempObj = Instantiate(wayPointObj);
-                tempObj.name = "WayPoint " + i + "";
-                tempObj.SetParent(wayPointParent);
+                var tempObj = (Transform)PrefabUtility.InstantiatePrefab(wayPointObj);
+                tempObj.name = "WayPoint" + j;
+                tempObj.SetParent(tempWaypointParentObj);
                 tempObj.transform.position = tempPos;
                 wayPoints.Add(tempObj);
             }
@@ -221,7 +226,7 @@ public class NodeSpawner : MonoBehaviour
         {
             enemyPathNodeList.Add(node);
 
-            var tempObj = Instantiate(pathObj);
+            var tempObj = (Transform)PrefabUtility.InstantiatePrefab(pathObj);
             tempObj.localScale = nodeSize;
             tempObj.SetParent(pathParent);
             tempObj.transform.position = new Vector3(node.x, 0, node.y);

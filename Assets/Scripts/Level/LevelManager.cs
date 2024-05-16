@@ -11,9 +11,8 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
 
-    [SerializeField] Transform wayPointParent;
-    private Transform[] wayPoints;
-    public Transform[] WayPoints => wayPoints;
+    private Transform[][] wayPoints;
+    public Transform[][] WayPoints => wayPoints;
 
 
     #region Money
@@ -29,23 +28,34 @@ public class LevelManager : MonoBehaviour
     public int Live => live;
     [SerializeField] private TextMeshProUGUI liveText;
     #endregion
+    private GameManager gameManager => GameManager.instance;
 
     private void Awake()
     {
         if (instance != null)
         {
-            Debug.LogError("有多個GameManager");
+            Debug.LogError("有多個LevelManager");
             return;
         }
         instance = this;
+    }
+
+    private void Start()
+    {
+        SetLevelSetting(gameManager.NowMapData.StartMoney,gameManager.NowMapData.StartLive);
     }
 
     public void SetLevelSetting(int startMoney,int startLive)
     {
         this.startLive = startLive;
         this.startMoney = startMoney;
-    }
 
+        money = startMoney;
+        live = startLive;
+
+        moneyText.text = money.ToString();
+        liveText.text = live.ToString();
+    }
 
     public void CostMoney(int cost)
     {
@@ -80,4 +90,25 @@ public class LevelManager : MonoBehaviour
         live = startLive;
         liveText.text = live.ToString();
     }
+
+
+#if UNITY_EDITOR
+    public void SetUI(Transform levelUICanvas,Transform map,int enemyPathCount)
+    {
+        var uiContext = levelUICanvas.Find("LevelPlayerStatus").Find("Context");
+        moneyText = uiContext.Find("Money").Find("Money").GetComponent<TextMeshProUGUI>();
+        liveText = uiContext.Find("Live").Find("LiveCount").GetComponent<TextMeshProUGUI>();
+
+        wayPoints = new Transform[enemyPathCount][];
+        for(int i =0;i<enemyPathCount;i++)
+        {
+            var waypointparent = map.Find("Waypoints" + i);
+            wayPoints[i] = new Transform[waypointparent.childCount];
+            for (int j = 0;j<waypointparent.childCount;j++)
+            {
+                wayPoints[i][j] = waypointparent.GetChild(j);
+            }
+        }
+    }
+#endif
 }

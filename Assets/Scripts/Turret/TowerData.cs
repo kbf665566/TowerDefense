@@ -24,11 +24,14 @@ public class TowerData
     //------------------
 
     //-----特效---------
-    public GameObject AttackParticle;
-    public GameObject NormalParticle;
-    public GameObject BuildParticle;
-    public GameObject RemoveParticle;
+    public GameEffectType AttackParticle;
+    public GameEffectType NormalParticle;
+    public GameEffectType BuildParticle;
+    public GameEffectType RemoveParticle;
     //------------------
+
+
+    public TowerInLevel TowerPrefab;
 }
 
 [Serializable]
@@ -86,6 +89,4 @@ public class TowerLevelData
     //價錢
     public int BuildUpgradeCost;
     public int SoldPrice;
-
-    public TowerInLevel towerPrefab;
 }

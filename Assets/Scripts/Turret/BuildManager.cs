@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class BuildManager : MonoBehaviour
 {
     public static BuildManager instance;
     private GameManager gameManager => GameManager.instance;
+    private LevelManager levelManager => LevelManager.instance;
 
     private Dictionary<int, TowerInLevel> nowTowers = new Dictionary<int, TowerInLevel>();
     [SerializeField] private Transform towerParent;
@@ -60,26 +62,27 @@ public class BuildManager : MonoBehaviour
     {
         var towerData = gameManager.TowerData.GetData(e.Id);
         var uid = GenerateUid();
-
         if(towerData != null)
         {
             TowerInLevel newTower = null;
-            var worldPos = e.GridPos.ToWorldPos() + new Vector3(0, 2f, 0);
+            var worldPos = e.GridPos.ToWorldPos() + new Vector3(0, .5f, 0);
 
-            newTower = Instantiate(towerData.TowerLevelData[0].towerPrefab, worldPos, Quaternion.identity);
+            newTower = Instantiate(towerData.TowerPrefab, worldPos, Quaternion.identity);
             newTower.transform.SetParent(towerParent);
 
             if (towerData.towerType == TowerType.Normal)
-                ((NormalTower)newTower).SetTower(uid, towerData);
+                ((NormalTower)newTower).SetTower(uid, towerData, e.GridPos);
             else if (towerData.towerType == TowerType.AOE)
-                ((AOETower)newTower).SetTower(uid, towerData);
+                ((AOETower)newTower).SetTower(uid, towerData, e.GridPos);
             else if (towerData.towerType == TowerType.Support)
-                ((SupportTower)newTower).SetTower(uid, towerData);
+                ((SupportTower)newTower).SetTower(uid, towerData, e.GridPos);
             else if (towerData.towerType == TowerType.Money)
-                ((MoneyTower)newTower).SetTower(uid, towerData);
+                ((MoneyTower)newTower).SetTower(uid, towerData, e.GridPos);
 
             gridManager.PlaceTower(uid,e.GridPos,towerData.TowerSize);
             nowTowers.Add(uid,newTower);
+
+            levelManager.CostMoney(towerData.TowerLevelData[0].BuildUpgradeCost);
 
             //發出建造特效事件
             EventHelper.EffectShowEvent.Invoke(this,GameEvent.GameEffectShowEvent.CreateEvent(worldPos,towerData.BuildParticle));
@@ -92,7 +95,16 @@ public class BuildManager : MonoBehaviour
 
     public void SellTower(object s, GameEvent.TowerSellEvent e)
     {
+        if (nowTowers.TryGetValue(e.Uid, out var tower))
+        {
+            EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(tower.GridPos.CalculateCenterPos(tower.TowerData.TowerSize), tower.TowerData.RemoveParticle));
+            levelManager.AddMoney(tower.GetNowLevelData().SoldPrice);
 
+            gridManager.RemoveTower(tower.GridPos,tower.TowerData.TowerSize);
+
+            nowTowers.Remove(e.Uid);
+            Destroy(tower.gameObject);
+        }
     }
 
     public void UpgradeTower(object s, GameEvent.TowerUpgradeEvent e)
@@ -100,12 +112,26 @@ public class BuildManager : MonoBehaviour
         if(nowTowers.TryGetValue(e.Uid,out var tower))
         {
             tower.LevelUp();
+            levelManager.CostMoney(tower.GetNowLevelData().BuildUpgradeCost);
         }
     }
 
     public bool CheckCanBuild(Vector2Short size,Vector2Short pos)
     {
         return gridManager.CheckCanBuild(pos,size);
+    }
+
+    public int GetTowerUid(Vector2Short pos)
+    {
+        return gridManager.GetGridTowerUid(pos);
+    }
+
+    public TowerInLevel GetTower(int uid)
+    {
+        if (nowTowers.TryGetValue(uid, out var tower))
+            return tower;
+
+        return null;
     }
 
     public void DeselectNode()
@@ -129,7 +155,7 @@ public class BuildManager : MonoBehaviour
 
     private int GenerateUid()
     {
-        int uid = 0;
+        int uid = 1;
         while (nowTowers.ContainsKey(uid)) uid += 1;
         return uid;
     }

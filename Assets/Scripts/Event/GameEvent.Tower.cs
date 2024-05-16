@@ -53,8 +53,25 @@ public static partial class GameEvent
         }
     }
 
+    public class TowerSelectEvent : GameEventArgs<TowerSelectEvent>
+    {
+        public int Uid { get; set; }
+        public static TowerSelectEvent CreateEvent(int uid)
+        {
+            var @event = CreateEvent();
+            @event.Uid = uid;
+            return @event;
+        }
+    }
+
     public class TowerCancelPreviewEvent : GameEventArgs<TowerCancelPreviewEvent>
     {
-
+        public Vector2Short GridPos { get; set; }
+        public static TowerCancelPreviewEvent CreateEvent(Vector2Short gridPos)
+        {
+            var @event = CreateEvent();
+            @event.GridPos = gridPos;
+            return @event;
+        }
     }
 }

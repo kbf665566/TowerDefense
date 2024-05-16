@@ -93,11 +93,17 @@ public class MapEditorWindow : UnitEditorWindow
             CameraController cameraController = (CameraController)FindObjectOfType(typeof(CameraController));
             cameraController.SetCamera(mapList[selectID].MapSize);
 
-            GameObject buildManager = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/BuildManager.prefab", typeof(GameObject)));
-            buildManager.name = "BuildManager";
+            GameObject buildManagerObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/BuildManager.prefab", typeof(GameObject)));
+            buildManagerObj.name = "BuildManager";
 
-            GameObject gameEffectManager = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/GameEffectManager.prefab", typeof(GameObject)));
-            gameEffectManager.name = "GameEffectManager";
+            GameObject gameEffectManagerObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/GameEffectManager.prefab", typeof(GameObject)));
+            gameEffectManagerObj.name = "GameEffectManager";
+
+            GameObject levelManagerObj = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/LevelManager.prefab", typeof(GameObject)));
+            levelManagerObj.name = "LevelManager";
+            LevelManager levelManager = (LevelManager)FindObjectOfType(typeof(LevelManager));
+            levelManager.SetUI(levelUICanvasObj.transform, mapObj.transform, mapList[selectID].EnemyPathList.Count);
+
         }
 
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new Map:");

@@ -11,9 +11,9 @@ public class SupportTower : TowerInLevel
     private float buffAddShootRange;
     private float buffAddFireRate;
 
-    public override void SetTower(int uid, TowerData towerData)
+    public override void SetTower(int uid, TowerData towerData, Vector2Short gridPos)
     {
-        base.SetTower(uid, towerData);
+        base.SetTower(uid, towerData,gridPos);
         towerType = TowerType.Support;
 
         SetLevelData(nowLevel);

@@ -28,6 +28,7 @@ public class NodeUI : MonoBehaviour
 
     private int selectTowerId;
     private Vector2Short selectGridPos;
+    private int selectTowerUid;
 
     [Header("Confirm")]
     [SerializeField] private GameObject confirmMenu;
@@ -35,7 +36,7 @@ public class NodeUI : MonoBehaviour
 
     private BuildManager buildManager => BuildManager.instance;
     private GameManager gameManager => GameManager.instance;
-
+    private LevelManager levelManager => LevelManager.instance;
 
     private void Awake()
     {
@@ -56,76 +57,67 @@ public class NodeUI : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-    }
 
-    public void SetTarget(Node targetNode)
+    public void SelectTower(object s, GameEvent.TowerSelectEvent e)
     {
-        //if (target == targetNode)
-        //{
-        //    target = null;
-        //    return;
-        //}
+        var tower = buildManager.GetTower(e.Uid);
+        selectTowerUid = e.Uid;
+        if (tower != null)
+        {
+            var worldPos = tower.GridPos.CalculateCenterPos(tower.TowerData.TowerSize) + new Vector3(0, 2.5f, 0);
+            ClameWindow(worldPos, tower.GridPos);
 
-        //target = targetNode;
-        //transform.position = target.GetBuildPos(offset);
-        //if (!target.IsUpgrade)
-        //{
-        //    upgradeCostText.text = "$" + target.TurretBlueprint.UpgradeCost;
-        //    upgradeBtn.interactable = true;
-        //}
-        //else
-        //{
-        //    upgradeCostText.text = "Done";
-        //    upgradeBtn.interactable = false;
-        //}
-       
-        //sellPriceText.text = "$" + target.TurretBlueprint.GetSellPirce();
-       
-        //ui.SetActive(true);
+            var nextData = tower.GetNextLevelData();
+           
+            if(nextData != null) 
+            {
+                //還能升級
+                upgradeCostText.text = "$" + nextData.BuildUpgradeCost;
+                upgradeBtn.interactable = levelManager.Money >= nextData.BuildUpgradeCost;
+            }
+            else
+            {
+                //升滿了
+                upgradeCostText.text = "Done";
+                upgradeBtn.interactable = false;
+            }
+            sellPriceText.text = "$" + tower.GetNowLevelData().SoldPrice;
+
+            upgradeAndSellMenu.SetActive(true);
+            StartCoroutine(WaitShowUI());
+        }
     }
 
     public void SelectNode(object s,GameEvent.NodeSelectEvent e)
     {
-
         selectGridPos = e.GridPos;
-        var gridState = buildManager.GetGridState(e.GridPos);
 
 #if UNITY_EDITOR
+        var gridState = buildManager.GetGridState(e.GridPos);
         Debug.Log("gridpos:" + e.GridPos + " state:" + gridState);
 #endif
+        var worldPos = e.GridPos.ToWorldPosCorner() + new Vector3(0, 2.5f, 0);
+        ClameWindow(worldPos, e.GridPos);
 
-        var worldPos = e.GridPos.ToWorldPosCorner() + new Vector3(0,2.5f,0);
+        buildMenu.SetActive(true);
+
+
+        StartCoroutine(WaitShowUI());
+    }
+    private void ClameWindow(Vector3 worldPos,Vector2Short gridPos)
+    {
         transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPos);
-        var nodePos = RectTransformUtility.WorldToScreenPoint(Camera.main, e.GridPos.ToWorldPosCorner());
+        var nodePos = RectTransformUtility.WorldToScreenPoint(Camera.main, gridPos.ToWorldPosCorner());
 
         UIExtension.ClampToWindow(rect, parentRect, margin);
 
         //判斷有沒有跟Node重疊到
         bool contains = RectTransformUtility.RectangleContainsScreenPoint(rect, nodePos);
-        if(contains)
+        if (contains)
         {
-            var newPos = worldPos - new Vector3(0,0,6f);
+            var newPos = worldPos - new Vector3(0, 0, 6f);
             transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, newPos);
         }
-
-
-        if (gridState == GridState.Building)
-        {
-            //取得塔
-
-            upgradeAndSellMenu.SetActive(true);
-        }
-        else if(gridState == GridState.Empty)
-        {
-            
-            buildMenu.SetActive(true);
-        }
-
-       
-
-        StartCoroutine(WaitShowUI());
     }
 
     /// <summary>
@@ -143,6 +135,7 @@ public class NodeUI : MonoBehaviour
         var towerData = gameManager.TowerData.GetData(towerId);
         if (towerData != null)
         {
+            selectTowerId = towerId;
             EventHelper.TowerPreviewBuiltEvent.Invoke(this, GameEvent.TowerPreviewBuildEvent.CreateEvent(towerData.TowerSize, selectGridPos));
             EventHelper.TipHideEvent.Invoke(this, GameEvent.HideTipEvent.CreateEvent());
             yesToBuildBtn.interactable = buildManager.CheckCanBuild(towerData.TowerSize, selectGridPos);
@@ -162,45 +155,48 @@ public class NodeUI : MonoBehaviour
 
     public void CancelBuild()
     {
-        EventHelper.TowerCanceledPreviewEvent.Invoke(this, GameEvent.TowerCancelPreviewEvent.CreateEvent());
+        EventHelper.TowerCanceledPreviewEvent.Invoke(this, GameEvent.TowerCancelPreviewEvent.CreateEvent(selectGridPos));
         confirmMenu.SetActive(false);
         buildMenu.SetActive(true);
     }
 
     public void Hide()
     {
-        
+        selectTowerId = -1;
+        selectGridPos = Vector2Short.Hide;
+        selectTowerUid = 0;
+        upgradeAndSellMenu.SetActive(false);
+        buildMenu.SetActive(false);
+        cancelClickBtn.SetActive(false);
+        confirmMenu.SetActive(false);
     }
 
     public void Upgrade()
     {
-        //target.UpgradeTurret();
-        BuildManager.instance.DeselectNode();
+        EventHelper.TowerUpgradedEvent.Invoke(this, GameEvent.TowerUpgradeEvent.CreateEvent(selectTowerUid));
+        Hide();
     }
 
     public void Sell()
     {
-        BuildManager.instance.DeselectNode();
+        EventHelper.TowerSoldEvent.Invoke(this, GameEvent.TowerSellEvent.CreateEvent(selectTowerUid));
         Hide();
     }
 
     public void CancelClick()
     {
-        selectTowerId = -1;
-        selectGridPos = Vector2Short.Hide;
-        upgradeAndSellMenu.SetActive(false);
-        buildMenu.SetActive(false);
-        cancelClickBtn.SetActive(false);
-        confirmMenu.SetActive(false);
+        Hide();
         EventHelper.NodeCancelSelectedEvent.Invoke(this, GameEvent.NodeCancelSelectEvent.CreateEvent());
     }
 
     private void OnDisable()
     {
         EventHelper.NodeSelectedEvent -= SelectNode;
+        EventHelper.TowerSelectedEvent -= SelectTower;
     }
     private void OnEnable()
     {
         EventHelper.NodeSelectedEvent += SelectNode;
+        EventHelper.TowerSelectedEvent += SelectTower;
     }
 }

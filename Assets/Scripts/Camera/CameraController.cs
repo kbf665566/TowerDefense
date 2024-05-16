@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
     {
         bound = new Rect(0,0,mapSize.x - 1,mapSize.y - 1);
         cameraConfine.size = new Vector3(mapSize.x + 5, 40f, mapSize.y + 5);
-        cameraConfine.transform.position = new Vector3(mapSize.x / 2 , 0 , mapSize.y / 4);
+        cameraConfine.transform.position = new Vector3(mapSize.x / 2 , 0 , mapSize.y / 3);
     }
 
     // Update is called once per frame

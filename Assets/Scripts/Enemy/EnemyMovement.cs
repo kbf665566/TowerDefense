@@ -14,7 +14,7 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
         enemy = GetComponent<Enemy>();
-        target = levelManager.WayPoints[0];
+        //target = levelManager.WayPoints[0];
     }
 
     // Update is called once per frame
@@ -33,14 +33,14 @@ public class EnemyMovement : MonoBehaviour
 
     private void GetNextWaypoint()
     {
-        if (wavepointIndex >= levelManager.WayPoints.Length - 1)
-        {
-            EndPath();
-            return;
-        }
+        //if (wavepointIndex >= levelManager.WayPoints.Length - 1)
+        //{
+        //    EndPath();
+        //    return;
+        //}
 
-        wavepointIndex++;
-        target = levelManager.WayPoints[wavepointIndex];
+        //wavepointIndex++;
+        //target = levelManager.WayPoints[wavepointIndex];
     }
 
     private void EndPath()

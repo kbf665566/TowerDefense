@@ -9,7 +9,7 @@ public class GridData
         /// <summary>
         /// 網格上的塔
         /// </summary>
-        public long TowerUid;
+        public int TowerUid;
         /// <summary>
         /// 網格狀態
         /// </summary>

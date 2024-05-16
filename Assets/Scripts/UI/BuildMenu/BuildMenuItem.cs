@@ -40,4 +40,10 @@ public class BuildMenuItem : MonoBehaviour,IPointerExitHandler,IPointerMoveHandl
             EventHelper.TipShowEvent.Invoke(this,GameEvent.ShowTipEvent.CreateEvent(towerData.Name,towerData.TowerInformation));
        // }
     }
+
+    private void OnEnable()
+    {
+        if (towerData != null)
+            btn.interactable = LevelManager.instance.Money >= towerData.TowerLevelData[0].BuildUpgradeCost;
+    }
 }

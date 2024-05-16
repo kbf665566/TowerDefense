@@ -259,7 +259,13 @@ public class TowerEditorWindow : UnitEditorWindow
         tower.towerType = (TowerType)type;
         startX = cachedX;
 
-        v3 = DrawIconAndName(tower, startX, startY); 
+        v3 = DrawIconAndName(tower, startX, startY);
+
+
+        cont = new GUIContent("塔 模型:");
+        EditorGUI.LabelField(new Rect(startX, startY + spaceY * 3, width, height), cont);
+        tower.TowerPrefab = (TowerInLevel)EditorGUI.ObjectField(new Rect(startX + 110, startY + spaceY * 3, width -5, height), tower.TowerPrefab, typeof(TowerInLevel), false);
+
         startY = v3.y;
 
         startX += spaceX * 2.5f;
@@ -276,7 +282,7 @@ public class TowerEditorWindow : UnitEditorWindow
 
         cont = new GUIContent("建造特效:", "");
         EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
-        tower.BuildParticle = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.BuildParticle, typeof(GameObject), false);
+        tower.BuildParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.BuildParticle);
 
         cont = new GUIContent("拆除音效:", "");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
@@ -284,7 +290,7 @@ public class TowerEditorWindow : UnitEditorWindow
 
         cont = new GUIContent("拆除特效:", "");
         EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
-        tower.RemoveParticle = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.RemoveParticle, typeof(GameObject), false);
+        tower.RemoveParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.RemoveParticle);
 
         if (TowerCanAttack(tower))
         {
@@ -294,13 +300,13 @@ public class TowerEditorWindow : UnitEditorWindow
 
             cont = new GUIContent("攻擊特效:", "");
             EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
-            tower.AttackParticle = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.AttackParticle, typeof(GameObject), false);
+            tower.AttackParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.AttackParticle);
         }
         else
         {
             cont = new GUIContent("一般特效:", "");
             EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY += spaceY, width, height), cont);
-            tower.NormalParticle = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.NormalParticle, typeof(GameObject), false);
+            tower.NormalParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.NormalParticle);
         }
 
         if(tower.towerType == TowerType.Special)
@@ -539,12 +545,6 @@ public class TowerEditorWindow : UnitEditorWindow
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.GetMoney = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.GetMoney);
         }
-
-
-        cont = new GUIContent("塔 模型:");
-        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        levelData.towerPrefab = (TowerInLevel)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), levelData.towerPrefab, typeof(TowerInLevel), false);
-
 
         return new Vector3(startX + 220, startY, statContentHeight);
     }

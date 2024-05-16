@@ -34,9 +34,9 @@ public class NormalTower : TowerInLevel
 
     [SerializeField] private Transform firePoint;
     [SerializeField] private Transform partToRotation;
-    public override void SetTower(int uid, TowerData towerData)
+    public override void SetTower(int uid, TowerData towerData, Vector2Short gridPos)
     {
-        base.SetTower(uid, towerData);
+        base.SetTower(uid, towerData,gridPos);
         towerType = TowerType.Normal;
 
         useBullet = towerData.IsUseBullet;

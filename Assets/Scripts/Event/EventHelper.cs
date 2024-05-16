@@ -8,6 +8,7 @@ public class EventHelper : MonoBehaviour
     public static EventHandler<GameEvent.SceneChangeEvent> SceneChangedEvent;
 
     public static EventHandler<GameEvent.TowerBuildEvent> TowerBuiltEvent;
+    public static EventHandler<GameEvent.TowerSelectEvent> TowerSelectedEvent;
     public static EventHandler<GameEvent.TowerSellEvent> TowerSoldEvent;
     public static EventHandler<GameEvent.TowerUpgradeEvent> TowerUpgradedEvent;
     public static EventHandler<GameEvent.TowerPreviewBuildEvent> TowerPreviewBuiltEvent;
@@ -25,5 +26,4 @@ public class EventHelper : MonoBehaviour
 
 
     public static EventHandler<GameEvent.GameEffectShowEvent> EffectShowEvent;
-    public static EventHandler<GameEvent.GameEffectShowWithEnumEvent> EnumEffectShowEvent;
 }
