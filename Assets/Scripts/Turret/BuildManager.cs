@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using static UnityEditor.PlayerSettings;
 
 public class BuildManager : MonoBehaviour
@@ -19,6 +20,14 @@ public class BuildManager : MonoBehaviour
     private GridDebugger gridDebugger;
     public GridDebugger GridDebugger => gridDebugger;
 #endif
+
+    #region 物件池
+    private int nowSelectTowerId = -1;
+    private Dictionary<int, IObjectPool<TowerInLevel>> towerObjectPools;
+    private int defaultCapacity = 20;
+    private int maxCapacity = 100;
+    private bool collectionCheck = true;
+    #endregion
 
     private void Awake()
     {
@@ -42,6 +51,17 @@ public class BuildManager : MonoBehaviour
 #endif
     }
 
+    private void Start()
+    {
+        towerObjectPools = new Dictionary<int, IObjectPool<TowerInLevel>>();
+        var towerList = gameManager.TowerData.TowerList;
+        for (int i = 0;i< towerList.Count;i++)
+        {
+            towerObjectPools.Add(towerList[i].Id, new ObjectPool<TowerInLevel>(CreateTower,
+            OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
+            collectionCheck, defaultCapacity, maxCapacity));
+        }
+    }
 
 
     public GridState GetGridState(Vector2Short gridPos)
@@ -60,6 +80,7 @@ public class BuildManager : MonoBehaviour
 
     public void BuildTower(object s,GameEvent.TowerBuildEvent e)
     {
+        nowSelectTowerId = e.Id;
         var towerData = gameManager.TowerData.GetData(e.Id);
         var uid = GenerateUid();
         if(towerData != null)
@@ -67,29 +88,34 @@ public class BuildManager : MonoBehaviour
             TowerInLevel newTower = null;
             var worldPos = e.GridPos.ToWorldPos() + new Vector3(0, .5f, 0);
 
-            newTower = Instantiate(towerData.TowerPrefab, worldPos, Quaternion.identity);
-            newTower.transform.SetParent(towerParent);
+            if (towerObjectPools.TryGetValue(e.Id, out var pool))
+            {
+                newTower = pool.Get();
 
-            if (towerData.towerType == TowerType.Normal)
-                ((NormalTower)newTower).SetTower(uid, towerData, e.GridPos);
-            else if (towerData.towerType == TowerType.AOE)
-                ((AOETower)newTower).SetTower(uid, towerData, e.GridPos);
-            else if (towerData.towerType == TowerType.Support)
-                ((SupportTower)newTower).SetTower(uid, towerData, e.GridPos);
-            else if (towerData.towerType == TowerType.Money)
-                ((MoneyTower)newTower).SetTower(uid, towerData, e.GridPos);
+                newTower.transform.SetPositionAndRotation(worldPos, Quaternion.identity);
+                newTower.transform.SetParent(towerParent);
 
-            gridManager.PlaceTower(uid,e.GridPos,towerData.TowerSize);
-            nowTowers.Add(uid,newTower);
+                if (towerData.towerType == TowerType.Normal)
+                    ((NormalTower)newTower).SetTower(uid, towerData, e.GridPos);
+                else if (towerData.towerType == TowerType.AOE)
+                    ((AOETower)newTower).SetTower(uid, towerData, e.GridPos);
+                else if (towerData.towerType == TowerType.Support)
+                    ((SupportTower)newTower).SetTower(uid, towerData, e.GridPos);
+                else if (towerData.towerType == TowerType.Money)
+                    ((MoneyTower)newTower).SetTower(uid, towerData, e.GridPos);
 
-            levelManager.CostMoney(towerData.TowerLevelData[0].BuildUpgradeCost);
+                gridManager.PlaceTower(uid, e.GridPos, towerData.TowerSize);
+                nowTowers.Add(uid, newTower);
 
-            //發出建造特效事件
-            EventHelper.EffectShowEvent.Invoke(this,GameEvent.GameEffectShowEvent.CreateEvent(worldPos,towerData.BuildParticle));
+                levelManager.CostMoney(towerData.TowerLevelData[0].BuildUpgradeCost);
+
+                //發出建造特效事件
+                EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(worldPos, towerData.BuildParticle));
 
 #if UNITY_EDITOR
-            gridDebugger.ChangeColor(e.GridPos,towerData.TowerSize,GridState.Building);
+                gridDebugger.ChangeColor(e.GridPos, towerData.TowerSize, GridState.Building);
 #endif
+            }
         }
     }
 
@@ -103,7 +129,9 @@ public class BuildManager : MonoBehaviour
             gridManager.RemoveTower(tower.GridPos,tower.TowerData.TowerSize);
 
             nowTowers.Remove(e.Uid);
-            Destroy(tower.gameObject);
+
+            if (towerObjectPools.TryGetValue(tower.Id, out var pool))
+                pool.Release(tower);
         }
     }
 
@@ -159,4 +187,37 @@ public class BuildManager : MonoBehaviour
         while (nowTowers.ContainsKey(uid)) uid += 1;
         return uid;
     }
+
+    #region  物件池
+    // 物件池中的物件不夠時，建立新的物件去填充物件池
+    private TowerInLevel CreateTower()
+    {
+        var towerData = gameManager.TowerData.GetData(nowSelectTowerId);
+        TowerInLevel newTower = Instantiate(towerData.TowerPrefab);
+       
+        if (towerObjectPools.TryGetValue(nowSelectTowerId, out var pool))
+            newTower.ObjectPool = pool;
+
+        return newTower;
+    }
+
+    // 將物件放回物件池
+    private void OnReleaseToPool(TowerInLevel pooledObject)
+    {
+        pooledObject.gameObject.SetActive(false);
+    }
+
+    // 從物件池中取出物件
+    private void OnGetFromPool(TowerInLevel pooledObject)
+    {
+        pooledObject.gameObject.SetActive(true);
+    }
+
+    // 當超出物件池的上限時，將物件Destroy
+    private void OnDestroyPooledObject(TowerInLevel pooledObject)
+    {
+        Destroy(pooledObject.gameObject);
+    }
+
+    #endregion
 }

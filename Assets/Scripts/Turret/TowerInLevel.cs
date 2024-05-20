@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class TowerInLevel : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class TowerInLevel : MonoBehaviour
     public TowerData TowerData => towerData;
     protected Vector2Short gridPos;
     public Vector2Short GridPos => gridPos;
+
+    private IObjectPool<TowerInLevel> objectPool;
+    public IObjectPool<TowerInLevel> ObjectPool { set => objectPool = value; }
 
     /// <summary>
     /// 建造塔的時候設定資料

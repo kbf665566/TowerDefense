@@ -64,7 +64,7 @@ public class NodeUI : MonoBehaviour
         selectTowerUid = e.Uid;
         if (tower != null)
         {
-            var worldPos = tower.GridPos.CalculateCenterPos(tower.TowerData.TowerSize) + new Vector3(0, 2.5f, 0);
+            var worldPos = GridExtension.GetCenterGrid(tower.GridPos, tower.TowerData.TowerSize).ToWorldPos() + new Vector3(0, 2.5f, 0);
             ClameWindow(worldPos, tower.GridPos);
 
             var nextData = tower.GetNextLevelData();
@@ -96,7 +96,7 @@ public class NodeUI : MonoBehaviour
         var gridState = buildManager.GetGridState(e.GridPos);
         Debug.Log("gridpos:" + e.GridPos + " state:" + gridState);
 #endif
-        var worldPos = e.GridPos.ToWorldPosCorner() + new Vector3(0, 2.5f, 0);
+        var worldPos = e.GridPos.ToWorldPos() + new Vector3(0, 2.5f, 0);
         ClameWindow(worldPos, e.GridPos);
 
         buildMenu.SetActive(true);

@@ -44,11 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b15aa5ccc5e356f408c24a6a7381dd3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildEffect: {fileID: 198112720091331062, guid: c559c1920b5d04e6d83aa4464fba5c68, type: 3}
-  upgradeEffect: {fileID: 198112720091331062, guid: c559c1920b5d04e6d83aa4464fba5c68, type: 3}
-  removeEffect: {fileID: 198059975614214484, guid: 7a0476686964e41ac8320b7cf37868c2, type: 3}
-  machineGunAttackEffect: {fileID: 198278080792148898, guid: a4e0e87699dbd400aaf85d616d2618f8, type: 3}
-  rocketTowerAttackEffect: {fileID: 198278080792148898, guid: a4e0e87699dbd400aaf85d616d2618f8, type: 3}
-  laserTowerAttackEffect: {fileID: 198278080792148898, guid: a4e0e87699dbd400aaf85d616d2618f8, type: 3}
-  boomEffect: {fileID: 198059975614214484, guid: f43a73bac381a4517bdade908e622a9e, type: 3}
-  enemyDeathEffect: {fileID: 19800000, guid: a9162585e30302147a5d79c58ef48d3e, type: 3}
+  buildEffect: {fileID: -4896926709089158366, guid: c559c1920b5d04e6d83aa4464fba5c68, type: 3}
+  upgradeEffect: {fileID: -4896926709089158366, guid: c559c1920b5d04e6d83aa4464fba5c68, type: 3}
+  removeEffect: {fileID: 4835041569668140416, guid: 7a0476686964e41ac8320b7cf37868c2, type: 3}
+  machineGunAttackEffect: {fileID: 1992728147910797973, guid: a4e0e87699dbd400aaf85d616d2618f8, type: 3}
+  rocketTowerAttackEffect: {fileID: 1992728147910797973, guid: a4e0e87699dbd400aaf85d616d2618f8, type: 3}
+  laserTowerAttackEffect: {fileID: 1992728147910797973, guid: a4e0e87699dbd400aaf85d616d2618f8, type: 3}
+  boomEffect: {fileID: -4261516937490873323, guid: f43a73bac381a4517bdade908e622a9e, type: 3}
+  enemyDeathEffect: {fileID: 4167920499697359073, guid: a9162585e30302147a5d79c58ef48d3e, type: 3}

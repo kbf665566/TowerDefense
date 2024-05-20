@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 198059975614214484}
   - component: {fileID: 199617813572552856}
   - component: {fileID: 82866806135897546}
+  - component: {fileID: 4835041569668140416}
   m_Layer: 0
   m_Name: TowerDeathExplosion
   m_TagString: Untagged
@@ -46,12 +47,12 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 5
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 1
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -4797,6 +4798,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &4835041569668140416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082826025734650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe9eff8a42de57a4cb6d9595a5c00d2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectParticle: {fileID: 198059975614214484}
 --- !u!1 &1124690750333654
 GameObject:
   m_ObjectHideFlags: 0
