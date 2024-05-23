@@ -20,6 +20,11 @@ public class EventHelper : MonoBehaviour
     public static EventHandler<GameEvent.GameOverEvent> GameOverEvent;
     public static EventHandler<GameEvent.LevelStartEvent> LevelStartedEvent;
     public static EventHandler<GameEvent.GameWinEvent> GameWonEvent;
+    public static EventHandler<GameEvent.NextWaveStartEvent> NextWaveStartedEvent;
+    public static EventHandler<GameEvent.WaveEndEvent> WaveEndEvent;
+
+    public static EventHandler<GameEvent.EnemyDieEvent> EnemyDiedEvent;
+    public static EventHandler<GameEvent.EnemyEndPathEvent> EnemyEndPathEvent;
 
     public static EventHandler<GameEvent.ShowTipEvent> TipShowEvent;
     public static EventHandler<GameEvent.HideTipEvent> TipHideEvent;

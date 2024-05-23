@@ -18,35 +18,42 @@ MonoBehaviour:
     WaveList:
     - Id: 1
       WaveEnemyList:
-      - EnemyPrefab: {fileID: 2363954171552337673, guid: 2631640efc39101409f726e2a524e8a6, type: 3}
+      - EnemyID: 0
         SpawnAmount: 10
         SpawnInterval: 0.5
         PathId: 0
+        SpawnInAllPath: 0
     - Id: 2
       WaveEnemyList:
-      - EnemyPrefab: {fileID: 2363954171552337673, guid: 2631640efc39101409f726e2a524e8a6, type: 3}
+      - EnemyID: 0
         SpawnAmount: 10
         SpawnInterval: 0.5
         PathId: 0
-      - EnemyPrefab: {fileID: 4943515868587019179, guid: 3b28c49756963d24aabe1bbedb2736cc, type: 3}
+        SpawnInAllPath: 0
+      - EnemyID: 1
         SpawnAmount: 10
         SpawnInterval: 0.5
         PathId: 0
-      - EnemyPrefab: {fileID: 2363954171552337673, guid: 2631640efc39101409f726e2a524e8a6, type: 3}
+        SpawnInAllPath: 0
+      - EnemyID: 0
         SpawnAmount: 10
         SpawnInterval: 0.5
         PathId: 0
+        SpawnInAllPath: 0
     - Id: 0
       WaveEnemyList:
-      - EnemyPrefab: {fileID: 2363954171552337673, guid: 2631640efc39101409f726e2a524e8a6, type: 3}
+      - EnemyID: 0
         SpawnAmount: 20
         SpawnInterval: 0.5
         PathId: 0
-      - EnemyPrefab: {fileID: 4943515868587019179, guid: 3b28c49756963d24aabe1bbedb2736cc, type: 3}
+        SpawnInAllPath: 0
+      - EnemyID: 1
         SpawnAmount: 15
         SpawnInterval: 0.5
         PathId: 0
-      - EnemyPrefab: {fileID: 2013957883763745283, guid: 1578b7dad5ba9574495139bb50dac2ec, type: 3}
+        SpawnInAllPath: 0
+      - EnemyID: 2
         SpawnAmount: 3
         SpawnInterval: 1
         PathId: 0
+        SpawnInAllPath: 0

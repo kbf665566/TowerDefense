@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TowerData
   m_EditorClassIdentifier: 
   TowerList:
-  - Id: 3
+  - Id: 0
     Name: MachineGun
     TowerLevelData:
     - Damage: 10
@@ -66,7 +66,7 @@ MonoBehaviour:
     BuildParticle: 1
     RemoveParticle: 0
     TowerPrefab: {fileID: -538096426614295507, guid: ee4561289e7fdb248a1644d1903699ed, type: 3}
-  - Id: 4
+  - Id: 1
     Name: RocketTower
     TowerLevelData:
     - Damage: 30
@@ -119,7 +119,7 @@ MonoBehaviour:
     BuildParticle: 1
     RemoveParticle: 0
     TowerPrefab: {fileID: -7594727079982387, guid: 852e13cd1fee71043be2067ce73f8c58, type: 3}
-  - Id: 5
+  - Id: 2
     Name: LaserTower
     TowerLevelData:
     - Damage: 15

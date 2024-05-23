@@ -57,7 +57,7 @@ public class TowerLevelData
     /// <summary> 攻速 </summary>
     public float FireRate;
     /// <summary> 使用的發射物 </summary>
-    public Bullet TowerBullet;
+    public GameObject TowerBullet;
     /// <summary> 發射物速度 </summary>
     public float BulletSpeed;
     /// <summary> 發射物爆炸範圍 </summary>

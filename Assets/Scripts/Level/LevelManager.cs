@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static GameManager;
 
 /// <summary>
@@ -11,9 +12,10 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
 
-    private Transform[][] wayPoints;
-    public Transform[][] WayPoints => wayPoints;
-
+    [SerializeField] private Transform[] wayPoints1;
+    [SerializeField] private Transform[] wayPoints2;
+    public Transform[] WayPoints1 => wayPoints1;
+    public Transform[] WayPoints2 => wayPoints2;
 
     #region Money
     [SerializeField] private int startMoney = 400;
@@ -30,6 +32,12 @@ public class LevelManager : MonoBehaviour
     #endregion
     private GameManager gameManager => GameManager.instance;
 
+    #region Wave
+    private int nowWave = 0;
+    [SerializeField] private TextMeshProUGUI waveText;
+    #endregion
+    [SerializeField] private Button nextWaveBtn;
+
     private void Awake()
     {
         if (instance != null)
@@ -43,6 +51,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         SetLevelSetting(gameManager.NowMapData.StartMoney,gameManager.NowMapData.StartLive);
+        nextWaveBtn.onClick.AddListener(NextWave);
     }
 
     public void SetLevelSetting(int startMoney,int startLive)
@@ -50,11 +59,7 @@ public class LevelManager : MonoBehaviour
         this.startLive = startLive;
         this.startMoney = startMoney;
 
-        money = startMoney;
-        live = startLive;
-
-        moneyText.text = money.ToString();
-        liveText.text = live.ToString();
+        ResetLevel();
     }
 
     public void CostMoney(int cost)
@@ -69,14 +74,6 @@ public class LevelManager : MonoBehaviour
         moneyText.text = money.ToString();
     }
 
-    public void LostLive(int lost)
-    {
-        live = live - lost <= 0 ? 0 : live - lost;
-        liveText.text = live.ToString();
-        if (live <= 0)
-            onGameOver?.Invoke();
-    }
-
     public void AddLive(int add)
     {
         live += add;
@@ -85,12 +82,55 @@ public class LevelManager : MonoBehaviour
 
     private void ResetLevel()
     {
+        nowWave = 0;
+        waveText.text = nowWave.ToString() + " / " + gameManager.NowWaveData.WaveList.Count;
         money = startMoney;
         moneyText.text = money.ToString();
         live = startLive;
         liveText.text = live.ToString();
     }
 
+    public void NextWave()
+    {
+        nextWaveBtn.interactable = false;
+        nowWave++;
+        waveText.text = nowWave.ToString() + " / " + gameManager.NowWaveData.WaveList.Count;
+
+        EventHelper.NextWaveStartedEvent.Invoke(this,GameEvent.NextWaveStartEvent.CreateEvent(nowWave));
+    }
+
+    private void WaveEnd(object s,GameEvent.WaveEndEvent e)
+    {
+        nextWaveBtn.interactable = true;
+    }
+
+    private void EnemyDied(object s,GameEvent.EnemyDieEvent e)
+    {
+        money += e.Value;
+        moneyText.text = money.ToString();
+    }
+
+    private void EnemyEndPath(object s, GameEvent.EnemyEndPathEvent e)
+    {
+        live = live - e.Damage <= 0 ? 0 : live - e.Damage;
+        liveText.text = live.ToString();
+        if (live <= 0)
+            onGameOver?.Invoke();
+    }
+
+    private void OnEnable()
+    {
+        EventHelper.WaveEndEvent += WaveEnd;
+        EventHelper.EnemyDiedEvent += EnemyDied;
+        EventHelper.EnemyEndPathEvent += EnemyEndPath;
+    }
+
+    private void OnDisable()
+    {
+        EventHelper.WaveEndEvent -= WaveEnd;
+        EventHelper.EnemyDiedEvent -= EnemyDied;
+        EventHelper.EnemyEndPathEvent -= EnemyEndPath;
+    }
 
 #if UNITY_EDITOR
     public void SetUI(Transform levelUICanvas,Transform map,int enemyPathCount)
@@ -98,17 +138,22 @@ public class LevelManager : MonoBehaviour
         var uiContext = levelUICanvas.Find("LevelPlayerStatus").Find("Context");
         moneyText = uiContext.Find("Money").Find("Money").GetComponent<TextMeshProUGUI>();
         liveText = uiContext.Find("Live").Find("LiveCount").GetComponent<TextMeshProUGUI>();
+        waveText = uiContext.Find("Wave").Find("WaveCount").GetComponent<TextMeshProUGUI>();
+        nextWaveBtn = levelUICanvas.Find("NextWaveBtn").GetComponent<Button>();
 
-        wayPoints = new Transform[enemyPathCount][];
-        for(int i =0;i<enemyPathCount;i++)
+        var waypointparent = map.Find("Waypoints0");
+        wayPoints1 = new Transform[waypointparent.childCount];
+        for (int i = 0; i < waypointparent.childCount; i++)
+            wayPoints1[i] = waypointparent.GetChild(i);
+
+        if(enemyPathCount == 2)
         {
-            var waypointparent = map.Find("Waypoints" + i);
-            wayPoints[i] = new Transform[waypointparent.childCount];
-            for (int j = 0;j<waypointparent.childCount;j++)
-            {
-                wayPoints[i][j] = waypointparent.GetChild(j);
-            }
+            var waypoint2parent = map.Find("Waypoints1");
+            wayPoints2 = new Transform[waypoint2parent.childCount];
+            for (int i = 0; i < waypoint2parent.childCount; i++)
+                wayPoints2[i] = waypoint2parent.GetChild(i);
         }
+
     }
 #endif
 }

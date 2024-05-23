@@ -8,4 +8,14 @@ using UnityEngine;
 public class Enemies : ScriptableObject
 {
     public List<EnemyData> EnemyList;
+
+    public EnemyData GetData(int id)
+    {
+        for (int i = 0; i < EnemyList.Count; i++)
+        {
+            if (EnemyList[i].Id == id)
+                return EnemyList[i];
+        }
+        return null;
+    }
 }

@@ -166,7 +166,7 @@ public class NodeSpawner : MonoBehaviour
             wayPoints.Add(tempWaypointParentObj);
             for (int j = 0; j < enemyPathArray[i].Path.Count; j++)
             {
-                var tempPos = new Vector3(nodeParent.position.x + enemyPathArray[i].Path[j].GridPos.x, 1.5f, nodeParent.position.z + enemyPathArray[i].Path[j].GridPos.y);
+                var tempPos = new Vector3(nodeParent.position.x + enemyPathArray[i].Path[j].GridPos.x, .5f, nodeParent.position.z + enemyPathArray[i].Path[j].GridPos.y);
                 var tempObj = (Transform)PrefabUtility.InstantiatePrefab(wayPointObj);
                 tempObj.name = "WayPoint" + j;
                 tempObj.SetParent(tempWaypointParentObj);

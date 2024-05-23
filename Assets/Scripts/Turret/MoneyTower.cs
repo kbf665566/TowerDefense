@@ -20,7 +20,7 @@ public class MoneyTower : TowerInLevel
     {
         base.SetTower(uid, towerData,gridPos);
         towerType = TowerType.Money;
-
+        support_FireRate = 1;
 
         SetLevelData(nowLevel);
     }
@@ -49,13 +49,13 @@ public class MoneyTower : TowerInLevel
 
     public override void ResetTowerSupport()
     {
-        support_FireRate = 0;
+        support_FireRate = 1;
 
         UpdateTowerState();
     }
 
     public override void UpdateTowerState()
     {
-        final_FireRate = support_FireRate == 0 ? originFireRate : (float)Math.Round(originFireRate / support_FireRate, 3);
+        final_FireRate = (float)Math.Round(originFireRate / support_FireRate, 3);
     }
 }

@@ -36,6 +36,10 @@ public class AOETower : TowerInLevel
         canSlow = towerData.CanSlowEnemy;
         canStun = towerData.CanStunEnemy;
 
+        support_Damage = 1;
+        support_ShootRange = 1;
+        support_FireRate = 1;
+
         SetLevelData(nowLevel);
 
         fireTimer = originFireRate;
@@ -80,17 +84,17 @@ public class AOETower : TowerInLevel
 
     public override void ResetTowerSupport()
     {
-        support_Damage = 0;
-        support_ShootRange = 0;
-        support_FireRate = 0;
+        support_Damage = 1;
+        support_ShootRange = 1;
+        support_FireRate = 1;
 
         UpdateTowerState();
     }
 
     public override void UpdateTowerState()
     {
-        final_Damage = support_Damage == 0 ? originDamage : originDamage * support_Damage;
-        final_ShootRange = support_ShootRange == 0 ? originShootRange : originShootRange * support_ShootRange;
-        final_FireRate = support_FireRate == 0 ? originFireRate : (float)Math.Round(originFireRate / support_FireRate, 3);
+        final_Damage =  originDamage * support_Damage;
+        final_ShootRange = originShootRange * support_ShootRange;
+        final_FireRate = (float)Math.Round(originFireRate / support_FireRate, 3);
     }
 }

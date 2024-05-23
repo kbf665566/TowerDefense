@@ -29,6 +29,14 @@ public class BuildManager : MonoBehaviour
     private bool collectionCheck = true;
     #endregion
 
+    #region 畫塔的範圍
+    [SerializeField] private LineRenderer LineDrawer;
+    [Range(6, 60)] 
+    float ThetaScale = 0.01f;//改變形狀
+    private int Size;
+    private float Theta = 0f;
+    #endregion
+
     private void Awake()
     {
         if (instance != null)
@@ -61,6 +69,13 @@ public class BuildManager : MonoBehaviour
             OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
             collectionCheck, defaultCapacity, maxCapacity));
         }
+
+        LineDrawer.loop = true;
+
+        LineDrawer.startColor = Color.red;
+        LineDrawer.endColor = Color.red;
+        LineDrawer.startWidth = 0.1f;
+        LineDrawer.endWidth = 0.1f;
     }
 
 
@@ -93,7 +108,6 @@ public class BuildManager : MonoBehaviour
                 newTower = pool.Get();
 
                 newTower.transform.SetPositionAndRotation(worldPos, Quaternion.identity);
-                newTower.transform.SetParent(towerParent);
 
                 if (towerData.towerType == TowerType.Normal)
                     ((NormalTower)newTower).SetTower(uid, towerData, e.GridPos);
@@ -111,10 +125,6 @@ public class BuildManager : MonoBehaviour
 
                 //發出建造特效事件
                 EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(worldPos, towerData.BuildParticle));
-
-#if UNITY_EDITOR
-                gridDebugger.ChangeColor(e.GridPos, towerData.TowerSize, GridState.Building);
-#endif
             }
         }
     }
@@ -162,9 +172,34 @@ public class BuildManager : MonoBehaviour
         return null;
     }
 
-    public void DeselectNode()
+    public void SelectTower(object s, GameEvent.TowerSelectEvent e)
     {
+       
+    }
+    public void CancelSelectTower(object s, GameEvent.NodeCancelSelectEvent e)
+    {
+       
+    }
 
+    private void DrawTowerRange(Vector3 towerPos,float towerShootRange)
+    {
+        LineDrawer.enabled = true;
+        Theta = 0f;
+        Size = (int)((1f / ThetaScale) + 1f);
+        LineDrawer.positionCount = Size;
+
+        for (int i = 0; i < Size; i++)
+        {
+            Theta += (2.0f * Mathf.PI * ThetaScale);
+            float x = towerShootRange * Mathf.Cos(Theta);
+            float y = towerShootRange * Mathf.Sin(Theta);
+            LineDrawer.SetPosition(i, new Vector3(towerPos.x + x, towerPos.y, towerPos.z + y));
+        }
+    }
+
+    private void StopDrawTowerRange()
+    {
+        LineDrawer.enabled = false;
     }
 
     private void OnDisable()
@@ -172,6 +207,8 @@ public class BuildManager : MonoBehaviour
         EventHelper.TowerBuiltEvent -= BuildTower;
         EventHelper.TowerSoldEvent -= SellTower;
         EventHelper.TowerUpgradedEvent -= UpgradeTower;
+        EventHelper.TowerSelectedEvent -= SelectTower;
+        EventHelper.NodeCancelSelectedEvent -= CancelSelectTower;
     }
 
     private void OnEnable()
@@ -179,6 +216,8 @@ public class BuildManager : MonoBehaviour
         EventHelper.TowerBuiltEvent += BuildTower;
         EventHelper.TowerSoldEvent += SellTower;
         EventHelper.TowerUpgradedEvent += UpgradeTower;
+        EventHelper.TowerSelectedEvent += SelectTower;
+        EventHelper.NodeCancelSelectedEvent += CancelSelectTower;
     }
 
     private int GenerateUid()
@@ -194,6 +233,7 @@ public class BuildManager : MonoBehaviour
     {
         var towerData = gameManager.TowerData.GetData(nowSelectTowerId);
         TowerInLevel newTower = Instantiate(towerData.TowerPrefab);
+        newTower.transform.SetParent(towerParent);
        
         if (towerObjectPools.TryGetValue(nowSelectTowerId, out var pool))
             newTower.ObjectPool = pool;

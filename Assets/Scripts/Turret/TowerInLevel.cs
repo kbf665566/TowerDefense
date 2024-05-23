@@ -9,6 +9,7 @@ public class TowerInLevel : MonoBehaviour
     public int Id => id;
     protected int uid;
     public int Uid => uid;
+
     protected string towerName;
     public string Name => towerName;
     protected List<TowerLevelData> towerLevelData;
@@ -16,8 +17,10 @@ public class TowerInLevel : MonoBehaviour
     public TowerType TowerType => towerType;
     protected int nowLevel;
     public int NowLevel => nowLevel;
+
     protected TowerData towerData;
     public TowerData TowerData => towerData;
+
     protected Vector2Short gridPos;
     public Vector2Short GridPos => gridPos;
 

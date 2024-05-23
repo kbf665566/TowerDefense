@@ -215,7 +215,7 @@ public class GridManager
                 grid.TowerUid = uid;
                 grid.GridState = gridState;
 #if UNITY_EDITOR
-                BuildManager.instance.GridDebugger.ChangeColor(x,y,gridState);
+                BuildManager.instance.GridDebugger.ChangeColor(tempGridPos.x, tempGridPos.y, gridState);
 #endif
                 UpdateEmptyList(grid);
                 continue;

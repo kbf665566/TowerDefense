@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEditor;
+using System;
 
 public class LevelEditorWindow : UnitEditorWindow
 {
     private static LevelEditorWindow window;
-
+    private static int[] enemyIDArray;
     public static void Init()
     {
         // Get existing open window or if none, make a new one:
@@ -15,6 +16,7 @@ public class LevelEditorWindow : UnitEditorWindow
 
         EditorDataManager.Init();
         selectID = -1;
+        enemyIDArray = EditorDataManager.EnemyIDList.ToArray();
     }
 
     private Vector2 scrollPos1;
@@ -62,14 +64,14 @@ public class LevelEditorWindow : UnitEditorWindow
     {
         if (window == null) Init();
 
-        List<Waves> levelDataList = EditorDataManager.LevelDataList;
+        List<LevelAllWaves> levelDataList = EditorDataManager.LevelDataList;
 
         EditorGUI.LabelField(new Rect(5, 7, 150, 17), "Add new Level:");
-        Waves newLevel = null;
+        LevelAllWaves newLevel = null;
 
         if (GUI.Button(new Rect(100, 7, 140, 17), "Add"))
         {
-            newLevel = new Waves();
+            newLevel = new LevelAllWaves();
             newLevel.LevelName = "NewLevel";
             int newSelectID = EditorDataManager.AddNewLevel(newLevel);
             if (newSelectID != -1) 
@@ -121,7 +123,7 @@ public class LevelEditorWindow : UnitEditorWindow
             EditorDataManager.SetDirtyLevel();
     }
 
-    private Vector2 DrawLevelList(float startX, float startY, List<Waves> levelDataList)
+    private Vector2 DrawLevelList(float startX, float startY, List<LevelAllWaves> levelDataList)
     {
 
         float width = 260;
@@ -134,7 +136,7 @@ public class LevelEditorWindow : UnitEditorWindow
             {
                 if (selectID > 0)
                 {
-                    Waves waves = levelDataList[selectID];
+                    LevelAllWaves waves = levelDataList[selectID];
                     levelDataList[selectID] = levelDataList[selectID - 1];
                     levelDataList[selectID - 1] = waves;
                     selectID -= 1;
@@ -147,7 +149,7 @@ public class LevelEditorWindow : UnitEditorWindow
             {
                 if (selectID < levelDataList.Count - 1)
                 {
-                    Waves waves = levelDataList[selectID];
+                    LevelAllWaves waves = levelDataList[selectID];
                     levelDataList[selectID] = levelDataList[selectID + 1];
                     levelDataList[selectID + 1] = waves;
                     selectID += 1;
@@ -220,9 +222,9 @@ public class LevelEditorWindow : UnitEditorWindow
 
     Vector3 v3 = Vector3.zero;
 
-    private Vector2 DrawLevelConfigurator(float startX, float startY, List<Waves> levelDataList)
+    private Vector2 DrawLevelConfigurator(float startX, float startY, List<LevelAllWaves> levelDataList)
     {
-        Waves waves = levelDataList[selectID];
+        LevelAllWaves waves = levelDataList[selectID];
 
         float cachedY = startY;
         float cachedX = startX;
@@ -294,9 +296,13 @@ public class LevelEditorWindow : UnitEditorWindow
         float cachedX = startX;
         for (int i = 0; i < enemyList.Count; i++)
         {
-            cont = new GUIContent("Enemy Prefab:", "");
+            cont = new GUIContent("Enemy:", "");
             EditorGUI.LabelField(new Rect(startX, startY, width, height), cont);
-            enemyList[i].EnemyPrefab = (GameObject)EditorGUI.ObjectField(new Rect(startX += spaceX -20, startY, 80, height), enemyList[i].EnemyPrefab, typeof(GameObject), false);
+            enemyList[i].EnemyID =  EditorGUI.IntPopup(new Rect(startX += spaceX - 20, startY, 80, height), enemyList[i].EnemyID,EditorDataManager.EnemyNameList,enemyIDArray);
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUI.ObjectField(new Rect(startX += spaceX - 10, startY, 80, height), EditorDataManager.GetEnemyData(enemyList[i].EnemyID).EnemyPrefab, typeof(GameObject), false);
+            EditorGUI.EndDisabledGroup();
+
 
             cont = new GUIContent("產生的數量:");
             EditorGUI.LabelField(new Rect(startX += spaceX, startY , width, height), cont);
@@ -306,9 +312,16 @@ public class LevelEditorWindow : UnitEditorWindow
             EditorGUI.LabelField(new Rect(startX += spaceX - 50, startY, width, height), cont);
             enemyList[i].SpawnInterval = EditorGUI.FloatField(new Rect(startX += spaceX - 50, startY, 40, height), enemyList[i].SpawnInterval);
 
-            cont = new GUIContent("PathId:","要走哪個路徑");
+            cont = new GUIContent("全路徑:", "是否要在所有路徑產生");
             EditorGUI.LabelField(new Rect(startX += spaceX - 50, startY, width, height), cont);
-            enemyList[i].PathId = EditorGUI.IntField(new Rect(startX += spaceX - 60, startY, 40, height), enemyList[i].PathId);
+            enemyList[i].SpawnInAllPath = EditorGUI.Toggle(new Rect(startX += spaceX - 60, startY, 40, height), enemyList[i].SpawnInAllPath);
+
+            if (enemyList[i].SpawnInAllPath == false)
+            {
+                cont = new GUIContent("PathId:", "要走哪個路徑");
+                EditorGUI.LabelField(new Rect(startX += spaceX - 50, startY, width, height), cont);
+                enemyList[i].PathId = Math.Clamp(EditorGUI.IntField(new Rect(startX += spaceX - 60, startY, 40, height), enemyList[i].PathId), 0, 1);
+            }
 
             if (deleteEnemyID == i && Id == clickWaveID)
             {

@@ -2,16 +2,26 @@
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] protected GameObject impactEffect;
-    protected Transform target;
-    [SerializeField] protected float speed = 70f;
-    [SerializeField] protected float explosionRadius = 0f;
-    [SerializeField] protected int damage = 50;
+    protected Enemy target;
+    protected float speed = 70f;
+    protected float explosionRadius = 0f;
+    protected float damage = 50;
 
-    public void Seek(Transform enemy)
+    private IObjectPool<Bullet> objectPool;
+    public IObjectPool<Bullet> ObjectPool { set => objectPool = value; }
+
+    public void SetBullet(float speed,float explosionRadius,float damage)
+    {
+        this.speed = speed;
+        this.explosionRadius = explosionRadius; 
+        this.damage = damage;
+    }
+
+    public void Seek(Enemy enemy)
     {
         target = enemy;
     }
@@ -21,11 +31,11 @@ public class Bullet : MonoBehaviour
     {
         if(target == null)
         {
-            Destroy(gameObject);
+            objectPool.Release(this);
             return;
         }
 
-        Vector3 dir = target.position - transform.position;
+        Vector3 dir = target.transform.position - transform.position;
         float distanceThisFrame = speed * Time.deltaTime;
 
         if(dir.magnitude <= distanceThisFrame)
@@ -35,13 +45,13 @@ public class Bullet : MonoBehaviour
         }
 
         transform.Translate(dir.normalized * distanceThisFrame,Space.World);
-        transform.LookAt(target);
+        transform.LookAt(target.transform);
     }
 
     protected virtual void HitTarget()
     {
-        GameObject effectObj = Instantiate(impactEffect, transform.position, transform.rotation);
-        Destroy(effectObj,5f);
+        //發出特效事件
+        EventHelper.EffectShowEvent.Invoke(this,GameEvent.GameEffectShowEvent.CreateEvent(transform.position,GameEffectType.Boom));
 
         if (explosionRadius > 0f)
         {
@@ -49,11 +59,16 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            Damage(target);
+            Damage();
         }
 
 
-        Destroy(gameObject);
+        objectPool.Release(this);
+    }
+
+    protected void Damage()
+    {
+        target.TakeDamage(damage);
     }
 
     protected void Damage(Transform enemy)
@@ -75,9 +90,11 @@ public class Bullet : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position,explosionRadius);
     }
+#endif
 }

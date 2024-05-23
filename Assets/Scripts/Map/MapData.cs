@@ -21,7 +21,7 @@ public class MapData
     public List<BlockData> BlockGridList;
     public int WavesId;
     [HideInInspector]
-    public Waves Waves;
+    public LevelAllWaves Waves;
 
 
 

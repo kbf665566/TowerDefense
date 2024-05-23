@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8112572255161928787}
   - component: {fileID: 7035119984816062058}
+  - component: {fileID: 3364018072185192005}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -44,8 +45,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd2cd7892dff51438ac87b38e427bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wayPointParent: {fileID: 0}
   startMoney: 400
   moneyText: {fileID: 0}
   startLive: 20
   liveText: {fileID: 0}
+  waveText: {fileID: 0}
+  nextWaveBtn: {fileID: 0}
+--- !u!114 &3364018072185192005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8496583786185795451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0b4ac26fdf8ee40ad0b5c8450f66ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

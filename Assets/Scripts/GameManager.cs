@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
     private MapData nowMapData;
     public MapData NowMapData => nowMapData;
 
+    private LevelAllWaves nowWaveData;
+    public LevelAllWaves NowWaveData => nowWaveData;
+
     private bool disableClicked = false;
     public bool DisableClicked => disableClicked;
 
@@ -78,6 +81,7 @@ public class GameManager : MonoBehaviour
     public MapData SelectMap(int id)
     {
         nowMapData = MapData.GetData(id);
+        nowWaveData = LevelData.GetData(nowMapData.WavesId);
         return nowMapData;
     }
 

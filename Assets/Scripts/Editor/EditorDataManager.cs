@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,6 +47,7 @@ public class EditorDataManager : EditorWindow
         //載入指定路徑的檔案
         towers = AssetDatabase.LoadAssetAtPath<Towers>(towerDatapath);
         towerList = towers.TowerList;
+        towerIDList.Clear();
 
         for (int i = 0; i < towerList.Count; i++)
         {
@@ -129,6 +131,7 @@ public class EditorDataManager : EditorWindow
         //載入指定路徑的檔案
         enemies = AssetDatabase.LoadAssetAtPath<Enemies>(enemyDatapath);
         enemyList = enemies.EnemyList;
+        enemyIDList.Clear();
 
         for (int i = 0; i < enemyList.Count; i++)
         {
@@ -150,7 +153,6 @@ public class EditorDataManager : EditorWindow
     private static void UpdateEnemyNameList()
     {
         List<string> tempList = new List<string>();
-        tempList.Add(" - ");
         for (int i = 0; i < enemyList.Count; i++)
         {
             string name = enemyList[i].Name;
@@ -191,13 +193,23 @@ public class EditorDataManager : EditorWindow
         UpdateEnemyNameList();
         SetDirtyEnemy();
     }
+
+    public static EnemyData GetEnemyData(int id)
+    {
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            if (id == enemyList[i].Id)
+                return enemyList[i];
+        }
+        return enemyList[0];
+    }
     #endregion
 
     #region 關卡
 
     private static LevelData levelData;
-    private static List<Waves> levelDataList = new List<Waves>();
-    public static List<Waves> LevelDataList => levelDataList;
+    private static List<LevelAllWaves> levelDataList = new List<LevelAllWaves>();
+    public static List<LevelAllWaves> LevelDataList => levelDataList;
     private static List<int> levelIDList = new List<int>();
     public static List<int> LevelIDList => levelIDList;
     private static string[] levelNameList = new string[0];
@@ -212,6 +224,7 @@ public class EditorDataManager : EditorWindow
         //載入指定路徑的檔案
         levelData = AssetDatabase.LoadAssetAtPath<LevelData>(levelDatapath);
         levelDataList = levelData.LevelDataList;
+        levelIDList.Clear();
 
         for (int i = 0; i < levelDataList.Count; i++)
         {
@@ -251,7 +264,7 @@ public class EditorDataManager : EditorWindow
         EditorUtility.SetDirty(levelData);
     }
 
-    public static int AddNewLevel(Waves newLevel)
+    public static int AddNewLevel(LevelAllWaves newLevel)
     {
         if (levelDataList.Contains(newLevel)) return -1;
 
@@ -294,6 +307,7 @@ public class EditorDataManager : EditorWindow
         //載入指定路徑的檔案
         maps = AssetDatabase.LoadAssetAtPath<Maps>(mapDatapath);
         mapList = maps.MapDataList;
+        mapIDList.Clear();
 
         for (int i = 0; i < mapList.Count; i++)
         {

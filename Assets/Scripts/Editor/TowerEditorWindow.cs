@@ -479,7 +479,7 @@ public class TowerEditorWindow : UnitEditorWindow
         {
             cont = new GUIContent("發射物體:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.TowerBullet = (Bullet)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), levelData.TowerBullet, typeof(Bullet), false);
+            levelData.TowerBullet = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), levelData.TowerBullet, typeof(GameObject), false);
 
             cont = new GUIContent("發射物速度:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);

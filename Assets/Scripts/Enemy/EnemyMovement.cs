@@ -21,7 +21,7 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         Vector3 dir = target.position - transform.position;
-        transform.Translate(dir.normalized * enemy.Speed * Time.deltaTime, Space.World);
+        //transform.Translate(dir.normalized * enemy.Speed * Time.deltaTime, Space.World);
 
         if (Vector3.Distance(transform.position, target.position) <= 0.4f)
         {
@@ -46,7 +46,7 @@ public class EnemyMovement : MonoBehaviour
     private void EndPath()
     {
         WaveSpawner.EnemiesAlive--;
-        levelManager.LostLive(enemy.Damage);
+        //levelManager.LostLive(enemy.Damage);
         Destroy(gameObject);
     }
 }

@@ -21,4 +21,5 @@ public class EnemyData
     public bool ImmuneStun;
     public GameObject EnemyPrefab;
     public AudioClip DeadSE;
+    public GameEffectType DeadParticle;
 }

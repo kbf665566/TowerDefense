@@ -257,6 +257,10 @@ public class EnemyEditorWindow : UnitEditorWindow
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
         enemy.DeadSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 80, height), enemy.DeadSE, typeof(AudioClip), false);
 
+        cont = new GUIContent("死亡特效:");
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        enemy.DeadParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX - 30, startY, 80, height), enemy.DeadParticle);
+
         return new Vector2(startX, startY);
     }
 

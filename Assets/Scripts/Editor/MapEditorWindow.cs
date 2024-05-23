@@ -298,7 +298,7 @@ public class MapEditorWindow : UnitEditorWindow
         cont = new GUIContent("敵人路徑:");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
 
-        if (GUI.Button(new Rect(startX + 65, startY, 75, 17), "Add Path"))
+        if (GUI.Button(new Rect(startX + 65, startY, 75, 17), "Add Path") && map.EnemyPathList.Count < 2)
         {
             EnemyPathData newPath = new EnemyPathData();
             newPath.Path = new List<EnemyPath>();
