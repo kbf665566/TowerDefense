@@ -45,10 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5143e58de39c6d4cab7bf5b11dcfe68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impactEffect: {fileID: 4887839116738860401, guid: 2651c3cd95e552c408bd52e030a20d84, type: 3}
-  speed: 70
-  explosionRadius: 10
-  damage: 50
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &5767975567461103216
 GameObject:
   m_ObjectHideFlags: 0

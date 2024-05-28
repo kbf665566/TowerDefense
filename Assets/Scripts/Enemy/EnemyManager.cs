@@ -54,7 +54,7 @@ public class EnemyManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (startSpawn == false)
             return;
@@ -84,7 +84,7 @@ public class EnemyManager : MonoBehaviour
         }
 
 
-        spawnTimeCount += Time.deltaTime;
+        spawnTimeCount += Time.fixedDeltaTime;
     }
 
     private void NextWaveStart(object s,GameEvent.NextWaveStartEvent e)

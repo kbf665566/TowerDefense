@@ -24,7 +24,7 @@ MonoBehaviour:
     ImmuneStun: 0
     EnemyPrefab: {fileID: 2363954171552337673, guid: 2631640efc39101409f726e2a524e8a6, type: 3}
     DeadSE: {fileID: 8300000, guid: f0f4d264bc72b4d0a8832cff5dd5a1de, type: 3}
-    DeadParticle: 7
+    DeadParticle: 300
   - Id: 1
     Name: HoverTank
     EnemyIcon: {fileID: 21300000, guid: 70632ddfe8e71b04b8f90ef7e29a9e98, type: 3}
@@ -36,7 +36,7 @@ MonoBehaviour:
     ImmuneStun: 0
     EnemyPrefab: {fileID: 4943515868587019179, guid: 3b28c49756963d24aabe1bbedb2736cc, type: 3}
     DeadSE: {fileID: 8300000, guid: 762259e894ae7465eb205d15ff0415c7, type: 3}
-    DeadParticle: 7
+    DeadParticle: 300
   - Id: 2
     Name: Boss
     EnemyIcon: {fileID: 21300000, guid: ec03f79379868c642b48ae5ddc821b6d, type: 3}
@@ -48,4 +48,4 @@ MonoBehaviour:
     ImmuneStun: 1
     EnemyPrefab: {fileID: 2013957883763745283, guid: 1578b7dad5ba9574495139bb50dac2ec, type: 3}
     DeadSE: {fileID: 8300000, guid: af2a0d5f6c52c4117aed93341b8f36cb, type: 3}
-    DeadParticle: 7
+    DeadParticle: 300

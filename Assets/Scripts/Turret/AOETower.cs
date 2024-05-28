@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
-public class AOETower : TowerInLevel
+public class AOETower : TowerInLevel,IAttackTower,ITowerRange
 {
     private float originDamage;
     private float originShootRange;
@@ -17,8 +18,7 @@ public class AOETower : TowerInLevel
     private float final_ShootRange;
     private float final_FireRate;
 
-    private bool canSlow;
-    private bool canStun;
+    private DebuffType debuff;
 
     private float slowAmount;
     private float slowDuration;
@@ -33,8 +33,7 @@ public class AOETower : TowerInLevel
     {
         base.SetTower(uid, towerData,gridPos);
         towerType = TowerType.AOE;
-        canSlow = towerData.CanSlowEnemy;
-        canStun = towerData.CanStunEnemy;
+        debuff = towerData.Debuff;
 
         support_Damage = 1;
         support_ShootRange = 1;
@@ -58,13 +57,13 @@ public class AOETower : TowerInLevel
         originShootRange = towerLevelData[level].ShootRange;
         originFireRate = towerLevelData[level].FireRate;
 
-        if (canSlow)
+        if (debuff == DebuffType.Slow)
         {
             slowAmount = towerLevelData[level].SlowAmount;
             slowDuration = towerLevelData[level].SlowDuration;
         }
 
-        if (canStun)
+        if (debuff == DebuffType.Stun)
         {
             stunProbability = towerLevelData[level].StunProbability;
             stunDuration = towerLevelData[level].StunDuration;
@@ -96,5 +95,20 @@ public class AOETower : TowerInLevel
         final_Damage =  originDamage * support_Damage;
         final_ShootRange = originShootRange * support_ShootRange;
         final_FireRate = (float)Math.Round(originFireRate / support_FireRate, 3);
+    }
+
+    public void FireToEnemy()
+    {
+        
+    }
+
+    public void Shoot()
+    {
+        
+    }
+
+    public float GetShootRange()
+    {
+        return final_ShootRange;
     }
 }

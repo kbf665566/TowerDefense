@@ -20,15 +20,15 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 dir = target.position - transform.position;
-        //transform.Translate(dir.normalized * enemy.Speed * Time.deltaTime, Space.World);
+        //Vector3 dir = target.position - transform.position;
+        ////transform.Translate(dir.normalized * enemy.Speed * Time.deltaTime, Space.World);
 
-        if (Vector3.Distance(transform.position, target.position) <= 0.4f)
-        {
-            GetNextWaypoint();
-        }
+        //if (Vector3.Distance(transform.position, target.position) <= 0.4f)
+        //{
+        //    GetNextWaypoint();
+        //}
 
-        enemy.ResetSpeed();
+        //enemy.ResetSpeed();
     }
 
     private void GetNextWaypoint()

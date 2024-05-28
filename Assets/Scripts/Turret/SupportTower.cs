@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SupportTower : TowerInLevel
+public class SupportTower : TowerInLevel,ITowerRange
 {
     private float shootRange;
 
@@ -35,5 +35,10 @@ public class SupportTower : TowerInLevel
         buffAddDamage = towerLevelData[level].BuffAddDamage;
         buffAddShootRange = towerLevelData[level].BuffAddRange;
         buffAddFireRate = towerLevelData[level].BuffAddFireRate;
+    }
+
+    public float GetShootRange()
+    {
+        return shootRange;
     }
 }

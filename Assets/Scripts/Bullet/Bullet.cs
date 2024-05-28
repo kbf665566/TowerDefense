@@ -11,14 +11,25 @@ public class Bullet : MonoBehaviour
     protected float explosionRadius = 0f;
     protected float damage = 50;
 
+    protected DebuffType debuff;
+    
+    protected float amount;
+    protected float duration;
+
     private IObjectPool<Bullet> objectPool;
     public IObjectPool<Bullet> ObjectPool { set => objectPool = value; }
 
-    public void SetBullet(float speed,float explosionRadius,float damage)
+    [SerializeField] private LayerMask enemyLayer;
+
+    public void SetBullet(float speed, float explosionRadius, float damage,float amount, float duration,DebuffType debuff)
     {
         this.speed = speed;
-        this.explosionRadius = explosionRadius; 
+        this.explosionRadius = explosionRadius;
         this.damage = damage;
+
+        this.amount = amount;
+        this.duration = duration;
+        this.debuff = debuff;
     }
 
     public void Seek(Enemy enemy)
@@ -27,7 +38,7 @@ public class Bullet : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(target == null)
         {
@@ -36,7 +47,7 @@ public class Bullet : MonoBehaviour
         }
 
         Vector3 dir = target.transform.position - transform.position;
-        float distanceThisFrame = speed * Time.deltaTime;
+        float distanceThisFrame = speed * Time.fixedDeltaTime;
 
         if(dir.magnitude <= distanceThisFrame)
         {
@@ -51,8 +62,7 @@ public class Bullet : MonoBehaviour
     protected virtual void HitTarget()
     {
         //發出特效事件
-        EventHelper.EffectShowEvent.Invoke(this,GameEvent.GameEffectShowEvent.CreateEvent(transform.position,GameEffectType.Boom));
-
+        EventHelper.EffectShowEvent.Invoke(this,GameEvent.GameEffectShowEvent.CreateEvent(transform.position,GameEffectType.BulletHit));
         if (explosionRadius > 0f)
         {
             Explode();
@@ -68,24 +78,27 @@ public class Bullet : MonoBehaviour
 
     protected void Damage()
     {
-        target.TakeDamage(damage);
+        target.TakeDamage(damage,amount,duration,debuff);
     }
 
     protected void Damage(Transform enemy)
     {
         Enemy e = enemy.GetComponent<Enemy>();
         if (e != null)
-            e.TakeDamage(damage);
+            e.TakeDamage(damage, amount, duration, debuff);
     }
 
     protected void Explode()
     {
-        Collider[] cols =  Physics.OverlapSphere(transform.position,explosionRadius);
+        Collider[] cols =  Physics.OverlapSphere(transform.position,explosionRadius, enemyLayer);
         foreach(Collider col in cols)
         {
-            if(col.CompareTag("Enemy"))
+            if (col.gameObject.activeSelf)
             {
-                Damage(col.transform);
+                if (col.CompareTag("Enemy"))
+                {
+                    Damage(col.transform);
+                }
             }
         }
     }

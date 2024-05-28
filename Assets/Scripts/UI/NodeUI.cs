@@ -136,7 +136,10 @@ public class NodeUI : MonoBehaviour
         if (towerData != null)
         {
             selectTowerId = towerId;
-            EventHelper.TowerPreviewBuiltEvent.Invoke(this, GameEvent.TowerPreviewBuildEvent.CreateEvent(towerData.TowerSize, selectGridPos));
+            if (towerData.towerType != TowerType.Money)
+                EventHelper.TowerPreviewBuiltEvent.Invoke(this, GameEvent.TowerPreviewBuildEvent.CreateEvent(towerData.TowerLevelData[0].ShootRange,towerData.TowerSize, selectGridPos));
+            else
+                EventHelper.TowerPreviewBuiltEvent.Invoke(this, GameEvent.TowerPreviewBuildEvent.CreateEvent(towerData.TowerSize, selectGridPos));
             EventHelper.TipHideEvent.Invoke(this, GameEvent.HideTipEvent.CreateEvent());
             yesToBuildBtn.interactable = buildManager.CheckCanBuild(towerData.TowerSize, selectGridPos);
             buildMenu.SetActive(false);

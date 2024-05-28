@@ -15,7 +15,8 @@ public class GameEffectManager : MonoBehaviour
     [SerializeField] private GameEffect machineGunAttackEffect;
     [SerializeField] private GameEffect rocketTowerAttackEffect;
     [SerializeField] private GameEffect laserTowerAttackEffect;
-    [SerializeField] private GameEffect boomEffect;
+    [SerializeField] private GameEffect bulletEffect;
+    [SerializeField] private GameEffect missileExplosionEffect;
     [Header("Enemy")]
     [SerializeField] private GameEffect enemyDeathEffect;
 
@@ -29,10 +30,18 @@ public class GameEffectManager : MonoBehaviour
     void Start()
     {
         effectObjectPools = new Dictionary<GameEffectType, IObjectPool<GameEffect>>();
-        for (int i = 0; i < 8; i++)
-            effectObjectPools.Add((GameEffectType)i, new ObjectPool<GameEffect>(CreateEffect,
-            OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
-            collectionCheck, defaultCapacity, maxCapacity));
+
+        effectObjectPools.Add(GameEffectType.Remove, new ObjectPool<GameEffect>(CreateEffect,OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,collectionCheck, defaultCapacity, maxCapacity));
+        effectObjectPools.Add(GameEffectType.Build, new ObjectPool<GameEffect>(CreateEffect,OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity));
+        effectObjectPools.Add(GameEffectType.Upgrade, new ObjectPool<GameEffect>(CreateEffect,OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,collectionCheck, defaultCapacity, maxCapacity));
+
+        effectObjectPools.Add(GameEffectType.BulletHit, new ObjectPool<GameEffect>(CreateEffect,OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,collectionCheck, defaultCapacity, maxCapacity));
+        effectObjectPools.Add(GameEffectType.MachineGunAttack, new ObjectPool<GameEffect>(CreateEffect,OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,collectionCheck, defaultCapacity, maxCapacity));
+        effectObjectPools.Add(GameEffectType.LaserTowerAttack, new ObjectPool<GameEffect>(CreateEffect,OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,collectionCheck, defaultCapacity, maxCapacity));
+        effectObjectPools.Add(GameEffectType.RocketTowerAttack, new ObjectPool<GameEffect>(CreateEffect,OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,collectionCheck, defaultCapacity, maxCapacity));
+        effectObjectPools.Add(GameEffectType.MissileExplosion, new ObjectPool<GameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity));
+
+        effectObjectPools.Add(GameEffectType.EnemyDeath, new ObjectPool<GameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity));
     }
 
     public void ShowEffect(object s, GameEvent.GameEffectShowEvent e)
@@ -57,17 +66,19 @@ public class GameEffectManager : MonoBehaviour
             case GameEffectType.Upgrade:
                 return upgradeEffect;
 
-            case GameEffectType.Boom:
-                return boomEffect;
+            case GameEffectType.BulletHit:
+                return bulletEffect;
             case GameEffectType.MachineGunAttack:
                 return machineGunAttackEffect;
             case GameEffectType.LaserTowerAttack:
                 return laserTowerAttackEffect;
             case GameEffectType.RocketTowerAttack:
                 return rocketTowerAttackEffect;
+            case GameEffectType.MissileExplosion:
+                return missileExplosionEffect;
 
             case GameEffectType.EnemyDeath:
-                return boomEffect;
+                return bulletEffect;
 
             default:
                 return null;
@@ -120,15 +131,16 @@ public class GameEffectManager : MonoBehaviour
 
 public enum GameEffectType
 {
-    Remove,
-    Build,
-    Upgrade,
+    Remove = 0,
+    Build = 1,
+    Upgrade = 2,
 
-    Boom,
-    MachineGunAttack,
-    RocketTowerAttack,
-    LaserTowerAttack,
+    BulletHit = 100,
+    MachineGunAttack = 101,
+    RocketTowerAttack = 102,
+    LaserTowerAttack = 103,
+    MissileExplosion = 104,
 
-    EnemyDeath,
+    EnemyDeath = 300,
    
 }

@@ -5,38 +5,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class NormalTower : TowerInLevel
+public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
 {
-    private float originDamage;
-    private float originShootRange;
-    private float originFireRate;
+    protected float originDamage;
+    protected float originShootRange;
+    protected float originFireRate;
 
-    private float support_Damage;
-    private float support_ShootRange;
-    private float support_FireRate;
+    protected float support_Damage;
+    protected float support_ShootRange;
+    protected float support_FireRate;
 
-    private float final_Damage;
-    private float final_ShootRange;
-    private float final_FireRate;
+    protected float final_Damage;
+    protected float final_ShootRange;
+    protected float final_FireRate;
 
-    private float bulletSpeed;
-    private float bulletExplsionRadius;
+    protected float bulletSpeed;
+    protected float bulletExplsionRadius;
 
-    private bool useBullet;
-    private bool canSlow;
-    private bool canStun;
+    protected bool useBullet;
+    protected DebuffType debuff;
 
-    private float slowAmount;
-    private float slowDuration;
+    protected float slowAmount;
+    protected float slowDuration;
 
-    private float stunProbability;
-    private float stunDuration;
+    protected float stunProbability;
+    protected float stunDuration;
 
-    private float fireTimer;
+    protected float fireTimer;
 
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private Transform partToRotation;
-    [SerializeField] private float turnSpeed = 10f;
+    protected bool isNeedTurn = true;
+    /// <summary> 判斷這個角度能不能攻擊 </summary>
+    protected bool angleCanFire = false;
+
+    [SerializeField] protected Transform firePoint;
+    [SerializeField] protected Transform partToRotation;
+    [SerializeField] protected float turnSpeed = 10f;
 
     protected EnemyManager enemyManager => EnemyManager.instance;
     protected Enemy targetEnemy;
@@ -46,22 +49,17 @@ public class NormalTower : TowerInLevel
     private int defaultCapacity = 20;
     private int maxSize = 100;
 
-    private void Start()
-    {
-        bulletPool = new ObjectPool<Bullet>(CreateBullet,
-            OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
-            collectionCheck, defaultCapacity, maxSize);
-    }
-
-
     public override void SetTower(int uid, TowerData towerData, Vector2Short gridPos)
     {
-        base.SetTower(uid, towerData,gridPos);
+        base.SetTower(uid, towerData, gridPos);
         towerType = TowerType.Normal;
 
-        useBullet = towerData.IsUseBullet;
-        canSlow = towerData.CanSlowEnemy;
-        canStun = towerData.CanStunEnemy;
+        useBullet = true;
+        debuff = towerData.Debuff;
+
+        isNeedTurn = towerData.IsNeedTurn;
+        if (isNeedTurn == false)
+            angleCanFire = true;
 
         support_Damage = 1;
         support_ShootRange = 1;
@@ -70,6 +68,14 @@ public class NormalTower : TowerInLevel
         SetLevelData(nowLevel);
 
         fireTimer = originFireRate;
+
+        if (bulletPool == null && useBullet == true)
+        {
+            bulletPool = new ObjectPool<Bullet>(CreateBullet,
+           OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
+           collectionCheck, defaultCapacity, maxSize);
+        }
+
     }
 
     public override void LevelUp()
@@ -88,13 +94,13 @@ public class NormalTower : TowerInLevel
         bulletSpeed = towerLevelData[level].BulletSpeed;
         bulletExplsionRadius = towerLevelData[level].BulletExplosionRadius;
 
-        if (canSlow)
+        if (debuff == DebuffType.Slow)
         {
             slowAmount = towerLevelData[level].SlowAmount;
             slowDuration = towerLevelData[level].SlowDuration;
         }
 
-        if (canStun)
+        if (debuff == DebuffType.Stun)
         {
             stunProbability = towerLevelData[level].StunProbability;
             stunDuration = towerLevelData[level].StunDuration;
@@ -138,7 +144,7 @@ public class NormalTower : TowerInLevel
         targetEnemy = enemyManager.FindNearestEnemy(transform.localPosition, final_ShootRange);
     }
 
-    protected void FireToEnemy()
+    public void FireToEnemy()
     {
         fireTimer += Time.fixedDeltaTime;
         fireTimer = fireTimer > final_FireRate ? final_FireRate : fireTimer;
@@ -155,9 +161,10 @@ public class NormalTower : TowerInLevel
             return;
         }
 
-        LockOnTarget();
+        if (isNeedTurn == true)
+            LockOnTarget();
 
-        if (fireTimer >= final_FireRate)
+        if (fireTimer >= final_FireRate && angleCanFire == true)
         {
             Shoot();
             fireTimer = 0;
@@ -169,17 +176,42 @@ public class NormalTower : TowerInLevel
         Quaternion lookRotation = Quaternion.LookRotation(dir);
         Vector3 rotation = Quaternion.Lerp(partToRotation.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
         partToRotation.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+        angleCanFire = MathF.Abs(Quaternion.Angle(partToRotation.rotation, lookRotation)) <= 5f;
     }
 
-    protected void Shoot()
+    public virtual void Shoot()
     {
         var bullet = bulletPool.Get();
         if (bullet != null)
         {
+            float amount = 0f;
+            float duration = 0f;
+            if (debuff == DebuffType.Stun)
+            {
+                amount = stunProbability;
+                duration = stunDuration;
+
+            }
+            else if (debuff == DebuffType.Slow)
+            {
+                amount = slowAmount;
+                duration = slowDuration;
+            }
+
+            bullet.SetBullet(towerData.TowerLevelData[nowLevel].BulletSpeed,
+                  towerData.TowerLevelData[nowLevel].BulletExplosionRadius, final_Damage,
+                  amount, duration, debuff);
+
             bullet.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
             bullet.Seek(targetEnemy);
         }
     }
+
+    public float GetShootRange()
+    {
+        return final_ShootRange;
+    }
+
     #region  物件池
     // 物件池中的物件不夠時，建立新的物件去填充物件池
     private Bullet CreateBullet()
@@ -188,7 +220,6 @@ public class NormalTower : TowerInLevel
         Bullet newBullet = obj.GetComponent<Bullet>();
 
         obj.transform.SetParent(transform);
-        newBullet.SetBullet(towerData.TowerLevelData[nowLevel].BulletSpeed, towerData.TowerLevelData[nowLevel].BulletExplosionRadius,final_Damage);
         newBullet.ObjectPool = bulletPool;
 
         return newBullet;

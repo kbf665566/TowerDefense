@@ -77,3 +77,4 @@ crashlytics-build.properties
 *.TTC
 
 /[Aa]ssets/[Tt]est/*
+/Assets/Third-Party/LightningBolt/*

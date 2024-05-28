@@ -316,6 +316,13 @@ public class TowerEditorWindow : UnitEditorWindow
             tower.SpecialMusic = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.SpecialMusic, typeof(AudioClip), false);
         }
 
+        if(tower.towerType == TowerType.Normal)
+        {
+            cont = new GUIContent("需要旋轉:", "攻擊時是否需要旋轉");
+            EditorGUI.LabelField(new Rect(startX + spaceX * 4, startY - spaceY * 2, width, height), cont);
+            tower.IsNeedTurn = EditorGUI.Toggle(new Rect(startX + spaceX * 5 - 30, startY - spaceY * 2, 4 * fWidth - 40, height), tower.IsNeedTurn);
+        }
+
         startX = cachedX;
         spaceX = 110;
         startY += 30;
@@ -329,13 +336,9 @@ public class TowerEditorWindow : UnitEditorWindow
 
         if(TowerCanAttack(tower))
         {
-            cont = new GUIContent("是否可緩速敵人:");
+            cont = new GUIContent("Debuff類型:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            tower.CanSlowEnemy = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), tower.CanSlowEnemy);
-
-            cont = new GUIContent("是否可擊暈敵人:");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            tower.CanStunEnemy = EditorGUI.Toggle(new Rect(startX + spaceX, startY, 40, height), tower.CanStunEnemy);
+            tower.Debuff = (DebuffType)EditorGUI.EnumPopup(new Rect(startX + spaceX, startY, 100, height), tower.Debuff);
         }
 
         if (startX + spaceX + width > maxWidth) 
@@ -470,7 +473,7 @@ public class TowerEditorWindow : UnitEditorWindow
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.ShootRange = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.ShootRange);
 
-            cont = new GUIContent("攻速:", "");
+            cont = new GUIContent("攻速:", "每次攻擊所需要的時間");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.FireRate = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.FireRate);
         }
@@ -492,9 +495,8 @@ public class TowerEditorWindow : UnitEditorWindow
         }
 
 
-        if (tower.CanSlowEnemy && TowerCanAttack(tower))
+        if (tower.Debuff == DebuffType.Slow && TowerCanAttack(tower))
         {
-            tower.CanStunEnemy = false;
             cont = new GUIContent("緩速程度:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.SlowAmount = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SlowAmount);
@@ -504,9 +506,8 @@ public class TowerEditorWindow : UnitEditorWindow
             levelData.SlowDuration = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.SlowDuration);
         }
 
-        if (tower.CanStunEnemy && TowerCanAttack(tower))
+        if (tower.Debuff == DebuffType.Stun && TowerCanAttack(tower))
         {
-            tower.CanSlowEnemy = false;
             cont = new GUIContent("擊暈機率:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.StunProbability = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.StunProbability);

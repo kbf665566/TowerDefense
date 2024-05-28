@@ -33,7 +33,7 @@ public class LaserBeamer : Turret
     private void LaserAttack()
     {
         targetEnemy.TakeDamage(damageOverTime * Time.deltaTime);
-        targetEnemy.Slow(slowAmount);
+       // targetEnemy.Slow(slowAmount);
 
         if (!lineRenderer.enabled)
         {

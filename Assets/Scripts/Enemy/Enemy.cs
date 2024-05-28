@@ -12,8 +12,8 @@ public class Enemy : MonoBehaviour
 
     private int uid = 0;
 
+    private float startSpeed;
     private float speed;
-    private float startSpeed = 10f;
     private int damage = 1;
     private float hp = 100;
     private int value = 50;
@@ -22,6 +22,14 @@ public class Enemy : MonoBehaviour
 
     private bool immuneStun;
     private bool immuneSlow;
+
+    private float slowAmount;
+
+    private float slowCount;
+    private float stunCount;
+
+    private bool nowSlow;
+    private bool nowStun;
 
     private bool isDead = false;
     public bool IsDead => isDead;
@@ -35,31 +43,50 @@ public class Enemy : MonoBehaviour
     private int wavepointIndex = 0;
     private Transform[] waypoints;
 
-    private void Start()
-    {
-        speed = startSpeed;
-    }
+    [SerializeField] private GameObject slowEffect;
+    [SerializeField] private GameObject stunEffect;
 
-    void Update()
+    void FixedUpdate()
     {
         if (isDead)
             return;
+
+        if(nowStun)
+        {
+            stunCount -= Time.fixedDeltaTime;
+            if (stunCount <= 0)
+            {
+                nowStun = false;
+                stunEffect.SetActive(false);
+            }
+            else
+                return;
+        }
+
+        if (nowSlow)
+        {
+            slowCount -= Time.fixedDeltaTime;
+            if (slowCount <= 0)
+            {
+                nowSlow = false;
+                slowEffect.SetActive(false);
+                speed = startSpeed;
+            }
+        }
         
         Vector3 dir = target.position - transform.position;
-        transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
+        transform.Translate(dir.normalized * speed * Time.fixedDeltaTime, Space.World);
 
         if (dir != Vector3.zero)
         {
             Quaternion wantedRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, wantedRot, rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, wantedRot, rotationSpeed * Time.fixedDeltaTime);
         }
 
         if (Vector3.Distance(transform.position, target.position) <= 0.25f)
         {
             GetNextWaypoint();
         }
-
-        //ResetSpeed();
     }
 
     public void SetEnemy(EnemyData enemyData)
@@ -80,21 +107,55 @@ public class Enemy : MonoBehaviour
     public void ReSwpawn(Transform[] waypoints,int uid)
     {
         hp = enemyData.HP;
-        speed = enemyData.Speed;
+        speed = startSpeed;
         this.waypoints = waypoints;
         target = waypoints[0];
         wavepointIndex = 0;
         isDead = false;
         this.uid = uid;
+
+        nowStun = false;
+        nowSlow = false;
+
+        stunCount = 0;
+        slowCount = 0;
+
+        slowAmount = 0;
     }
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float damage,float debuffAmount = 0f,float debuffDuration = 0f,DebuffType debuff = DebuffType.None)
     {
         if (isDead) return;
 
-        hp -= amount;
+        hp -= damage;
         if (hp <= 0)
+        {
             Die();
+            return;
+        }
+
+        if(debuff == DebuffType.Stun && immuneStun == false)
+        {
+            if(Random.Range(0f,1f) <= debuffAmount)
+            {
+                nowStun = true;
+                //剩餘時間大於要附上的時間，維持不變
+                stunCount = stunCount > debuffDuration ? stunCount : debuffDuration;
+               stunEffect.SetActive(true);
+            }
+        }
+        else if(debuff == DebuffType.Slow && immuneSlow == false)
+        {
+            if (slowAmount <= debuffAmount)
+            {
+                nowSlow = true;
+                slowAmount = debuffAmount;
+                slowCount = debuffDuration;
+                speed = startSpeed * (1f - slowAmount);
+                slowEffect.SetActive(true);
+            }
+        }
+
     }
 
     private void Die()
@@ -105,16 +166,6 @@ public class Enemy : MonoBehaviour
         //發送死亡事件
         EventHelper.EnemyDiedEvent.Invoke(this,GameEvent.EnemyDieEvent.CreateEvent(uid,value));
         objectPool.Release(this);
-    }
-
-    public void Slow(float pct)
-    {
-        speed = startSpeed * (1f - pct);
-    }
-
-    public void ResetSpeed()
-    {
-        speed = startSpeed;
     }
 
     private void GetNextWaypoint()

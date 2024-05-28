@@ -12,8 +12,8 @@ public class TowerData
     public TowerType towerType;
     /// <summary> 是否使用發射物 </summary>
     public bool IsUseBullet;
-    public bool CanSlowEnemy;
-    public bool CanStunEnemy;
+    public bool IsNeedTurn;
+    public DebuffType Debuff;
     public string TowerInformation;
     public Vector2Short TowerSize;
     //-----音效---------
@@ -89,4 +89,12 @@ public class TowerLevelData
     //價錢
     public int BuildUpgradeCost;
     public int SoldPrice;
+}
+
+[Serializable]
+public enum DebuffType
+{
+    None,
+    Stun,
+    Slow,
 }

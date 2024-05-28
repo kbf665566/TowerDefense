@@ -42,11 +42,21 @@ public static partial class GameEvent
 
     public class TowerPreviewBuildEvent : GameEventArgs<TowerPreviewBuildEvent>
     {
+        public float ShootRange { get; set; }
         public Vector2Short Size { get; set; }
         public Vector2Short GridPos { get; set; }
         public static TowerPreviewBuildEvent CreateEvent(Vector2Short size, Vector2Short gridPos)
         {
             var @event = CreateEvent();
+            @event.Size = size;
+            @event.GridPos = gridPos;
+            return @event;
+        }
+
+        public static TowerPreviewBuildEvent CreateEvent(float shootRange,Vector2Short size, Vector2Short gridPos)
+        {
+            var @event = CreateEvent();
+            @event.ShootRange = shootRange;
             @event.Size = size;
             @event.GridPos = gridPos;
             return @event;
