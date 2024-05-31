@@ -124,18 +124,17 @@ public class EnemyManager : MonoBehaviour
 
     private void EnemyDied(object s, GameEvent.EnemyDieEvent e)
     {
-        nowEnemies.Remove(e.Uid);
-        EnemyDestroyed();
+        EnemyDestroyed(e.Uid);
     }
 
     private void EnemyEndPath(object s, GameEvent.EnemyEndPathEvent e)
     {
-        nowEnemies.Remove(e.Uid);
-        EnemyDestroyed();
+        EnemyDestroyed(e.Uid);
     }
 
-    private void EnemyDestroyed()
+    private void EnemyDestroyed(int uid)
     {
+        nowEnemies.Remove(uid);
         nowDiedEnemyAmount++;
 
         if (nowDiedEnemyAmount >= totalEnemyAmount)
@@ -164,6 +163,11 @@ public class EnemyManager : MonoBehaviour
             return nearestEnemy;
         }
         return null;
+    }
+
+    public int GetNowEnemyAmount()
+    {
+        return nowEnemies.Count;
     }
 
     private void OnEnable()

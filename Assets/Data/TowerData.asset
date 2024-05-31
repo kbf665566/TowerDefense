@@ -57,9 +57,10 @@ MonoBehaviour:
     TowerSize:
       x: 2
       y: 2
+    NormalSE: {fileID: 0}
     AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
     BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 01e0e2d3367124c909e8666c4241940c, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 101
     NormalParticle: 0
@@ -110,9 +111,10 @@ MonoBehaviour:
     TowerSize:
       x: 2
       y: 2
+    NormalSE: {fileID: 0}
     AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
     BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 01e0e2d3367124c909e8666c4241940c, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 102
     NormalParticle: 0
@@ -163,9 +165,10 @@ MonoBehaviour:
     TowerSize:
       x: 2
       y: 2
+    NormalSE: {fileID: 0}
     AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
     BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 01e0e2d3367124c909e8666c4241940c, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 103
     NormalParticle: 0
@@ -212,16 +215,109 @@ MonoBehaviour:
     IsUseBullet: 0
     IsNeedTurn: 0
     Debuff: 1
-    TowerInformation: 
+    TowerInformation: "\u96FB"
     TowerSize:
       x: 2
       y: 2
+    NormalSE: {fileID: 0}
     AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
     BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 01e0e2d3367124c909e8666c4241940c, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 103
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
     TowerPrefab: {fileID: -2869254594166877190, guid: 30b5d16d89d00a64397649af57f051a4, type: 3}
+  - Id: 4
+    Name: WindTower
+    TowerLevelData:
+    - Damage: 10
+      ShootRange: 5
+      FireRate: 3
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 0
+      BulletExplosionRadius: 0
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
+      GetMoney: 0
+      SlowAmount: 0
+      SlowDuration: 0
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 50
+      SoldPrice: 25
+    - Damage: 20
+      ShootRange: 5.5
+      FireRate: 2.8
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 0
+      BulletExplosionRadius: 0
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
+      GetMoney: 0
+      SlowAmount: 0
+      SlowDuration: 0
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 100
+      SoldPrice: 50
+    TowerIcon: {fileID: 21300000, guid: 7ee48c5fba4919649a8a6094cbead669, type: 3}
+    towerType: 2
+    IsUseBullet: 0
+    IsNeedTurn: 0
+    Debuff: 0
+    TowerInformation: "\u98A8"
+    TowerSize:
+      x: 2
+      y: 2
+    NormalSE: {fileID: 0}
+    AttackSE: {fileID: 8300000, guid: dadcd6f20f187487ca6d872956f98c7d, type: 3}
+    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
+    SpecialMusic: {fileID: 0}
+    AttackParticle: 105
+    NormalParticle: 0
+    BuildParticle: 1
+    RemoveParticle: 0
+    TowerPrefab: {fileID: 5851007637400312791, guid: d703b1bb197e75d41b67dbd9c40b1f85, type: 3}
+  - Id: 5
+    Name: MoneyTower
+    TowerLevelData:
+    - Damage: 0
+      ShootRange: 0
+      FireRate: 3
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 0
+      BulletExplosionRadius: 0
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
+      GetMoney: 10
+      SlowAmount: 0
+      SlowDuration: 0
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 100
+      SoldPrice: 50
+    TowerIcon: {fileID: 21300042, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
+    towerType: 3
+    IsUseBullet: 0
+    IsNeedTurn: 0
+    Debuff: 0
+    TowerInformation: Money
+    TowerSize:
+      x: 2
+      y: 2
+    NormalSE: {fileID: 8300000, guid: 9cfc9c4c568e54e68a4038ecdf7ffac7, type: 3}
+    AttackSE: {fileID: 0}
+    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
+    SpecialMusic: {fileID: 0}
+    AttackParticle: 0
+    NormalParticle: 106
+    BuildParticle: 1
+    RemoveParticle: 0
+    TowerPrefab: {fileID: 651710087589137828, guid: 747dd77151da46c40bb33b5705ec456b, type: 3}

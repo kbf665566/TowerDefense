@@ -139,7 +139,7 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
         FireToEnemy();
     }
 
-    protected void FindEnemy()
+    public void FindEnemy()
     {
         targetEnemy = enemyManager.FindNearestEnemy(transform.localPosition, final_ShootRange);
     }
@@ -179,28 +179,36 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
         angleCanFire = MathF.Abs(Quaternion.Angle(partToRotation.rotation, lookRotation)) <= 5f;
     }
 
+    public (float amount, float duration) DebuffProcess()
+    {
+        float amount = 0f;
+        float duration = 0f;
+        if (debuff == DebuffType.Stun)
+        {
+            amount = stunProbability;
+            duration = stunDuration;
+
+        }
+        else if (debuff == DebuffType.Slow)
+        {
+            amount = slowAmount;
+            duration = slowDuration;
+        }
+
+        return (amount, duration);
+    }
+
     public virtual void Shoot()
     {
         var bullet = bulletPool.Get();
         if (bullet != null)
         {
-            float amount = 0f;
-            float duration = 0f;
-            if (debuff == DebuffType.Stun)
-            {
-                amount = stunProbability;
-                duration = stunDuration;
+            var debuffCount = DebuffProcess();
 
-            }
-            else if (debuff == DebuffType.Slow)
-            {
-                amount = slowAmount;
-                duration = slowDuration;
-            }
-
+            EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(firePoint.transform.position, towerData.AttackParticle));
             bullet.SetBullet(towerData.TowerLevelData[nowLevel].BulletSpeed,
                   towerData.TowerLevelData[nowLevel].BulletExplosionRadius, final_Damage,
-                  amount, duration, debuff);
+                  debuffCount.amount, debuffCount.duration, debuff);
 
             bullet.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
             bullet.Seek(targetEnemy);

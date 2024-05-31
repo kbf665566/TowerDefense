@@ -20,7 +20,7 @@ public class Bullet : MonoBehaviour
     public IObjectPool<Bullet> ObjectPool { set => objectPool = value; }
 
     [SerializeField] private LayerMask enemyLayer;
-
+    private Collider[] hitTargets = new Collider[30];
     public void SetBullet(float speed, float explosionRadius, float damage,float amount, float duration,DebuffType debuff)
     {
         this.speed = speed;
@@ -90,15 +90,15 @@ public class Bullet : MonoBehaviour
 
     protected void Explode()
     {
-        Collider[] cols =  Physics.OverlapSphere(transform.position,explosionRadius, enemyLayer);
-        foreach(Collider col in cols)
+        Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, hitTargets, enemyLayer);
+        foreach (Collider col in hitTargets)
         {
-            if (col.gameObject.activeSelf)
+            if (col == null)
+                continue;
+
+            if (col.gameObject.activeSelf && col.CompareTag("Enemy"))
             {
-                if (col.CompareTag("Enemy"))
-                {
-                    Damage(col.transform);
-                }
+                Damage(col.transform);
             }
         }
     }

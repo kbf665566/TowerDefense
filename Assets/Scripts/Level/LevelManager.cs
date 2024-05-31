@@ -35,9 +35,10 @@ public class LevelManager : MonoBehaviour
     #region Wave
     private int nowWave = 0;
     [SerializeField] private TextMeshProUGUI waveText;
-    #endregion
     [SerializeField] private Button nextWaveBtn;
-
+    private bool nowWaveEnd = true;
+    public bool NextWaveEnd => nowWaveEnd;
+    #endregion
     private void Awake()
     {
         if (instance != null)
@@ -88,11 +89,14 @@ public class LevelManager : MonoBehaviour
         moneyText.text = money.ToString();
         live = startLive;
         liveText.text = live.ToString();
+        nowWaveEnd = true;
+        nextWaveBtn.interactable = true;
     }
 
     public void NextWave()
     {
         nextWaveBtn.interactable = false;
+        nowWaveEnd = false;
         nowWave++;
         waveText.text = nowWave.ToString() + " / " + gameManager.NowWaveData.WaveList.Count;
 
@@ -102,6 +106,7 @@ public class LevelManager : MonoBehaviour
     private void WaveEnd(object s,GameEvent.WaveEndEvent e)
     {
         nextWaveBtn.interactable = true;
+        nowWaveEnd = true;
     }
 
     private void EnemyDied(object s,GameEvent.EnemyDieEvent e)
@@ -118,11 +123,18 @@ public class LevelManager : MonoBehaviour
             onGameOver?.Invoke();
     }
 
+    private void MakeMoney(object s, GameEvent.TowerMakeMoneyEvent e)
+    {
+        money += e.GetMoney;
+        moneyText.text = money.ToString();
+    }
+
     private void OnEnable()
     {
         EventHelper.WaveEndEvent += WaveEnd;
         EventHelper.EnemyDiedEvent += EnemyDied;
         EventHelper.EnemyEndPathEvent += EnemyEndPath;
+        EventHelper.TowerModeMoneyEvent += MakeMoney;
     }
 
     private void OnDisable()
@@ -130,6 +142,7 @@ public class LevelManager : MonoBehaviour
         EventHelper.WaveEndEvent -= WaveEnd;
         EventHelper.EnemyDiedEvent -= EnemyDied;
         EventHelper.EnemyEndPathEvent -= EnemyEndPath;
+        EventHelper.TowerModeMoneyEvent -= MakeMoney;
     }
 
 #if UNITY_EDITOR

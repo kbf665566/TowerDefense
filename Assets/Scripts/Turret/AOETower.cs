@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class AOETower : TowerInLevel,IAttackTower,ITowerRange
 {
@@ -28,7 +29,13 @@ public class AOETower : TowerInLevel,IAttackTower,ITowerRange
 
     private float fireTimer;
 
+    private EnemyManager enemyManager => EnemyManager.instance;
+
     [SerializeField] private Transform firePoint;
+    [SerializeField] private LayerMask enemyLayer;
+
+    private Collider[] hitTargets = new Collider[30];
+    private bool nowCanFindEnemy = false;
     public override void SetTower(int uid, TowerData towerData, Vector2Short gridPos)
     {
         base.SetTower(uid, towerData,gridPos);
@@ -97,14 +104,79 @@ public class AOETower : TowerInLevel,IAttackTower,ITowerRange
         final_FireRate = (float)Math.Round(originFireRate / support_FireRate, 3);
     }
 
+    private void FixedUpdate()
+    {
+        FireToEnemy();
+    }
+
+    public void FindEnemy()
+    {
+        nowCanFindEnemy = enemyManager.GetNowEnemyAmount() > 0;
+    }
+
     public void FireToEnemy()
     {
+        fireTimer += Time.fixedDeltaTime;
+        fireTimer = fireTimer > final_FireRate ? final_FireRate : fireTimer;
+
+        FindEnemy();
+
+        if (!nowCanFindEnemy)
+            return;
         
+
+        if (fireTimer >= final_FireRate)
+        {
+            int count = 0;
+            if (Time.frameCount % 10 == 0)
+                count = Physics.OverlapSphereNonAlloc(transform.position, final_ShootRange, hitTargets, enemyLayer);
+
+            if (count > 0)
+            {
+                Shoot();
+                fireTimer = 0;
+            }
+        }
+    }
+
+    public (float amount, float duration) DebuffProcess()
+    {
+        float amount = 0f;
+        float duration = 0f;
+        if (debuff == DebuffType.Stun)
+        {
+            amount = stunProbability;
+            duration = stunDuration;
+
+        }
+        else if (debuff == DebuffType.Slow)
+        {
+            amount = slowAmount;
+            duration = slowDuration;
+        }
+
+        return (amount, duration);
     }
 
     public void Shoot()
     {
-        
+        var debuffCount = DebuffProcess();
+
+        EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(firePoint.transform.position, towerData.AttackParticle,final_ShootRange));
+        foreach (Collider col in hitTargets)
+        {
+            if (col == null)
+                continue;
+
+            if (col.gameObject.activeSelf && col.CompareTag("Enemy"))
+            {
+                var enemy = col.gameObject.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(final_Damage, debuffCount.amount, debuffCount.duration, debuff);
+                }
+            }
+        }
     }
 
     public float GetShootRange()

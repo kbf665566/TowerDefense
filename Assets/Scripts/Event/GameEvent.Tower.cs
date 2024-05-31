@@ -84,4 +84,15 @@ public static partial class GameEvent
             return @event;
         }
     }
+
+    public class TowerMakeMoneyEvent : GameEventArgs<TowerMakeMoneyEvent>
+    {
+        public int GetMoney { get; set; }
+        public static TowerMakeMoneyEvent CreateEvent(int money)
+        {
+            var @event = CreateEvent();
+            @event.GetMoney = money;
+            return @event;
+        }
+    }
 }

@@ -52,4 +52,6 @@ MonoBehaviour:
   laserTowerAttackEffect: {fileID: -8354265578787481948, guid: 8a31f1b1059e95947bc1b85e93ad3ef3, type: 3}
   bulletEffect: {fileID: 1992728147910797973, guid: a4e0e87699dbd400aaf85d616d2618f8, type: 3}
   missileExplosionEffect: {fileID: -4261516937490873323, guid: f43a73bac381a4517bdade908e622a9e, type: 3}
+  windAttackEffect: {fileID: 7342573660951464434, guid: 638ace3c1eda1994bb21efe2ad87cf79, type: 3}
+  makeMoneyEffect: {fileID: 2168911983297192658, guid: ae08ba3a43339bd48b515617a0863349, type: 3}
   enemyDeathEffect: {fileID: 4167920499697359073, guid: a9162585e30302147a5d79c58ef48d3e, type: 3}

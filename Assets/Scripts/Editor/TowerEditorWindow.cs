@@ -304,8 +304,12 @@ public class TowerEditorWindow : UnitEditorWindow
         }
         else
         {
+            cont = new GUIContent("一般音效:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            tower.NormalSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.NormalSE, typeof(AudioClip), false);
+
             cont = new GUIContent("一般特效:", "");
-            EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY += spaceY, width, height), cont);
+            EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
             tower.NormalParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.NormalParticle);
         }
 

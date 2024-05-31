@@ -17,6 +17,7 @@ public class TowerData
     public string TowerInformation;
     public Vector2Short TowerSize;
     //-----音效---------
+    public AudioClip NormalSE;
     public AudioClip AttackSE;
     public AudioClip BuildSE;
     public AudioClip RemoveSE;

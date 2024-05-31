@@ -16,6 +16,7 @@ public class MoneyTower : TowerInLevel
     private float fireTimer;
 
     [SerializeField] private Transform firePoint;
+    private LevelManager levelManager => LevelManager.instance;
     public override void SetTower(int uid, TowerData towerData, Vector2Short gridPos)
     {
         base.SetTower(uid, towerData,gridPos);
@@ -57,5 +58,31 @@ public class MoneyTower : TowerInLevel
     public override void UpdateTowerState()
     {
         final_FireRate = (float)Math.Round(originFireRate / support_FireRate, 3);
+    }
+
+    private void FixedUpdate()
+    {
+        MakeMoney();
+    }
+
+    private void MakeMoney()
+    {
+        fireTimer += Time.fixedDeltaTime;
+        fireTimer = fireTimer > final_FireRate ? final_FireRate : fireTimer;
+
+        if (levelManager.NextWaveEnd)
+            return;
+
+        if (fireTimer >= final_FireRate)
+        {
+            GetMoney();
+            fireTimer = 0;
+        }
+    }
+
+    private void GetMoney()
+    {
+        EventHelper.TowerModeMoneyEvent.Invoke(this,GameEvent.TowerMakeMoneyEvent.CreateEvent(getMoney));
+        EventHelper.EffectShowTextEvent.Invoke(this, GameEvent.GameEffectShowWithTextEvent.CreateEvent(firePoint.position ,towerData.NormalParticle,"+" + getMoney));
     }
 }

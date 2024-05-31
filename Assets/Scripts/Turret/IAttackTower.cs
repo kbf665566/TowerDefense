@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IAttackTower
 {
+    (float amount, float duration) DebuffProcess();
+    void FindEnemy();
     void FireToEnemy();
     void Shoot();
 }
