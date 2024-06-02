@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: -2869254594166877190}
   - component: {fileID: -8605975627781746845}
   - component: {fileID: -9065376971118537667}
-  m_Layer: 0
+  - component: {fileID: -5826153720105468204}
+  m_Layer: 8
   m_Name: EMP_TowerLv1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,6 +180,19 @@ MonoBehaviour:
   AnimationMode: 3
   lineRenderer: {fileID: -8605975627781746845}
   is2DGame: 0
+--- !u!65 &-5826153720105468204
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4487880785721902874}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9, y: 0.5, z: 1.9}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1 &9091582331465801800
 GameObject:
   m_ObjectHideFlags: 0

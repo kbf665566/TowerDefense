@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Pool;
 
 public class TowerInLevel : MonoBehaviour
@@ -91,5 +92,13 @@ public class TowerInLevel : MonoBehaviour
     public virtual void UpdateTowerState()
     {
 
+    }
+
+    private void OnMouseDown()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        EventHelper.TowerSelectedEvent.Invoke(this, GameEvent.TowerSelectEvent.CreateEvent(uid));
     }
 }

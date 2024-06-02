@@ -41,7 +41,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3687849214172207187}
   - component: {fileID: 6620071218778020787}
-  m_Layer: 0
+  - component: {fileID: -1558794150815770515}
+  m_Layer: 8
   m_Name: RocketTowerLv3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,6 +80,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 6811789582331089607}
   partToRotation: {fileID: 4820224956220629586}
+  turnSpeed: 10
+--- !u!65 &-1558794150815770515
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5901723144127056010}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9, y: 0.5, z: 1.9}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1 &8858695484635044186
 GameObject:
   m_ObjectHideFlags: 0

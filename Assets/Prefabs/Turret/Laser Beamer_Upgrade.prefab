@@ -4908,7 +4908,8 @@ GameObject:
   - component: {fileID: 2081185161226312228}
   - component: {fileID: 2092598566631916636}
   - component: {fileID: 9065171716430895362}
-  m_Layer: 0
+  - component: {fileID: -4977524013910893793}
+  m_Layer: 8
   m_Name: Laser Beamer_Upgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5057,6 +5058,19 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!65 &-4977524013910893793
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1705186731453907102}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.5, z: 6}
+  m_Center: {x: 0, y: 0.25, z: 2.5}
 --- !u!1 &1880206606300146243
 GameObject:
   m_ObjectHideFlags: 0

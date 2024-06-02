@@ -22,21 +22,8 @@ public class NoBulletTower : NormalTower, IAttackTower, ITowerRange
 
     public override void Shoot()
     {
-        float amount = 0f;
-        float duration = 0f;
-        if (debuff == DebuffType.Stun)
-        {
-            amount = stunProbability;
-            duration = stunDuration;
-
-        }
-        else if (debuff == DebuffType.Slow)
-        {
-            amount = slowAmount;
-            duration = slowDuration;
-        }
-
-        targetEnemy.TakeDamage(final_Damage,amount,duration,debuff);
+        var debuffCount = DebuffProcess();
+        targetEnemy.TakeDamage(final_Damage, debuffCount.amount, debuffCount.duration, debuff);
         EventHelper.EffectShowEvent.Invoke(this,GameEvent.GameEffectShowEvent.CreateEvent(firePoint.transform.position,towerData.AttackParticle));
 
         if (lightningEffect == null)

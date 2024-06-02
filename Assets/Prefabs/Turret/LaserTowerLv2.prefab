@@ -75,7 +75,8 @@ GameObject:
   - component: {fileID: 6681580625019278802}
   - component: {fileID: -2731824926859771685}
   - component: {fileID: 8199813878201586319}
-  m_Layer: 0
+  - component: {fileID: 200106318215676759}
+  m_Layer: 8
   m_Name: LaserTowerLv2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,6 +116,7 @@ MonoBehaviour:
   partToRotation: {fileID: 1255402016451830185}
   turnSpeed: 10
   lineRenderer: {fileID: 8199813878201586319}
+  lightningEffect: {fileID: 0}
 --- !u!120 &8199813878201586319
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -214,6 +216,19 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!65 &200106318215676759
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601639495670701164}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9, y: 0.5, z: 1.9}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1001 &6432324447053579941
 PrefabInstance:
   m_ObjectHideFlags: 0

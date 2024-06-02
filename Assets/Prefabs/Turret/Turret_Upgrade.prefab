@@ -95,7 +95,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4498948016666184410}
   - component: {fileID: 3697727151460195076}
-  m_Layer: 0
+  - component: {fileID: 5197348248336784773}
+  m_Layer: 8
   m_Name: Turret_Upgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,6 +140,19 @@ MonoBehaviour:
   partToRotation: {fileID: 6253215328879535039}
   bulletPrefab: {fileID: 4850711738385815153, guid: bb3de253152a0f546a699a44982f7457, type: 3}
   firePoint: {fileID: 426238143729628751}
+--- !u!65 &5197348248336784773
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3829372289273974880}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9, y: 0.5, z: 1.9}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1 &4681038111130529988
 GameObject:
   m_ObjectHideFlags: 0

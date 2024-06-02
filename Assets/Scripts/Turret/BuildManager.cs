@@ -1,6 +1,7 @@
 ﻿using Game;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 using static UnityEditor.PlayerSettings;
@@ -129,6 +130,10 @@ public class BuildManager : MonoBehaviour
 
                 levelManager.CostMoney(towerData.TowerLevelData[0].BuildUpgradeCost);
 
+
+                if (newTower.TowerType == TowerType.Support)
+                    ((SupportTower)newTower).SupportOtherTower();
+
                 //發出建造特效事件
                 EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(worldPos, towerData.BuildParticle));
             }
@@ -143,9 +148,21 @@ public class BuildManager : MonoBehaviour
             EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(tower.GridPos.CalculateCenterPos(tower.TowerData.TowerSize), tower.TowerData.RemoveParticle));
             levelManager.AddMoney(tower.GetNowLevelData().SoldPrice);
 
-            gridManager.RemoveTower(tower.GridPos,tower.TowerData.TowerSize);
 
+            gridManager.RemoveTower(tower.GridPos, tower.TowerData.TowerSize);
             nowTowers.Remove(e.Uid);
+
+            if (tower.TowerType == TowerType.Support)
+            {
+                ((SupportTower)tower).SellToResetSupport();
+                foreach(var obj in nowTowers)
+                {
+                    if(obj.Value.TowerType == TowerType.Support)
+                    {
+                        ((SupportTower)obj.Value).SupportOtherTower();
+                    }
+                }
+            }
 
             if (towerObjectPools.TryGetValue(tower.Id, out var pool))
                 pool.Release(tower);
@@ -187,6 +204,10 @@ public class BuildManager : MonoBehaviour
         {
              var range = ((ITowerRange)tower).GetShootRange();
             DrawTowerRange(tower.transform.position,range);
+#if UNITY_EDITOR
+            EditorGUIUtility.PingObject(tower);
+            Selection.activeGameObject = tower.gameObject;
+#endif
         }
     }
 

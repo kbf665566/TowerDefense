@@ -21,10 +21,6 @@ public class Node : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
-        var uid = BuildManager.instance.GetTowerUid(pos);
-        if (uid != 0)
-            EventHelper.TowerSelectedEvent.Invoke(this, GameEvent.TowerSelectEvent.CreateEvent(uid));
-        else
-            EventHelper.NodeSelectedEvent.Invoke(this, GameEvent.NodeSelectEvent.CreateEvent(pos));
+        EventHelper.NodeSelectedEvent.Invoke(this, GameEvent.NodeSelectEvent.CreateEvent(pos));
     }
 }

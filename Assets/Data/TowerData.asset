@@ -321,3 +321,41 @@ MonoBehaviour:
     BuildParticle: 1
     RemoveParticle: 0
     TowerPrefab: {fileID: 651710087589137828, guid: 747dd77151da46c40bb33b5705ec456b, type: 3}
+  - Id: 6
+    Name: RaderTower
+    TowerLevelData:
+    - Damage: 0
+      ShootRange: 0
+      FireRate: 0
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 0
+      BulletExplosionRadius: 0
+      BuffAddDamage: 0
+      BuffAddRange: 0
+      BuffAddFireRate: 0
+      GetMoney: 0
+      SlowAmount: 0
+      SlowDuration: 0
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 0
+      SoldPrice: 0
+    TowerIcon: {fileID: 21300052, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
+    towerType: 1
+    IsUseBullet: 0
+    IsNeedTurn: 0
+    Debuff: 0
+    TowerInformation: 
+    TowerSize:
+      x: 2
+      y: 2
+    NormalSE: {fileID: 0}
+    AttackSE: {fileID: 0}
+    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
+    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
+    SpecialMusic: {fileID: 0}
+    AttackParticle: 0
+    NormalParticle: 0
+    BuildParticle: 1
+    RemoveParticle: 0
+    TowerPrefab: {fileID: 2181722627641859894, guid: f18933bff30f89d489f567a9e6720919, type: 3}
