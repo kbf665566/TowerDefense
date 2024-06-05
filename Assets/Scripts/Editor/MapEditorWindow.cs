@@ -395,6 +395,9 @@ public class MapEditorWindow : UnitEditorWindow
         EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
         map.StartLive = EditorGUI.IntField(new Rect(startX + spaceX * 2 + 60, startY, fWidth, height), map.StartLive);
 
+        cont = new GUIContent("地圖音樂:", "");
+        EditorGUI.LabelField(new Rect(startX + spaceX * 3, startY - spaceY, width, height), cont);
+        map.MapMusic = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 + 60, startY - spaceY, width, height), map.MapMusic, typeof(AudioClip), false);
 
         cont = new GUIContent("顯示地圖:", "是否顯示地圖");
         EditorGUI.LabelField(new Rect(startX, startY + spaceY * 2.5f, width, height), cont);

@@ -7,20 +7,7 @@ public static partial class GameEvent
 
     public class GameOverEvent : GameEventArgs<GameOverEvent>
     {
-        public static GameOverEvent CreateEvent()
-        {
-            var @event = CreateEvent();
-            return @event;
-        }
-    }
-
-    public class LevelStartEvent : GameEventArgs<LevelStartEvent>
-    {
-        public static LevelStartEvent CreateEvent()
-        {
-            var @event = CreateEvent();
-            return @event;
-        }
+        
     }
 
     public class NextWaveStartEvent : GameEventArgs<NextWaveStartEvent>

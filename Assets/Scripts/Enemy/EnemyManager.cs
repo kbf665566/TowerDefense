@@ -111,7 +111,8 @@ public class EnemyManager : MonoBehaviour
 
     private void SpawnEnemy(int enemyId,int pathId)
     {
-        if(enemyObjectPools.TryGetValue(enemyId,out var pool))
+        nowSelectEnemyId = enemyId;
+        if (enemyObjectPools.TryGetValue(enemyId,out var pool))
         {
             var newEnemy = pool.Get();
             var wayPoints = pathId == 0 ? levelManager.WayPoints1 : levelManager.WayPoints2;

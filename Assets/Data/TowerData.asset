@@ -30,7 +30,7 @@ MonoBehaviour:
       SlowDuration: 0
       StunProbability: 0
       StunDuration: 0
-      BuildUpgradeCost: 100
+      BuildUpgradeCost: 10
       SoldPrice: 50
     - Damage: 15
       ShootRange: 12
@@ -84,7 +84,7 @@ MonoBehaviour:
       SlowDuration: 0
       StunProbability: 0
       StunDuration: 0
-      BuildUpgradeCost: 200
+      BuildUpgradeCost: 20
       SoldPrice: 100
     - Damage: 40
       ShootRange: 15
@@ -138,7 +138,7 @@ MonoBehaviour:
       SlowDuration: 1
       StunProbability: 0
       StunDuration: 0
-      BuildUpgradeCost: 300
+      BuildUpgradeCost: 30
       SoldPrice: 150
     - Damage: 30
       ShootRange: 20
@@ -325,21 +325,37 @@ MonoBehaviour:
     Name: RaderTower
     TowerLevelData:
     - Damage: 0
-      ShootRange: 0
+      ShootRange: 8
       FireRate: 0
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
-      BuffAddDamage: 0
-      BuffAddRange: 0
-      BuffAddFireRate: 0
+      BuffAddDamage: 1.2
+      BuffAddRange: 1.2
+      BuffAddFireRate: 1.2
       GetMoney: 0
       SlowAmount: 0
       SlowDuration: 0
       StunProbability: 0
       StunDuration: 0
-      BuildUpgradeCost: 0
-      SoldPrice: 0
+      BuildUpgradeCost: 10
+      SoldPrice: 500
+    - Damage: 0
+      ShootRange: 10
+      FireRate: 0
+      TowerBullet: {fileID: 0}
+      BulletSpeed: 0
+      BulletExplosionRadius: 0
+      BuffAddDamage: 1.4
+      BuffAddRange: 1.4
+      BuffAddFireRate: 1.4
+      GetMoney: 0
+      SlowAmount: 0
+      SlowDuration: 0
+      StunProbability: 0
+      StunDuration: 0
+      BuildUpgradeCost: 20
+      SoldPrice: 1000
     TowerIcon: {fileID: 21300052, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}
     towerType: 1
     IsUseBullet: 0

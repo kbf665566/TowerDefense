@@ -19,7 +19,6 @@ public class EventHelper : MonoBehaviour
     public static EventHandler<GameEvent.NodeCancelSelectEvent> NodeCancelSelectedEvent;
 
     public static EventHandler<GameEvent.GameOverEvent> GameOverEvent;
-    public static EventHandler<GameEvent.LevelStartEvent> LevelStartedEvent;
     public static EventHandler<GameEvent.GameWinEvent> GameWonEvent;
     public static EventHandler<GameEvent.NextWaveStartEvent> NextWaveStartedEvent;
     public static EventHandler<GameEvent.WaveEndEvent> WaveEndEvent;

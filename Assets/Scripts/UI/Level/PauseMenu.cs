@@ -3,8 +3,6 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject ui;
-    [SerializeField] private string levelName = "Level1";
-    [SerializeField] private SceneFader sceneFader;
     // Update is called once per frame
     void Update()
     {
@@ -26,12 +24,12 @@ public class PauseMenu : MonoBehaviour
     public void Retry()
     {
         Toggle();
-        sceneFader.FadeTo(levelName);
+        EventHelper.SceneChangedEvent.Invoke(this,GameEvent.SceneChangeEvent.CreateEvent(GameManager.instance.NowMapData.MapName));
     }
 
     public void Menu()
     {
         Toggle();
-        sceneFader.FadeTo(GameSetting.MainMenuName);
+        EventHelper.SceneChangedEvent.Invoke(this, GameEvent.SceneChangeEvent.CreateEvent(GameSetting.MainMenuName));
     }
 }

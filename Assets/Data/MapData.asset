@@ -74,6 +74,7 @@ MonoBehaviour:
         x: 3
         y: 3
     WavesId: 0
+    MapMusic: {fileID: 8300000, guid: 6ce6d7c4d4f6140f68d2c18955f02e8c, type: 3}
     Waves:
       Id: 0
       LevelName: 
@@ -100,6 +101,7 @@ MonoBehaviour:
           y: 0
     BlockGridList: []
     WavesId: 0
+    MapMusic: {fileID: 0}
     Waves:
       Id: 0
       LevelName: 
@@ -116,6 +118,7 @@ MonoBehaviour:
     EnemyPathList: []
     BlockGridList: []
     WavesId: 0
+    MapMusic: {fileID: 0}
     Waves:
       Id: 0
       LevelName: 

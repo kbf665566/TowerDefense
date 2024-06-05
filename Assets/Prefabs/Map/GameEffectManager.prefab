@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3668201169489369363}
   - component: {fileID: -636031816836836619}
+  - component: {fileID: -8466698626489776310}
   m_Layer: 0
   m_Name: GameEffectManager
   m_TagString: Untagged
@@ -55,3 +56,30 @@ MonoBehaviour:
   windAttackEffect: {fileID: 7342573660951464434, guid: 638ace3c1eda1994bb21efe2ad87cf79, type: 3}
   makeMoneyEffect: {fileID: 2168911983297192658, guid: ae08ba3a43339bd48b515617a0863349, type: 3}
   enemyDeathEffect: {fileID: 4167920499697359073, guid: a9162585e30302147a5d79c58ef48d3e, type: 3}
+--- !u!114 &-8466698626489776310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8387105612236685088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0c55dbc54bc43246babc1a05d1b91cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seObj: {fileID: 3586307730500728370, guid: ce708967619691c4f8466ef245e72c47, type: 3}
+  buildEffect: {fileID: 8300000, guid: ceddc15e2d07b4a65bdb173d7eb22830, type: 3}
+  upgradeEffect: {fileID: 8300000, guid: ceddc15e2d07b4a65bdb173d7eb22830, type: 3}
+  removeEffect: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
+  machineGunAttackEffect: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
+  rocketTowerAttackEffect: {fileID: 8300000, guid: ce02cc583b9d84102a12a156e90ca692, type: 3}
+  laserTowerAttackEffect: {fileID: 8300000, guid: f7f2b958b23574551b561f7e871a8306, type: 3}
+  bulletEffect: {fileID: 8300000, guid: f0f4d264bc72b4d0a8832cff5dd5a1de, type: 3}
+  missileExplosionEffect: {fileID: 8300000, guid: 762259e894ae7465eb205d15ff0415c7, type: 3}
+  windAttackEffect: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
+  makeMoneyEffect: {fileID: 8300000, guid: 9cfc9c4c568e54e68a4038ecdf7ffac7, type: 3}
+  enemyDeathEffect: {fileID: 8300000, guid: 68e681912bb2e4047a3ff9a20dac4cb6, type: 3}
+  musicGroup: {fileID: -8691704105318060115, guid: adad7d20769a96944a9e94ce57ee0d9b, type: 2}
+  towerGroup: {fileID: -4372087684158494225, guid: adad7d20769a96944a9e94ce57ee0d9b, type: 2}
+  enemyGroup: {fileID: 5930479085910009041, guid: adad7d20769a96944a9e94ce57ee0d9b, type: 2}

@@ -276,41 +276,25 @@ public class TowerEditorWindow : UnitEditorWindow
         tower.TowerSize.x = (short)EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), tower.TowerSize.x);
         tower.TowerSize.y = (short)EditorGUI.IntField(new Rect(startX + spaceX + fWidth + 3, startY, fWidth, height), tower.TowerSize.y);
 
-        cont = new GUIContent("建造音效:", "");
-        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        tower.BuildSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.BuildSE, typeof(AudioClip), false);
-
         cont = new GUIContent("建造特效:", "");
-        EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
-        tower.BuildParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.BuildParticle);
-
-        cont = new GUIContent("拆除音效:", "");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        tower.RemoveSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.RemoveSE, typeof(AudioClip), false);
+        tower.BuildParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.BuildParticle);
 
         cont = new GUIContent("拆除特效:", "");
-        EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
-        tower.RemoveParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.RemoveParticle);
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        tower.RemoveParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.RemoveParticle);
 
         if (TowerCanAttack(tower))
         {
-            cont = new GUIContent("攻擊音效:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            tower.AttackSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.AttackSE, typeof(AudioClip), false);
-
             cont = new GUIContent("攻擊特效:", "");
-            EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
-            tower.AttackParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.AttackParticle);
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            tower.AttackParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.AttackParticle);
         }
         else
         {
-            cont = new GUIContent("一般音效:", "");
-            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            tower.NormalSE = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.NormalSE, typeof(AudioClip), false);
-
             cont = new GUIContent("一般特效:", "");
-            EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
-            tower.NormalParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX * 3 - 30, startY, 4 * fWidth - 40, height), tower.NormalParticle);
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            tower.NormalParticle = (GameEffectType)EditorGUI.EnumPopup(new Rect(startX + spaceX - 30, startY, 4 * fWidth - 40, height), tower.NormalParticle);
         }
 
         if(tower.towerType == TowerType.Special)
@@ -323,8 +307,8 @@ public class TowerEditorWindow : UnitEditorWindow
         if(tower.towerType == TowerType.Normal)
         {
             cont = new GUIContent("需要旋轉:", "攻擊時是否需要旋轉");
-            EditorGUI.LabelField(new Rect(startX + spaceX * 4, startY - spaceY * 2, width, height), cont);
-            tower.IsNeedTurn = EditorGUI.Toggle(new Rect(startX + spaceX * 5 - 30, startY - spaceY * 2, 4 * fWidth - 40, height), tower.IsNeedTurn);
+            EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY - spaceY * 2, width, height), cont);
+            tower.IsNeedTurn = EditorGUI.Toggle(new Rect(startX + spaceX * 3 - 30, startY - spaceY * 2, 4 * fWidth - 40, height), tower.IsNeedTurn);
         }
 
         startX = cachedX;

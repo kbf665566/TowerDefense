@@ -20,6 +20,7 @@ public class MapData
     public List<EnemyPathData> EnemyPathList = new List<EnemyPathData>();
     public List<BlockData> BlockGridList;
     public int WavesId;
+    public AudioClip MapMusic;
     [HideInInspector]
     public LevelAllWaves Waves;
 

@@ -11,11 +11,6 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
 
-    private bool gameIsOver = false;
-    [SerializeField] GameObject gameOverUI;
-    [SerializeField] GameObject gameWinUI;
-    public delegate void OnGameOver();
-    public static OnGameOver onGameOver;
 
     public Maps MapData;
     public LevelData LevelData;
@@ -43,54 +38,20 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-       
-    }
-
     private void Update()
     {
 #if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.E))
-            onGameOver?.Invoke();
+        //if (Input.GetKeyDown(KeyCode.E))
+        //    onGameOver?.Invoke();
 #endif
 
-        //EventSystem.current.
     }
 
-    private void ResetGame()
-    {
-        gameIsOver = false;
-        gameOverUI.SetActive(false);
-    }
-
-
-    private void EndGame()
-    {
-        gameIsOver = true;
-        gameOverUI.SetActive(true);
-    }
-
-    private void WinGame()
-    {
-        gameIsOver = true;
-        gameWinUI.SetActive(true);
-    }
 
     public MapData SelectMap(int id)
     {
         nowMapData = MapData.GetData(id);
         nowWaveData = LevelData.GetData(nowMapData.WavesId);
         return nowMapData;
-    }
-
-    private void OnEnable()
-    {
-        onGameOver += EndGame;
-    }
-    private void OnDisable()
-    {
-        onGameOver -= EndGame;
     }
 }

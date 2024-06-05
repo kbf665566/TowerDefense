@@ -60,14 +60,22 @@ public class CameraController : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.onGameOver += GameEnd;
-    }
-    private void OnDisable()
-    {
-        GameManager.onGameOver -= GameEnd;
+        EventHelper.GameOverEvent += GameOverEvent;
+        EventHelper.GameWonEvent += GameWinEvent;
     }
 
-    private void GameEnd()
+    private void OnDisable()
+    {
+        EventHelper.GameOverEvent -= GameOverEvent;
+        EventHelper.GameWonEvent += GameWinEvent;
+    }
+
+    private void GameOverEvent(object s, GameEvent.GameOverEvent e)
+    {
+        canMove = false;
+    }
+
+    private void GameWinEvent(object s, GameEvent.GameWinEvent e)
     {
         canMove = false;
     }

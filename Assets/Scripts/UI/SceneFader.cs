@@ -55,4 +55,9 @@ public class SceneFader : MonoBehaviour
     {
         EventHelper.SceneChangedEvent += FadeTo;
     }
+
+    private void OnDisable()
+    {
+        EventHelper.SceneChangedEvent -= FadeTo;
+    }
 }

@@ -103,9 +103,16 @@ public class LevelManager : MonoBehaviour
         EventHelper.NextWaveStartedEvent.Invoke(this,GameEvent.NextWaveStartEvent.CreateEvent(nowWave));
     }
 
-    private void WaveEnd(object s,GameEvent.WaveEndEvent e)
+    private void WaveEnd(object s, GameEvent.WaveEndEvent e)
     {
-        nextWaveBtn.interactable = true;
+        if (nowWave == gameManager.NowWaveData.WaveList.Count)
+        {
+            WinTheGame();
+            EventHelper.GameWonEvent.Invoke(this, GameEvent.GameWinEvent.CreateEvent());
+        }
+        else
+            nextWaveBtn.interactable = true;
+
         nowWaveEnd = true;
     }
 
@@ -120,13 +127,20 @@ public class LevelManager : MonoBehaviour
         live = live - e.Damage <= 0 ? 0 : live - e.Damage;
         liveText.text = live.ToString();
         if (live <= 0)
-            onGameOver?.Invoke();
+            EventHelper.GameOverEvent.Invoke(this,GameEvent.GameOverEvent.CreateEvent());
     }
 
     private void MakeMoney(object s, GameEvent.TowerMakeMoneyEvent e)
     {
         money += e.GetMoney;
         moneyText.text = money.ToString();
+    }
+
+
+    private void WinTheGame()
+    {
+        //記錄獲勝的關卡
+        // PlayerPrefs.SetInt("levelReached", levelToUnlock);
     }
 
     private void OnEnable()
