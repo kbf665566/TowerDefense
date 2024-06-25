@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine;
 using System.IO;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using UnityEngine.Audio;
+using DG.Tweening;
 /// <summary>
 /// 管理整個遊戲
 /// </summary>
@@ -26,6 +29,13 @@ public class GameManager : MonoBehaviour
     private bool disableClicked = false;
     public bool DisableClicked => disableClicked;
 
+    [SerializeField] private AudioMixer gameMixer;
+
+    public static PlayerData GameData;
+
+    private DifficultyType difficulty;
+    public DifficultyType Difficulty => difficulty;
+
     private void Awake()
     {
         if (instance != null)
@@ -36,6 +46,7 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         DontDestroyOnLoad(gameObject);
+        LoadData();
     }
 
     private void Update()
@@ -48,10 +59,59 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public MapData SelectMap(int id)
+    public MapData SelectMap(int id,DifficultyType difficulty)
     {
         nowMapData = MapData.GetData(id);
+        this.difficulty = difficulty;
         nowWaveData = LevelData.GetData(nowMapData.WavesId);
         return nowMapData;
+    }
+
+    private void LoadData()
+    {
+       var data = SaveLoadHelper.Load();
+        if(data == null)
+        {
+            GameData = new PlayerData();
+            GameData.SettingData = new PlayerSettingData
+            {
+                MasterAudio = 0,
+                BGMAudio = 0,
+                TowerAudio = 0,
+                EnemyAudio = 0,
+                UIAudio = 0,
+                ScreenWidth = 1920,
+                ScreenHeight = 1080,
+                FullScreen = false
+            };
+
+            GameData.GameLevelData = new PlayerGameLevelData();
+            GameData.GameLevelData.GameLevelDatas = new List<GameLevelData>();
+            for(int i =0;i<MapData.MapDataList.Count;i++)
+            {
+                var levelData = new GameLevelData();
+                levelData.LevelId = MapData.MapDataList[i].Id;
+                GameData.GameLevelData.GameLevelDatas.Add(levelData);
+            }
+        }
+        else
+        {
+            GameData = new PlayerData();
+            GameData.SettingData = data.SettingData;
+            GameData.GameLevelData = data.GameLevelData;
+
+            gameMixer.SetFloat("Master", data.SettingData.MasterAudio);
+            gameMixer.SetFloat("BGM", data.SettingData.BGMAudio);
+            gameMixer.SetFloat("Tower", data.SettingData.TowerAudio);
+            gameMixer.SetFloat("Enemy", data.SettingData.EnemyAudio);
+            gameMixer.SetFloat("UI", data.SettingData.UIAudio);
+
+            Screen.SetResolution(data.SettingData.ScreenWidth, data.SettingData.ScreenHeight, data.SettingData.FullScreen);
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        //SaveLoadHelper.Save(GameData);
     }
 }

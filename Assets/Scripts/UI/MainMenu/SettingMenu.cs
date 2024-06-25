@@ -8,11 +8,6 @@ public class SettingMenu : MonoBehaviour
 {
     [SerializeField] private AudioMixer gameMixer;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public void OnEnable()
     {
@@ -37,26 +32,31 @@ public class SettingMenu : MonoBehaviour
     public void SetMasterAudio(float amount)
     {
         gameMixer.SetFloat("Master",amount);
+        GameManager.GameData.SettingData.MasterAudio = amount;
     }
 
     public void SetBGMAudio(float amount)
     {
         gameMixer.SetFloat("BGM", amount);
+        GameManager.GameData.SettingData.BGMAudio = amount;
     }
 
     public void SetTowerAudio(float amount)
     {
         gameMixer.SetFloat("Tower", amount);
+        GameManager.GameData.SettingData.TowerAudio = amount;
     }
 
     public void SetEnemyAudio(float amount)
     {
         gameMixer.SetFloat("Enemy", amount);
+        GameManager.GameData.SettingData.EnemyAudio = amount;
     }
 
     public void SetUIAudio(float amount)
     {
         gameMixer.SetFloat("UI", amount);
+        GameManager.GameData.SettingData.UIAudio = amount;
     }
 
     public void ChangeResolution(int index)
@@ -65,18 +65,27 @@ public class SettingMenu : MonoBehaviour
         if (index == 0)
         {
             Screen.SetResolution(800,600, fullScreen);
+            GameManager.GameData.SettingData.ScreenWidth = 800;
+            GameManager.GameData.SettingData.ScreenHeight = 600;
         }
         else if (index == 1)
         {
             Screen.SetResolution(1024, 768, fullScreen);
+            GameManager.GameData.SettingData.ScreenWidth = 1024;
+            GameManager.GameData.SettingData.ScreenHeight = 768;
         }
         else if (index == 2)
         {
             Screen.SetResolution(1280, 960, fullScreen);
+            GameManager.GameData.SettingData.ScreenWidth = 1280;
+            GameManager.GameData.SettingData.ScreenHeight = 960;
         }
         else if (index == 3)
         {
             Screen.SetResolution(1920, 1080, fullScreen);
+            GameManager.GameData.SettingData.ScreenWidth = 1920;
+            GameManager.GameData.SettingData.ScreenHeight = 1080;
         }
+        GameManager.GameData.SettingData.FullScreen = fullScreen;
     }
 }

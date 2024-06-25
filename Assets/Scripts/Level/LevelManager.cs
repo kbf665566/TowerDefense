@@ -39,6 +39,8 @@ public class LevelManager : MonoBehaviour
     private bool nowWaveEnd = true;
     public bool NextWaveEnd => nowWaveEnd;
     #endregion
+
+    private float difficultyRatio;
     private void Awake()
     {
         if (instance != null)
@@ -57,8 +59,23 @@ public class LevelManager : MonoBehaviour
 
     public void SetLevelSetting(int startMoney,int startLive)
     {
-        this.startLive = startLive;
-        this.startMoney = startMoney;
+        
+        if (gameManager.Difficulty == DifficultyType.Easy)
+        {
+            difficultyRatio = GameSetting.EasyMoneyRatio;
+            this.startLive = startLive;
+        }
+        else if (gameManager.Difficulty == DifficultyType.Normal)
+        {
+            difficultyRatio = GameSetting.NormalMoneyRatio;
+            this.startLive = (int)(startLive * GameSetting.NormalLiveRatio);
+        }
+        else if (gameManager.Difficulty == DifficultyType.Hard)
+        {
+            difficultyRatio = GameSetting.HardMoneyRatio;
+            this.startLive = GameSetting.HardLive;
+        }
+        this.startMoney = (int)(startMoney * difficultyRatio);
 
         ResetLevel();
     }

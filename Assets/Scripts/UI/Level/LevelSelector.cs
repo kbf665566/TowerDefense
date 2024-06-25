@@ -21,6 +21,8 @@ public class LevelSelector : MonoBehaviour
     [SerializeField] private TextMeshProUGUI mapInformationText;
 
     private int nowSelectId = 0;
+    private DifficultyType nowSelectDifficulty = DifficultyType.Easy;
+    private MapData tempMapData;
     private void Start()
     {
         int levelReached = PlayerPrefs.GetInt("levelReached",1);
@@ -51,19 +53,41 @@ public class LevelSelector : MonoBehaviour
 
     public void SelectLevel(int mapId)
     {
-        var mapData = gameManager.MapData.GetData(mapId);
-        if(mapData != null)
-        {
-            mapIcon.sprite = mapData.MapIcon;
-            mapNameText.text = mapData.MapName;
-            mapInformationText.text = "起始生命：" + mapData.StartLive +" \n起始資源："+mapData.StartMoney;
-            nowSelectId = mapId;
-        }
+        tempMapData = gameManager.MapData.GetData(mapId);
+        nowSelectId = mapId;
+        if (tempMapData != null)
+            UpdataMapInformation(tempMapData.StartLive, tempMapData.StartMoney);
+    }
+
+    private void UpdataMapInformation(int startLive, int startMoney)
+    {
+        mapIcon.sprite = tempMapData.MapIcon;
+        mapNameText.text = tempMapData.MapName;
+        mapInformationText.text = "起始生命：" + startLive + " \n起始資源：" + startMoney;
+
+    }
+
+    public void SelectEasyDifficulty(bool e)
+    {
+        nowSelectDifficulty = DifficultyType.Easy;
+        UpdataMapInformation(tempMapData.StartLive, (int)(tempMapData.StartMoney * GameSetting.EasyMoneyRatio));
+    }
+
+    public void SelectNormalDifficulty(bool n)
+    {
+        nowSelectDifficulty = DifficultyType.Normal;
+        UpdataMapInformation((int)(tempMapData.StartLive * GameSetting.NormalLiveRatio), (int)(tempMapData.StartMoney * GameSetting.NormalMoneyRatio));
+    }
+
+    public void SelectHardDifficulty(bool h)
+    {
+        nowSelectDifficulty = DifficultyType.Hard;
+        UpdataMapInformation(GameSetting.HardLive, (int)(tempMapData.StartMoney * GameSetting.HardMoneyRatio));
     }
 
     public void StartLevel()
     {
-        var mapData = gameManager.SelectMap(nowSelectId);
+        var mapData = gameManager.SelectMap(nowSelectId,nowSelectDifficulty);
         EventHelper.SceneChangedEvent.Invoke(this, GameEvent.SceneChangeEvent.CreateEvent(mapData.SceneName));
     }
 
