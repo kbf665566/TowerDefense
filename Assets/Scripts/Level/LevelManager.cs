@@ -156,8 +156,7 @@ public class LevelManager : MonoBehaviour
 
     private void WinTheGame()
     {
-        //記錄獲勝的關卡
-        // PlayerPrefs.SetInt("levelReached", levelToUnlock);
+        gameManager.SavePlayerWinData();
     }
 
     private void OnEnable()

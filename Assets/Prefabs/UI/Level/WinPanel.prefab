@@ -210,6 +210,14 @@ PrefabInstance:
     - target: {fileID: 1851415342666557537, guid: d50fc52518739714984c45e9e8479d50, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 5256633522436701644}
+    - target: {fileID: 1851415342666557537, guid: d50fc52518739714984c45e9e8479d50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851415342666557537, guid: d50fc52518739714984c45e9e8479d50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameWin, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1851415342666557564, guid: d50fc52518739714984c45e9e8479d50, type: 3}
       propertyPath: m_Name

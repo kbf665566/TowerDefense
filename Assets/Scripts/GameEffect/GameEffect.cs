@@ -11,9 +11,35 @@ public class GameEffect : MonoBehaviour,IGameEffect
 
     private IObjectPool<IGameEffect> objectPool;
 
+    [Header("LightSetting")]
+    [SerializeField] private float hideSecond = 0.1f;
+    [SerializeField] private Light effectLight;
+    private WaitForSeconds waitHide;
+    private Coroutine wait;
+
+    private void Awake()
+    {
+        waitHide = new WaitForSeconds(hideSecond);
+    }
+
     private void OnDisable()
     {
         Hide();
+    }
+
+    private void OnEnable()
+    {
+        if (effectLight != null)
+        {
+            effectLight.enabled = true;
+            wait = StartCoroutine(HideLight());
+        }
+    }
+
+    private IEnumerator HideLight()
+    {
+        yield return waitHide;
+        effectLight.enabled = false;
     }
 
     public void Hide()
@@ -21,6 +47,12 @@ public class GameEffect : MonoBehaviour,IGameEffect
         transform.localScale = Vector3.one;
         effectParticle.Stop(true);
         objectPool.Release(this);
+
+        if (effectLight != null)
+        {
+            effectLight.enabled = false;
+            StopCoroutine(wait);
+        }
     }
 
     public Transform GetTransform()

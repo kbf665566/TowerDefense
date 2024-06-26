@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using UnityEngine.Audio;
 using DG.Tweening;
+using UnityEngine.Networking.Types;
 /// <summary>
 /// 管理整個遊戲
 /// </summary>
@@ -31,7 +32,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private AudioMixer gameMixer;
 
-    public static PlayerData GameData;
+    private PlayerData gameData;
+    public PlayerData GameData => gameData;
 
     private DifficultyType difficulty;
     public DifficultyType Difficulty => difficulty;
@@ -72,8 +74,8 @@ public class GameManager : MonoBehaviour
        var data = SaveLoadHelper.Load();
         if(data == null)
         {
-            GameData = new PlayerData();
-            GameData.SettingData = new PlayerSettingData
+            gameData = new PlayerData();
+            gameData.SettingData = new PlayerSettingData
             {
                 MasterAudio = 0,
                 BGMAudio = 0,
@@ -85,20 +87,20 @@ public class GameManager : MonoBehaviour
                 FullScreen = false
             };
 
-            GameData.GameLevelData = new PlayerGameLevelData();
-            GameData.GameLevelData.GameLevelDatas = new List<GameLevelData>();
+            gameData.GameLevelData = new PlayerGameLevelData();
+            gameData.GameLevelData.GameLevelDatas = new List<GameLevelData>();
             for(int i =0;i<MapData.MapDataList.Count;i++)
             {
                 var levelData = new GameLevelData();
-                levelData.LevelId = MapData.MapDataList[i].Id;
-                GameData.GameLevelData.GameLevelDatas.Add(levelData);
+                levelData.MapId = MapData.MapDataList[i].Id;
+                gameData.GameLevelData.GameLevelDatas.Add(levelData);
             }
         }
         else
         {
-            GameData = new PlayerData();
-            GameData.SettingData = data.SettingData;
-            GameData.GameLevelData = data.GameLevelData;
+            gameData = new PlayerData();
+            gameData.SettingData = data.SettingData;
+            gameData.GameLevelData = data.GameLevelData;
 
             gameMixer.SetFloat("Master", data.SettingData.MasterAudio);
             gameMixer.SetFloat("BGM", data.SettingData.BGMAudio);
@@ -113,5 +115,28 @@ public class GameManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         //SaveLoadHelper.Save(GameData);
+    }
+
+    public GameLevelData GetPlayerLevelData(int mapId)
+    {
+        for(int i =0;i< gameData.GameLevelData.GameLevelDatas.Count;i++)
+        {
+            if (gameData.GameLevelData.GameLevelDatas[i].MapId == mapId)
+                return gameData.GameLevelData.GameLevelDatas[i];
+        }
+
+        return null;
+    }
+
+    public void SavePlayerWinData()
+    {
+        for (int i = 0; i < gameData.GameLevelData.GameLevelDatas.Count; i++)
+        {
+            if (gameData.GameLevelData.GameLevelDatas[i].MapId == nowMapData.Id)
+            {
+                gameData.GameLevelData.GameLevelDatas[i].LevelDifficulty[(int)difficulty].Win = true;
+                break;
+            }
+        }
     }
 }

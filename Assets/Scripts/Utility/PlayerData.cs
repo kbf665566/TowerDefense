@@ -32,7 +32,7 @@ public class PlayerGameLevelData
 [Serializable]
 public class GameLevelData
 {
-    public int LevelId;
+    public int MapId;
     public LevelDifficultyData[] LevelDifficulty = new LevelDifficultyData[]
     { new LevelDifficultyData() {Difficulty = DifficultyType.Easy , Win = false },
     new LevelDifficultyData() {Difficulty = DifficultyType.Normal , Win = false },

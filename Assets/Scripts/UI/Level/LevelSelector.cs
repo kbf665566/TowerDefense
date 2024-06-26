@@ -42,12 +42,6 @@ public class LevelSelector : MonoBehaviour
             btnSpawnFinish = true;
         }
 
-        //for (int i = 0; i < levelBtns.Length; i++)
-        //{
-        //    if(i + 1 > levelReached)
-        //    levelBtns[i].interactable = false;
-        //}
-
         SelectLevel(gameManager.MapData.MapDataList[0].Id);
     }
 
