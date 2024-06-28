@@ -30,4 +30,9 @@ public static class UIExtension
         }
         return temp;
     }
+
+    public static string GetLanguageValue(this string key)
+    {
+        return GameManager.instance.LanguagesData.GetLanguageValue(key);
+    }
 }

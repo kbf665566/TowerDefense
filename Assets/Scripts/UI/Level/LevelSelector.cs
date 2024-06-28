@@ -57,8 +57,7 @@ public class LevelSelector : MonoBehaviour
     {
         mapIcon.sprite = tempMapData.MapIcon;
         mapNameText.text = tempMapData.MapName;
-        mapInformationText.text = "起始生命：" + startLive + " \n起始資源：" + startMoney;
-
+        mapInformationText.text = "SartLive".GetLanguageValue() + startLive + " \n" + "StartMoney".GetLanguageValue() + startMoney;
     }
 
     public void SelectEasyDifficulty(bool e)

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public LevelData LevelData;
     public Towers TowerData;
     public Enemies EnemyData;
+    public Languages LanguagesData;
 
     private MapData nowMapData;
     public MapData NowMapData => nowMapData;
@@ -84,7 +85,8 @@ public class GameManager : MonoBehaviour
                 UIAudio = 0,
                 ScreenWidth = 1920,
                 ScreenHeight = 1080,
-                FullScreen = false
+                FullScreen = false,
+                NowLanguage = LanguageType.tw
             };
 
             gameData.GameLevelData = new PlayerGameLevelData();
@@ -107,6 +109,8 @@ public class GameManager : MonoBehaviour
             gameMixer.SetFloat("Tower", data.SettingData.TowerAudio);
             gameMixer.SetFloat("Enemy", data.SettingData.EnemyAudio);
             gameMixer.SetFloat("UI", data.SettingData.UIAudio);
+
+            gameData.SettingData.NowLanguage = data.SettingData.NowLanguage;
 
             Screen.SetResolution(data.SettingData.ScreenWidth, data.SettingData.ScreenHeight, data.SettingData.FullScreen);
         }

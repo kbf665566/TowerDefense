@@ -21,4 +21,8 @@ public static partial class GameEvent
     public class HideTipEvent : GameEventArgs<HideTipEvent>
     {
     }
+
+    public class ChangeLanguageEvent : GameEventArgs<ChangeLanguageEvent>
+    {
+    }
 }

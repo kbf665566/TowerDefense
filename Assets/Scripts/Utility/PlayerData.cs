@@ -21,6 +21,7 @@ public class PlayerSettingData
     public int ScreenWidth;
     public int ScreenHeight;
     public bool FullScreen;
+    public LanguageType NowLanguage = LanguageType.tw;
 }
 
 [Serializable]

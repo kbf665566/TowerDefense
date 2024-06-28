@@ -9,4 +9,6 @@ public class GameSetting
 
     public const float NormalLiveRatio = 0.5f;
     public const int HardLive = 1;
+
+    public static LanguageType GameLanguage = LanguageType.tw;
 }

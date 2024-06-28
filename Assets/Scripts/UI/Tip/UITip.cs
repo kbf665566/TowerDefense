@@ -36,8 +36,8 @@ public class UITip : MonoBehaviour
         transform.position = targetPos;
         if (!(titleText.text.Equals(title) && informationText.text.Equals(information)))
         {
-            titleText.text = title;
-            informationText.text = information;
+            titleText.text = title.GetLanguageValue();
+            informationText.text = information.GetLanguageValue();
             informationText.ForceMeshUpdate(true);
             StartCoroutine(UpdateUI());
         }

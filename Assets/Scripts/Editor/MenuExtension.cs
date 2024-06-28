@@ -27,4 +27,10 @@ public class MenuExtension : EditorWindow
     {
         MapEditorWindow.Init();
     }
+
+    [MenuItem("Tools/TowerDefense/LanguageEditor", false, 10)]
+    static void OpenLanguageEditor()
+    {
+        LanguageEditorWindow.Init();
+    }
 }

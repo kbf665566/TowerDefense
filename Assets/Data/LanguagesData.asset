@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16f7a783e81efa84eae6a58ab72cfa89, type: 3}
+  m_Name: LanguagesData
+  m_EditorClassIdentifier: 
+  LanguageDataList:
+  - Id: 0
+    Key: StartGame
+    LanguageString:
+    - "\u958B\u59CB\u904A\u6232"
+    - StartGame
+  - Id: 1
+    Key: GameSetting
+    LanguageString:
+    - "\u904A\u6232\u8A2D\u5B9A"
+    - GameSetting
+  - Id: 2
+    Key: ExitGame
+    LanguageString:
+    - "\u96E2\u958B\u904A\u6232"
+    - ExitGame
+  - Id: 3
+    Key: Yes
+    LanguageString:
+    - "\u662F"
+    - Yes
+  - Id: 4
+    Key: No
+    LanguageString:
+    - "\u5426"
+    - No
+  - Id: 5
+    Key: ConfirmExit
+    LanguageString:
+    - "\u78BA\u5B9A\u8981\u96E2\u958B\u55CE\uFF1F"
+    - Are you sure you want to exit?
+  - Id: 6
+    Key: Language
+    LanguageString:
+    - "\u8A9E\u8A00:"
+    - 'Language:'
+  - Id: 7
+    Key: Resolution
+    LanguageString:
+    - "\u89E3\u6790\u5EA6:"
+    - 'Resolution:'
+  - Id: 8
+    Key: GameSetting
+    LanguageString:
+    - "\u904A\u6232\u8A2D\u5B9A"
+    - GameSetting
+  - Id: 9
+    Key: Return
+    LanguageString:
+    - "\u8FD4\u56DE"
+    - Return
+  - Id: 10
+    Key: AudioSetting
+    LanguageString:
+    - "\u97F3\u6548\u8A2D\u5B9A"
+    - AudioSetting
+  - Id: 11
+    Key: MasterAudio
+    LanguageString:
+    - "\u5168\u9AD4:"
+    - 'MasterAudio:'
+  - Id: 12
+    Key: BGM
+    LanguageString:
+    - 'BGM:'
+    - 'BGM:'
+  - Id: 13
+    Key: TowerAudio
+    LanguageString:
+    - "\u5854\u97F3\u6548:"
+    - 'TowerAudio:'
+  - Id: 14
+    Key: EnemyAudio
+    LanguageString:
+    - "\u6575\u97F3\u6548:"
+    - 'EnemyAudio:'
+  - Id: 15
+    Key: UIAudio
+    LanguageString:
+    - "UI\u97F3\u6548:"
+    - 'UIAudio:'
+  - Id: 16
+    Key: SelectMap
+    LanguageString:
+    - "\u9078\u64C7\u95DC\u5361"
+    - SelectMap
+  - Id: 17
+    Key: Easy
+    LanguageString:
+    - "\u7C21\u55AE"
+    - Easy
+  - Id: 18
+    Key: Normal
+    LanguageString:
+    - "\u4E00\u822C"
+    - Normal
+  - Id: 19
+    Key: Hard
+    LanguageString:
+    - "\u56F0\u96E3"
+    - Hard

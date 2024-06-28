@@ -57,10 +57,6 @@ MonoBehaviour:
     TowerSize:
       x: 2
       y: 2
-    NormalSE: {fileID: 0}
-    AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
-    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 101
     NormalParticle: 0
@@ -111,10 +107,6 @@ MonoBehaviour:
     TowerSize:
       x: 2
       y: 2
-    NormalSE: {fileID: 0}
-    AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
-    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 102
     NormalParticle: 0
@@ -165,10 +157,6 @@ MonoBehaviour:
     TowerSize:
       x: 2
       y: 2
-    NormalSE: {fileID: 0}
-    AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
-    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 103
     NormalParticle: 0
@@ -219,10 +207,6 @@ MonoBehaviour:
     TowerSize:
       x: 2
       y: 2
-    NormalSE: {fileID: 0}
-    AttackSE: {fileID: 8300000, guid: e10115bd99a564d38aa5ea4f418b1eda, type: 3}
-    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 103
     NormalParticle: 0
@@ -273,10 +257,6 @@ MonoBehaviour:
     TowerSize:
       x: 2
       y: 2
-    NormalSE: {fileID: 0}
-    AttackSE: {fileID: 8300000, guid: dadcd6f20f187487ca6d872956f98c7d, type: 3}
-    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 105
     NormalParticle: 0
@@ -311,10 +291,6 @@ MonoBehaviour:
     TowerSize:
       x: 2
       y: 2
-    NormalSE: {fileID: 8300000, guid: 9cfc9c4c568e54e68a4038ecdf7ffac7, type: 3}
-    AttackSE: {fileID: 0}
-    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 0
     NormalParticle: 106
@@ -361,14 +337,10 @@ MonoBehaviour:
     IsUseBullet: 0
     IsNeedTurn: 0
     Debuff: 0
-    TowerInformation: 
+    TowerInformation: dadada
     TowerSize:
       x: 2
       y: 2
-    NormalSE: {fileID: 0}
-    AttackSE: {fileID: 0}
-    BuildSE: {fileID: 8300000, guid: d440c9f7407a04474bf738520785306b, type: 3}
-    RemoveSE: {fileID: 8300000, guid: 3fcb7fef61bc54750bd9dde9a1280199, type: 3}
     SpecialMusic: {fileID: 0}
     AttackParticle: 0
     NormalParticle: 0

@@ -27,6 +27,7 @@ public class EditorDataManager : EditorWindow
         LoadEnemy();
         LoadLevel();
         LoadMap();
+        LoadLanguage();
     }
 
     #region 塔
@@ -369,6 +370,99 @@ public class EditorDataManager : EditorWindow
         mapList.RemoveAt(listID);
         UpdateMapNameList();
         SetDirtyMap();
+    }
+    #endregion
+
+    #region 語言
+    private static Languages languages;
+    private static List<LanguageData> languageDataList = new List<LanguageData>();
+    public static List<LanguageData> LanguageDataList => languageDataList;
+    private static List<int> languageIDList = new List<int>();
+    public static List<int> LanguageIDList => languageIDList;
+    private static string[] languageKeyList = new string[0];
+    public static string[] LanguageKeyList => languageKeyList;
+    private static string languageDatapath = "Assets/Data/LanguagesData.asset";
+
+
+    /// <summary>
+    /// 讀取Language資料
+    /// </summary>
+    private static void LoadLanguage()
+    {
+        //載入指定路徑的檔案
+        languages = AssetDatabase.LoadAssetAtPath<Languages>(languageDatapath);
+        languageDataList = languages.LanguageDataList;
+        languageIDList.Clear();
+
+        for (int i = 0; i < languageDataList.Count; i++)
+        {
+            if (languageDataList[i] != null)
+            {
+                if (languageIDList.Contains(languageDataList[i].Id))
+                    languageDataList[i].Id = GenerateNewID(languageIDList);
+                languageIDList.Add(languageDataList[i].Id);
+            }
+            else
+            {
+                languageDataList.RemoveAt(i);
+                i -= 1;
+            }
+        }
+
+        UpdateLanguageKeyList();
+    }
+    private static void UpdateLanguageKeyList()
+    {
+        List<string> tempList = new List<string>();
+        for (int i = 0; i < languageDataList.Count; i++)
+        {
+            string name = languageDataList[i].Key;
+            while (tempList.Contains(name)) name += ".";
+            tempList.Add(name);
+        }
+
+        languageKeyList = new string[tempList.Count];
+        for (int i = 0; i < tempList.Count; i++)
+            languageKeyList[i] = tempList[i];
+    }
+
+
+    public static void SetDirtyLanguage()
+    {
+        EditorUtility.SetDirty(languages);
+    }
+
+    public static int AddNewLanguageKey(LanguageData newLanguageKey)
+    {
+        if (languageDataList.Contains(newLanguageKey)) return -1;
+
+        int ID = GenerateNewID(languageIDList);
+        newLanguageKey.Id = ID;
+        languageIDList.Add(ID);
+        languageDataList.Add(newLanguageKey);
+
+        UpdateLanguageKeyList();
+
+        SetDirtyLanguage();
+
+        return languageDataList.Count - 1;
+    }
+    public static void RemoveLanguageKey(int listID)
+    {
+        languageIDList.Remove(languageDataList[listID].Id);
+        languageDataList.RemoveAt(listID);
+        UpdateLanguageKeyList();
+        SetDirtyLanguage();
+    }
+
+    public static LanguageData GetLanguageData(int id)
+    {
+        for (int i = 0; i < languageDataList.Count; i++)
+        {
+            if (id == languageDataList[i].Id)
+                return languageDataList[i];
+        }
+        return languageDataList[0];
     }
     #endregion
 

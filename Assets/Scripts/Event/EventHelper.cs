@@ -29,6 +29,7 @@ public class EventHelper : MonoBehaviour
     public static EventHandler<GameEvent.ShowTipEvent> TipShowEvent;
     public static EventHandler<GameEvent.HideTipEvent> TipHideEvent;
 
+    public static EventHandler<GameEvent.ChangeLanguageEvent> LanguageChangedEvent;
 
     public static EventHandler<GameEvent.GameEffectShowEvent> EffectShowEvent;
     public static EventHandler<GameEvent.GameEffectShowWithTextEvent> EffectShowTextEvent;

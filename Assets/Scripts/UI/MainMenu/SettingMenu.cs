@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening.Core.Easing;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class SettingMenu : MonoBehaviour
 {
     [SerializeField] private AudioMixer gameMixer;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
+    [SerializeField] private TMP_Dropdown languageDropdown;
 
     private GameManager gameManager => GameManager.instance;
     public void OnEnable()
@@ -28,6 +30,8 @@ public class SettingMenu : MonoBehaviour
         {
             resolutionDropdown.value = 3;
         }
+
+        languageDropdown.value = (int)GameSetting.GameLanguage;
     }
 
     public void SetMasterAudio(float amount)
@@ -88,5 +92,13 @@ public class SettingMenu : MonoBehaviour
             gameManager.GameData.SettingData.ScreenHeight = 1080;
         }
         gameManager.GameData.SettingData.FullScreen = fullScreen;
+    }
+
+    public void ChangeLanguage(int index)
+    {
+        GameSetting.GameLanguage = (LanguageType)index;
+        gameManager.GameData.SettingData.NowLanguage = (LanguageType)index;
+
+        EventHelper.LanguageChangedEvent.Invoke(this,GameEvent.ChangeLanguageEvent.CreateEvent());
     }
 }
