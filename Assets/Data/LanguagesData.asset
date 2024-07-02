@@ -17,17 +17,17 @@ MonoBehaviour:
     Key: StartGame
     LanguageString:
     - "\u958B\u59CB\u904A\u6232"
-    - StartGame
+    - Start Game
   - Id: 1
     Key: GameSetting
     LanguageString:
     - "\u904A\u6232\u8A2D\u5B9A"
-    - GameSetting
+    - Game Setting
   - Id: 2
     Key: ExitGame
     LanguageString:
     - "\u96E2\u958B\u904A\u6232"
-    - ExitGame
+    - Exit Game
   - Id: 3
     Key: Yes
     LanguageString:
@@ -51,13 +51,8 @@ MonoBehaviour:
   - Id: 7
     Key: Resolution
     LanguageString:
-    - "\u89E3\u6790\u5EA6:"
-    - 'Resolution:'
-  - Id: 8
-    Key: GameSetting
-    LanguageString:
-    - "\u904A\u6232\u8A2D\u5B9A"
-    - GameSetting
+    - "\u89E3\u6790\u5EA6"
+    - Resolution
   - Id: 9
     Key: Return
     LanguageString:
@@ -67,37 +62,37 @@ MonoBehaviour:
     Key: AudioSetting
     LanguageString:
     - "\u97F3\u6548\u8A2D\u5B9A"
-    - AudioSetting
+    - Audio Setting
   - Id: 11
     Key: MasterAudio
     LanguageString:
-    - "\u5168\u9AD4:"
-    - 'MasterAudio:'
+    - "\u5168\u9AD4"
+    - Master Audio
   - Id: 12
     Key: BGM
     LanguageString:
-    - 'BGM:'
-    - 'BGM:'
+    - BGM
+    - BGM
   - Id: 13
     Key: TowerAudio
     LanguageString:
-    - "\u5854\u97F3\u6548:"
-    - 'TowerAudio:'
+    - "\u5854\u97F3\u6548"
+    - Tower Audio
   - Id: 14
     Key: EnemyAudio
     LanguageString:
-    - "\u6575\u97F3\u6548:"
-    - 'EnemyAudio:'
+    - "\u6575\u97F3\u6548"
+    - Enemy Audio
   - Id: 15
     Key: UIAudio
     LanguageString:
-    - "UI\u97F3\u6548:"
-    - 'UIAudio:'
+    - "UI\u97F3\u6548"
+    - UI Audio
   - Id: 16
     Key: SelectMap
     LanguageString:
     - "\u9078\u64C7\u95DC\u5361"
-    - SelectMap
+    - Select Map
   - Id: 17
     Key: Easy
     LanguageString:
@@ -113,3 +108,63 @@ MonoBehaviour:
     LanguageString:
     - "\u56F0\u96E3"
     - Hard
+  - Id: 20
+    Key: Title
+    LanguageString:
+    - "\u5854\u9632"
+    - TowerDefense
+  - Id: 21
+    Key: SartLive
+    LanguageString:
+    - "\u8D77\u59CB\u751F\u547D\uFF1A"
+    - 'Sart Live:'
+  - Id: 22
+    Key: StartMoney
+    LanguageString:
+    - "\u8D77\u59CB\u8CC7\u6E90\uFF1A"
+    - 'Start Money:'
+  - Id: 8
+    Key: GameOver
+    LanguageString:
+    - "\u904A\u6232\u7D50\u675F"
+    - Game Over
+  - Id: 23
+    Key: Retry
+    LanguageString:
+    - "\u91CD\u4F86"
+    - Retry
+  - Id: 24
+    Key: Wave
+    LanguageString:
+    - "\u6CE2\u6578\uFF1A"
+    - 'Wave:'
+  - Id: 25
+    Key: Continue
+    LanguageString:
+    - "\u7E7C\u7E8C"
+    - Continue
+  - Id: 26
+    Key: Pause
+    LanguageString:
+    - "\u66AB\u505C"
+    - Pause
+  - Id: 27
+    Key: Win
+    LanguageString:
+    - "\u52DD\u5229"
+    - Win
+  - Id: 28
+    Key: Upgrade
+    LanguageString:
+    - "\u5347\u7D1A"
+    - Upgrade
+  - Id: 29
+    Key: Sell
+    LanguageString:
+    - "\u8CE3\u51FA"
+    - Sell
+  - Id: 30
+    Key: NextWave
+    LanguageString:
+    - "\u4E0B\u4E00\u6CE2"
+    - NextWave

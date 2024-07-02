@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine.Audio;
 using DG.Tweening;
 using UnityEngine.Networking.Types;
+using UnityEngine.TextCore.Text;
 /// <summary>
 /// 管理整個遊戲
 /// </summary>
@@ -38,6 +39,9 @@ public class GameManager : MonoBehaviour
 
     private DifficultyType difficulty;
     public DifficultyType Difficulty => difficulty;
+
+    [SerializeField]private TMP_FontAsset[] fontAssets;
+    public TMP_FontAsset[] FontAssets => fontAssets;
 
     private void Awake()
     {

@@ -52,7 +52,7 @@ public class TMPTextGroup : MonoBehaviour
             texts[0].enableAutoSizing = false;
         }
         textLanguage = GameSetting.GameLanguage;
-        firstShow = true;
+        firstShow = false;
     }
 
     private void LanguageChanged(object s, GameEvent.ChangeLanguageEvent e)

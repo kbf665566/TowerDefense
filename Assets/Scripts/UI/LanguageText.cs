@@ -14,7 +14,10 @@ public class LanguageText : MonoBehaviour
         {
             var value = key.GetLanguageValue();
             if (!text.text.Equals(value))
+            {
                 text.text = key.GetLanguageValue();
+                text.font = GameManager.instance.FontAssets[(int)GameSetting.GameLanguage];
+            }
         }
     }
 }
