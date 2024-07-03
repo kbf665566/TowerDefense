@@ -53,7 +53,7 @@ MonoBehaviour:
     IsUseBullet: 1
     IsNeedTurn: 1
     Debuff: 0
-    TowerInformation: Test
+    TowerInformation: MachineGunInfo
     TowerSize:
       x: 2
       y: 2
@@ -103,7 +103,7 @@ MonoBehaviour:
     IsUseBullet: 1
     IsNeedTurn: 1
     Debuff: 0
-    TowerInformation: TestTestTestTestTestTestTest
+    TowerInformation: RocketTowerInfo
     TowerSize:
       x: 2
       y: 2
@@ -153,7 +153,7 @@ MonoBehaviour:
     IsUseBullet: 0
     IsNeedTurn: 1
     Debuff: 2
-    TowerInformation: "\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66\u6E2C\u8A66"
+    TowerInformation: LaserTowerInfo
     TowerSize:
       x: 2
       y: 2
@@ -203,7 +203,7 @@ MonoBehaviour:
     IsUseBullet: 0
     IsNeedTurn: 0
     Debuff: 1
-    TowerInformation: "\u96FB"
+    TowerInformation: LightningTowerInfo
     TowerSize:
       x: 2
       y: 2
@@ -253,7 +253,7 @@ MonoBehaviour:
     IsUseBullet: 0
     IsNeedTurn: 0
     Debuff: 0
-    TowerInformation: "\u98A8"
+    TowerInformation: WindTowerInfo
     TowerSize:
       x: 2
       y: 2
@@ -287,7 +287,7 @@ MonoBehaviour:
     IsUseBullet: 0
     IsNeedTurn: 0
     Debuff: 0
-    TowerInformation: Money
+    TowerInformation: MoneyTowerInfo
     TowerSize:
       x: 2
       y: 2
@@ -337,7 +337,7 @@ MonoBehaviour:
     IsUseBullet: 0
     IsNeedTurn: 0
     Debuff: 0
-    TowerInformation: dadada
+    TowerInformation: RaderTowerInfo
     TowerSize:
       x: 2
       y: 2

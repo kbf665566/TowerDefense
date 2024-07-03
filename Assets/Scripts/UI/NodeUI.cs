@@ -6,8 +6,12 @@ using UnityEngine.UI;
 
 public class NodeUI : MonoBehaviour
 {
-    [SerializeField] private Vector3 offset = new Vector3(0,.5f,0);
+    [SerializeField] private Vector3 offset = new Vector3(0,2.5f,0);
     [SerializeField] private Vector2 margin = new Vector2(50,50);
+
+    [SerializeField] private Vector3 tipOffset = new Vector3(400f,0,0);
+
+    [SerializeField] private Vector3 nodeContainsOffset = new Vector3(0,0,4f);
 
     [SerializeField] private RectTransform rect;
     private RectTransform parentRect;
@@ -64,7 +68,7 @@ public class NodeUI : MonoBehaviour
         selectTowerUid = e.Uid;
         if (tower != null)
         {
-            var worldPos = GridExtension.GetCenterGrid(tower.GridPos, tower.TowerData.TowerSize).ToWorldPos() + new Vector3(0, 2.5f, 0);
+            var worldPos = GridExtension.GetCenterGrid(tower.GridPos, tower.TowerData.TowerSize).ToWorldPos() + offset;
             ClameWindow(worldPos, tower.GridPos);
 
             var nextData = tower.GetNextLevelData();
@@ -74,6 +78,9 @@ public class NodeUI : MonoBehaviour
                 //還能升級
                 upgradeCostText.text = "$" + nextData.BuildUpgradeCost;
                 upgradeBtn.interactable = levelManager.Money >= nextData.BuildUpgradeCost;
+                var towerName = tower.TowerData.Name.GetLanguageValue() + " " + "Upgrade".GetLanguageValue();
+                var towerInfo = tower.TowerData.TowerInformation.GetLanguageValue() + tower.TowerData.GetTowerLevelInfo(tower.NowLevel, true);
+                EventHelper.TipShowEvent.Invoke(this, GameEvent.ShowTipEvent.CreateEvent(transform.position - tipOffset, towerName, towerInfo));
             }
             else
             {
@@ -96,7 +103,7 @@ public class NodeUI : MonoBehaviour
         var gridState = buildManager.GetGridState(e.GridPos);
         Debug.Log("gridpos:" + e.GridPos + " state:" + gridState);
 #endif
-        var worldPos = e.GridPos.ToWorldPos() + new Vector3(0, 2.5f, 0);
+        var worldPos = e.GridPos.ToWorldPos() + offset;
         ClameWindow(worldPos, e.GridPos);
 
         buildMenu.SetActive(true);
@@ -115,7 +122,7 @@ public class NodeUI : MonoBehaviour
         bool contains = RectTransformUtility.RectangleContainsScreenPoint(rect, nodePos);
         if (contains)
         {
-            var newPos = worldPos - new Vector3(0, 0, 6f);
+            var newPos = worldPos - nodeContainsOffset;
             transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, newPos);
         }
     }
@@ -165,6 +172,7 @@ public class NodeUI : MonoBehaviour
 
     public void Hide()
     {
+        EventHelper.TipHideEvent.Invoke(this,GameEvent.HideTipEvent.CreateEvent());
         selectTowerId = -1;
         selectGridPos = Vector2Short.Hide;
         selectTowerUid = 0;

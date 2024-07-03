@@ -10,12 +10,17 @@ public class BuildMenuItem : MonoBehaviour,IPointerExitHandler,IPointerMoveHandl
     [SerializeField] private Button btn;
     private int towerId;
     private TowerData towerData;
-    private float interval = 15;
+    private float interval = 5;
+
+    private string towerName;
+    private string towerInfo;
 
     public void SetItem(int id,Sprite towerIcon,int cost, UnityAction clickAction)
     {
         towerId = id;
         towerData = GameManager.instance.TowerData.GetData(towerId);
+        towerName = towerData.Name.GetLanguageValue();
+        towerInfo = towerData.TowerInformation.GetLanguageValue() + towerData.GetTowerLevelInfo(0);
         towerImage.sprite = towerIcon;
         costText.text = cost.ToString();
         btn.onClick.AddListener(clickAction);
@@ -35,10 +40,10 @@ public class BuildMenuItem : MonoBehaviour,IPointerExitHandler,IPointerMoveHandl
     public void OnPointerMove(PointerEventData eventData)
     {
         //減低更新位置的頻率
-        //if (Time.frameCount % interval == 0)
-        //{
-            EventHelper.TipShowEvent.Invoke(this,GameEvent.ShowTipEvent.CreateEvent(towerData.Name,towerData.TowerInformation));
-       // }
+        if (Time.frameCount % interval == 0)
+        {
+            EventHelper.TipShowEvent.Invoke(this, GameEvent.ShowTipEvent.CreateEvent(towerName, towerInfo));
+        }
     }
 
     private void OnEnable()

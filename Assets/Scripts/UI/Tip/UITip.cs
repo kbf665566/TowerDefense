@@ -23,7 +23,10 @@ public class UITip : MonoBehaviour
 
     public void ShowTip(object s,GameEvent.ShowTipEvent e)
     {
-        SetTip(Input.mousePosition,e.Title,e.Information);
+        if (e.TargetPos != Vector3.zero)
+            SetTip(e.TargetPos, e.Title, e.Information);
+        else
+            SetTip(Input.mousePosition, e.Title, e.Information);
     }
 
     public void HideTip(object s, GameEvent.HideTipEvent e)
@@ -36,8 +39,8 @@ public class UITip : MonoBehaviour
         transform.position = targetPos;
         if (!(titleText.text.Equals(title) && informationText.text.Equals(information)))
         {
-            titleText.text = title.GetLanguageValue();
-            informationText.text = information.GetLanguageValue();
+            titleText.text = title;
+            informationText.text = information;
             informationText.ForceMeshUpdate(true);
             StartCoroutine(UpdateUI());
         }

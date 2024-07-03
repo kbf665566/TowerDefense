@@ -25,6 +25,7 @@ public class TowerInLevel : MonoBehaviour
     protected Vector2Short gridPos;
     public Vector2Short GridPos => gridPos;
 
+    //塔本身使用的物件池
     private IObjectPool<TowerInLevel> objectPool;
     public IObjectPool<TowerInLevel> ObjectPool { set => objectPool = value; }
 

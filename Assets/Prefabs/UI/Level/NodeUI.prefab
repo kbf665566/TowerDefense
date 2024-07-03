@@ -348,8 +348,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8104fda7532f5478fdec66090a4d41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: -0.5, y: 5, z: 4.5}
+  offset: {x: 0, y: 2.5, z: 0}
   margin: {x: 50, y: 10}
+  tipOffset: {x: 360, y: 0, z: 0}
   rect: {fileID: 8003014180261873900}
   cancelClickBtn: {fileID: 2071299676186467255}
   upgradeCostText: {fileID: 5634216842389560886}

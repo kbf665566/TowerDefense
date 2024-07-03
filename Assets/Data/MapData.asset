@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MapDataList:
   - Id: 0
-    MapName: "\u6E2C\u8A66\u5834\u666F"
+    MapName: Map001
     SceneName: TestLevel
     StartLive: 20
     StartMoney: 400
@@ -80,7 +80,7 @@ MonoBehaviour:
       LevelName: 
       WaveList: []
   - Id: 1
-    MapName: rrrrrrr
+    MapName: Map002
     SceneName: rrrrr
     StartLive: 0
     StartMoney: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
       LevelName: 
       WaveList: []
   - Id: 2
-    MapName: ttttttt
+    MapName: Map003
     SceneName: tttttt
     StartLive: 0
     StartMoney: 0
