@@ -42,22 +42,27 @@ public static partial class GameEvent
 
     public class TowerPreviewBuildEvent : GameEventArgs<TowerPreviewBuildEvent>
     {
+        public int TowerId { get; set; }
         public float ShootRange { get; set; }
         public Vector2Short Size { get; set; }
         public Vector2Short GridPos { get; set; }
-        public static TowerPreviewBuildEvent CreateEvent(Vector2Short size, Vector2Short gridPos)
+        public static TowerPreviewBuildEvent CreateEvent(int towerId,float shootRange,Vector2Short size, Vector2Short gridPos)
         {
             var @event = CreateEvent();
+            @event.TowerId = towerId;
+            @event.ShootRange = shootRange;
             @event.Size = size;
             @event.GridPos = gridPos;
             return @event;
         }
+    }
 
-        public static TowerPreviewBuildEvent CreateEvent(float shootRange,Vector2Short size, Vector2Short gridPos)
+    public class MovePreviewBuildEvent : GameEventArgs<MovePreviewBuildEvent>
+    {
+        public Vector2Short GridPos { get; set; }
+        public static MovePreviewBuildEvent CreateEvent(Vector2Short gridPos)
         {
             var @event = CreateEvent();
-            @event.ShootRange = shootRange;
-            @event.Size = size;
             @event.GridPos = gridPos;
             return @event;
         }
@@ -76,13 +81,7 @@ public static partial class GameEvent
 
     public class TowerCancelPreviewEvent : GameEventArgs<TowerCancelPreviewEvent>
     {
-        public Vector2Short GridPos { get; set; }
-        public static TowerCancelPreviewEvent CreateEvent(Vector2Short gridPos)
-        {
-            var @event = CreateEvent();
-            @event.GridPos = gridPos;
-            return @event;
-        }
+
     }
 
     public class TowerMakeMoneyEvent : GameEventArgs<TowerMakeMoneyEvent>

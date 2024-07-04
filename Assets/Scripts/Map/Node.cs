@@ -23,4 +23,12 @@ public class Node : MonoBehaviour
 
         EventHelper.NodeSelectedEvent.Invoke(this, GameEvent.NodeSelectEvent.CreateEvent(pos));
     }
+
+    private void OnMouseEnter()
+    {
+        if (!BuildManager.instance.NowPreviewBuild || EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        EventHelper.MovePreviewBuiltEvent.Invoke(this, GameEvent.MovePreviewBuildEvent.CreateEvent(pos));
+    }
 }

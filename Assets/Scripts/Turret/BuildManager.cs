@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
-using static UnityEditor.PlayerSettings;
 
 public class BuildManager : MonoBehaviour
 {
@@ -14,6 +13,13 @@ public class BuildManager : MonoBehaviour
 
     private Dictionary<int, TowerInLevel> nowTowers = new Dictionary<int, TowerInLevel>();
     [SerializeField] private Transform towerParent;
+
+    private int selectTowerId;
+
+    private bool nowPreviewBuild = false;
+    public bool NowPreviewBuild => nowPreviewBuild;
+    private float tempShootRange;
+    private Vector2Short tempSize;
 
     private GridManager gridManager;
 
@@ -79,19 +85,61 @@ public class BuildManager : MonoBehaviour
         LineDrawer.endWidth = 0.1f;
     }
 
-
-    public GridState GetGridState(Vector2Short gridPos)
+    private void Update()
     {
-        var gridState = gridManager.GetGridState(gridPos.x,gridPos.y);
-        return gridState;
+        if(nowPreviewBuild && Input.GetMouseButton(1))
+        {
+            CancelBuild();
+        }
     }
-    public GridState GetGridState(int x,int y)
-    {
-        if (gridManager.IsExistGrid(new Vector2Short(x, y)) == false)
-            return GridState.Block;
 
-        var gridState = gridManager.GetGridState(x, y);
-        return gridState;
+    public void PreviewBuildTower(object s, GameEvent.TowerPreviewBuildEvent e)
+    {
+        nowPreviewBuild = true;
+        if (e.ShootRange != 0)
+        {
+            selectTowerId = e.TowerId;
+            tempShootRange = e.ShootRange;
+            tempSize = e.Size;
+            DrawTowerRange(GridExtension.GetCenterGrid(e.GridPos, e.Size).ToWorldPos(), e.ShootRange);
+        }
+    }
+
+    public void MovePreviewBuild(object s, GameEvent.MovePreviewBuildEvent e)
+    {
+        DrawTowerRange(GridExtension.GetCenterGrid(e.GridPos, tempSize).ToWorldPos(), tempShootRange);
+    }
+
+    public void SelectTower(object s, GameEvent.TowerSelectEvent e)
+    {
+        var tower = GetTower(e.Uid);
+        if (tower.TowerType != TowerType.Money)
+        {
+            var range = ((ITowerRange)tower).GetShootRange();
+            DrawTowerRange(tower.transform.position, range);
+#if UNITY_EDITOR
+            EditorGUIUtility.PingObject(tower);
+            Selection.activeGameObject = tower.gameObject;
+#endif
+        }
+    }
+
+    public void CancelSelectTower(object s, GameEvent.NodeCancelSelectEvent e)
+    {
+        StopDrawTowerRange();
+    }
+
+    public void SelectNode(object s, GameEvent.NodeSelectEvent e)
+    {
+#if UNITY_EDITOR
+        var gridState = GetGridState(e.GridPos);
+        Debug.Log("gridpos:" + e.GridPos + " state:" + gridState);
+#endif
+
+        if (CheckCanBuild(tempSize, e.GridPos))
+            EventHelper.TowerBuiltEvent.Invoke(this, GameEvent.TowerBuildEvent.CreateEvent(selectTowerId, e.GridPos));
+        else
+            CancelBuild();
     }
 
     public void BuildTower(object s,GameEvent.TowerBuildEvent e)
@@ -138,6 +186,18 @@ public class BuildManager : MonoBehaviour
                 EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(worldPos, towerData.BuildParticle));
             }
         }
+
+        selectTowerId = -1;
+        nowPreviewBuild = false;
+        StopDrawTowerRange();
+    }
+
+    public void CancelBuild()
+    {
+        selectTowerId = -1;
+        nowPreviewBuild = false;
+        StopDrawTowerRange();
+        EventHelper.TowerCanceledPreviewEvent.Invoke(this, GameEvent.TowerCancelPreviewEvent.CreateEvent());
     }
 
     public void SellTower(object s, GameEvent.TowerSellEvent e)
@@ -189,44 +249,26 @@ public class BuildManager : MonoBehaviour
         return gridManager.GetGridTowerUid(pos);
     }
 
+    public GridState GetGridState(Vector2Short gridPos)
+    {
+        var gridState = gridManager.GetGridState(gridPos.x, gridPos.y);
+        return gridState;
+    }
+    public GridState GetGridState(int x, int y)
+    {
+        if (gridManager.IsExistGrid(new Vector2Short(x, y)) == false)
+            return GridState.Block;
+
+        var gridState = gridManager.GetGridState(x, y);
+        return gridState;
+    }
+
     public TowerInLevel GetTower(int uid)
     {
         if (nowTowers.TryGetValue(uid, out var tower))
             return tower;
 
         return null;
-    }
-
-    public void SelectTower(object s, GameEvent.TowerSelectEvent e)
-    {
-        var tower = GetTower(e.Uid);
-        if(tower.TowerType != TowerType.Money)
-        {
-             var range = ((ITowerRange)tower).GetShootRange();
-            DrawTowerRange(tower.transform.position,range);
-#if UNITY_EDITOR
-            EditorGUIUtility.PingObject(tower);
-            Selection.activeGameObject = tower.gameObject;
-#endif
-        }
-    }
-
-    public void PreviewBuildTower(object s, GameEvent.TowerPreviewBuildEvent e)
-    {
-        if (e.ShootRange != 0)
-        {
-            DrawTowerRange(GridExtension.GetCenterGrid(e.GridPos,e.Size).ToWorldPos(), e.ShootRange);
-        }
-    }
-
-    public void CancelSelectTower(object s, GameEvent.NodeCancelSelectEvent e)
-    {
-        StopDrawTowerRange();
-    }
-
-    public void CancelPreviewBuildTower(object s, GameEvent.TowerCancelPreviewEvent e)
-    {
-        StopDrawTowerRange();
     }
 
     private void DrawTowerRange(Vector3 towerPos,float towerShootRange)
@@ -252,23 +294,25 @@ public class BuildManager : MonoBehaviour
 
     private void OnDisable()
     {
+        EventHelper.NodeSelectedEvent -= SelectNode;
         EventHelper.TowerBuiltEvent -= BuildTower;
         EventHelper.TowerSoldEvent -= SellTower;
         EventHelper.TowerUpgradedEvent -= UpgradeTower;
         EventHelper.TowerSelectedEvent -= SelectTower;
         EventHelper.TowerPreviewBuiltEvent -= PreviewBuildTower;
-        EventHelper.TowerCanceledPreviewEvent -= CancelPreviewBuildTower;
+        EventHelper.MovePreviewBuiltEvent -= MovePreviewBuild;
         EventHelper.NodeCancelSelectedEvent -= CancelSelectTower;
     }
 
     private void OnEnable()
     {
+        EventHelper.NodeSelectedEvent += SelectNode;
         EventHelper.TowerBuiltEvent += BuildTower;
         EventHelper.TowerSoldEvent += SellTower;
         EventHelper.TowerUpgradedEvent += UpgradeTower;
         EventHelper.TowerSelectedEvent += SelectTower;
         EventHelper.TowerPreviewBuiltEvent += PreviewBuildTower;
-        EventHelper.TowerCanceledPreviewEvent += CancelPreviewBuildTower;
+        EventHelper.MovePreviewBuiltEvent += MovePreviewBuild;
         EventHelper.NodeCancelSelectedEvent += CancelSelectTower;
     }
 

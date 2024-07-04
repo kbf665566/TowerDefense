@@ -1,8 +1,10 @@
 using DG.Tweening.Core.Easing;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using Object = UnityEngine.Object;
 
 public class GameEffectManager : MonoBehaviour
 {
@@ -31,22 +33,9 @@ public class GameEffectManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        effectObjectPools = new Dictionary<GameEffectType, IObjectPool<IGameEffect>>
-        {
-            { GameEffectType.Remove, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-            { GameEffectType.Build, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-            { GameEffectType.Upgrade, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-
-            { GameEffectType.BulletHit, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-            { GameEffectType.MachineGunAttack, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-            { GameEffectType.LaserTowerAttack, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-            { GameEffectType.RocketTowerAttack, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-            { GameEffectType.MissileExplosion, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-            { GameEffectType.WindTowerAttack, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-            { GameEffectType.MakeMoney, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) },
-
-            { GameEffectType.EnemyDeath, new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity) }
-        };
+        effectObjectPools = new Dictionary<GameEffectType, IObjectPool<IGameEffect>>();
+        for (int i = 0; i < Enum.GetValues(typeof(GameEffectType)).Length; i++)
+            effectObjectPools.Add((GameEffectType)Enum.GetValues(typeof(GameEffectType)).GetValue(i), new ObjectPool<IGameEffect>(CreateEffect, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, collectionCheck, defaultCapacity, maxCapacity));
     }
 
     public void ShowEffect(object s, GameEvent.GameEffectShowEvent e)

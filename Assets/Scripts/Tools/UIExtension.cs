@@ -46,13 +46,13 @@ public static class UIExtension
 
         if (levelData.Damage != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.Damage - levelData.Damage) +"</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.Damage - levelData.Damage),3) +"</color>" : string.Empty;
             info += "Damage".GetLanguageValue() + ": " + levelData.Damage + addValue + "\n";
         }
 
         if (levelData.ShootRange != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.ShootRange - levelData.ShootRange) + "</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.ShootRange - levelData.ShootRange),3) + "</color>" : string.Empty;
             info += "ShootRange".GetLanguageValue() + ": " + levelData.ShootRange + addValue + "\n";
         }
 
@@ -71,25 +71,25 @@ public static class UIExtension
 
         if (levelData.BulletExplosionRadius != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.BulletExplosionRadius - levelData.BulletExplosionRadius) + "</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.BulletExplosionRadius - levelData.BulletExplosionRadius),3) + "</color>" : string.Empty;
             info += "BulletExplosionRadius".GetLanguageValue() + ": " + levelData.BulletExplosionRadius + addValue + "\n";
         }
 
         if (levelData.BuffAddDamage != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.BuffAddDamage - levelData.BuffAddDamage) + "</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.BuffAddDamage - levelData.BuffAddDamage),3) + "</color>" : string.Empty;
             info += "BuffAddDamage".GetLanguageValue() + ": " + levelData.BuffAddDamage + addValue + "\n";
         }
 
         if (levelData.BuffAddRange != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.BuffAddRange - levelData.BuffAddRange) + "</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.BuffAddRange - levelData.BuffAddRange),3) + "</color>" : string.Empty;
             info += "BuffAddRange".GetLanguageValue() + ": " + levelData.BuffAddRange + addValue + "\n";
         }
 
         if (levelData.BuffAddFireRate != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.BuffAddFireRate - levelData.BuffAddFireRate) + "</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.BuffAddFireRate - levelData.BuffAddFireRate),3) + "</color>" : string.Empty;
             info += "BuffAddFireRate".GetLanguageValue() + ": " + levelData.BuffAddFireRate + addValue + "\n";
         }
 
@@ -101,23 +101,23 @@ public static class UIExtension
 
         if (levelData.SlowAmount != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.SlowAmount - levelData.SlowAmount) + "</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.SlowAmount - levelData.SlowAmount),3) + "</color>" : string.Empty;
             info += "SlowAmount".GetLanguageValue() + ": " + levelData.SlowAmount + addValue + "\n";
         }
         if (levelData.SlowDuration != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.SlowDuration - levelData.SlowDuration) + "</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.SlowDuration - levelData.SlowDuration),3) + "</color>" : string.Empty;
             info += "SlowDuration".GetLanguageValue() + ": " + levelData.SlowDuration + addValue + "\n";
         }
 
         if (levelData.StunProbability != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.StunProbability - levelData.StunProbability) + "</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.StunProbability - levelData.StunProbability),3) + "</color>" : string.Empty;
             info += "StunProbability".GetLanguageValue() + ": " + levelData.StunProbability + addValue + "\n";
         }
         if (levelData.StunDuration != 0)
         {
-            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + (nextData.StunDuration - levelData.StunDuration) + "</color>" : string.Empty;
+            addValue = nextData != null && isUpdate ? "<color=#ff0000>  + " + Math.Round((nextData.StunDuration - levelData.StunDuration),3) + "</color>" : string.Empty;
             info += "StunDuration".GetLanguageValue() + ": " + levelData.StunDuration + addValue + "\n";
         }
 

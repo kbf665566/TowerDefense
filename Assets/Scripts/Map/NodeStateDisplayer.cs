@@ -15,7 +15,7 @@ public class NodeStateDisplayer : MonoBehaviour
     private Color WhiteColor = new Color(1,1,1,0.6f);
     private Color GreenColor = new Color(0, 1, 0, 0.6f);
 
-
+    private Vector2Short tempSize;
     public void SelectNode(object s, GameEvent.NodeSelectEvent e)
     {
         stateDisplayers[0].color = GreenColor;
@@ -24,12 +24,27 @@ public class NodeStateDisplayer : MonoBehaviour
         stateDisplayers[0].gameObject.SetActive(true);
     }
 
-    public void PreviewBuildTower(object s,GameEvent.TowerPreviewBuildEvent e)
+    public void StartPreviewBuildTower(object s,GameEvent.TowerPreviewBuildEvent e)
     {
         int index = 0;
+        tempSize = e.Size;
         for (int x = e.GridPos.x; x < e.GridPos.x + e.Size.x; x++)
         {
             for (int y = e.GridPos.y; y < e.GridPos.y + e.Size.y; y++)
+            {
+                stateDisplayers[index].color = GreenColor;
+                stateDisplayers[index].transform.localPosition = new Vector3(x, 0.7f, y);
+                stateDisplayers[index].gameObject.SetActive(true);
+                index++;
+            }
+        }
+    }
+    public void MovePreviewBuildTower(object s, GameEvent.MovePreviewBuildEvent e)
+    {
+        var index = 0;
+        for (int x = e.GridPos.x; x < e.GridPos.x + tempSize.x; x++)
+        {
+            for (int y = e.GridPos.y; y < e.GridPos.y + tempSize.y; y++)
             {
                 var gridState = buildManager.GetGridState(x, y);
                 if (gridState == GridState.Building || gridState == GridState.EnemyPath || gridState == GridState.Block)
@@ -37,8 +52,7 @@ public class NodeStateDisplayer : MonoBehaviour
                 else if (gridState == GridState.Empty)
                     stateDisplayers[index].color = GreenColor;
 
-                stateDisplayers[index].transform.localPosition = new Vector3(x,0.7f,y);
-                stateDisplayers[index].gameObject.SetActive(true);
+                stateDisplayers[index].transform.localPosition = new Vector3(x, 0.7f, y);
                 index++;
             }
         }
@@ -97,10 +111,6 @@ public class NodeStateDisplayer : MonoBehaviour
     public void TowerCanceledPreview(object s, GameEvent.TowerCancelPreviewEvent e)
     {
         HideState();
-
-        stateDisplayers[0].color = GreenColor;
-        stateDisplayers[0].transform.localPosition = new Vector3(e.GridPos.x, 0.7f, e.GridPos.y);
-        stateDisplayers[0].gameObject.SetActive(true);
     }
 
     [ContextMenu("Spawn")]
@@ -120,7 +130,8 @@ public class NodeStateDisplayer : MonoBehaviour
 
     private void OnEnable()
     {
-        EventHelper.TowerPreviewBuiltEvent += PreviewBuildTower;
+        EventHelper.TowerPreviewBuiltEvent += StartPreviewBuildTower;
+        EventHelper.MovePreviewBuiltEvent += MovePreviewBuildTower;
         EventHelper.NodeSelectedEvent += SelectNode;
         EventHelper.NodeCancelSelectedEvent += CancelSelectNode;
         EventHelper.TowerBuiltEvent += TowerBuilt;
@@ -132,7 +143,8 @@ public class NodeStateDisplayer : MonoBehaviour
 
     private void OnDisable()
     {
-        EventHelper.TowerPreviewBuiltEvent -= PreviewBuildTower;
+        EventHelper.TowerPreviewBuiltEvent -= StartPreviewBuildTower;
+        EventHelper.MovePreviewBuiltEvent -= MovePreviewBuildTower;
         EventHelper.NodeSelectedEvent -= SelectNode;
         EventHelper.NodeCancelSelectedEvent -= CancelSelectNode;
         EventHelper.TowerBuiltEvent -= TowerBuilt;

@@ -12,6 +12,7 @@ public class EventHelper : MonoBehaviour
     public static EventHandler<GameEvent.TowerSellEvent> TowerSoldEvent;
     public static EventHandler<GameEvent.TowerUpgradeEvent> TowerUpgradedEvent;
     public static EventHandler<GameEvent.TowerPreviewBuildEvent> TowerPreviewBuiltEvent;
+    public static EventHandler<GameEvent.MovePreviewBuildEvent> MovePreviewBuiltEvent;
     public static EventHandler<GameEvent.TowerCancelPreviewEvent> TowerCanceledPreviewEvent;
     public static EventHandler<GameEvent.TowerMakeMoneyEvent> TowerModeMoneyEvent;
 

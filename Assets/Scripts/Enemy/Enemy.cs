@@ -111,6 +111,8 @@ public class Enemy : MonoBehaviour
 
         nowStun = false;
         nowSlow = false;
+        stunEffect.SetActive(false);
+        slowEffect.SetActive(false);
 
         stunCount = 0;
         slowCount = 0;

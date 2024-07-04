@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using JetBrains.Annotations;
+
 [Serializable]
 public class TowerData 
 {
@@ -27,6 +29,7 @@ public class TowerData
     public GameEffectType RemoveParticle;
     //------------------
 
+    public TowerAttackMode AttackMode;
 
     public TowerInLevel TowerPrefab;
 }
@@ -44,6 +47,22 @@ public enum TowerType
     Money,
     Special,
 }
+
+[Serializable]
+public enum TowerAttackMode
+{
+    None = 0,
+    /// <summary> 最近 </summary>
+    Nearest = 1,
+    /// <summary> 總血量最高 </summary>
+    HighestHP = 2,
+    /// <summary> 攻擊特定地點 </summary>
+    Fixedpoint = 4,
+    /// <summary> 當前血量最少 </summary>
+    Weakest = 8,
+}
+
+
 [Serializable]
 public class TowerLevelData
 {

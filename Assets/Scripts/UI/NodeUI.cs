@@ -24,14 +24,6 @@ public class NodeUI : MonoBehaviour
     [SerializeField] private Button upgradeBtn;
     [SerializeField] private GameObject upgradeAndSellMenu;
 
-
-    [Header("Build")]
-    [SerializeField] private GameObject buildMenu;
-    [SerializeField] private BuildMenuItem buildMenuItemObj;
-    [SerializeField] private Transform buildMenuItemParent;
-
-    private int selectTowerId;
-    private Vector2Short selectGridPos;
     private int selectTowerUid;
 
     [Header("Confirm")]
@@ -45,20 +37,10 @@ public class NodeUI : MonoBehaviour
     private void Awake()
     {
         upgradeAndSellMenu.SetActive(false);
-        buildMenu.SetActive(false);
         cancelClickBtn.SetActive(false);
         confirmMenu.SetActive(false);
 
         parentRect = transform.GetTopParent().GetComponent<RectTransform>();
-
-        var towerList = gameManager.TowerData.TowerList;
-        for (int i =0;i< towerList.Count; i++)
-        {
-            var buildBtn = Instantiate(buildMenuItemObj);
-            buildBtn.transform.SetParent(buildMenuItemParent,false);
-            int i2 = i;
-            buildBtn.SetItem(towerList[i].Id, towerList[i].TowerIcon, towerList[i].TowerLevelData[0].BuildUpgradeCost,() => PrereviwBuildTower(towerList[i2].Id));
-        }
     }
 
 
@@ -95,22 +77,6 @@ public class NodeUI : MonoBehaviour
         }
     }
 
-    public void SelectNode(object s,GameEvent.NodeSelectEvent e)
-    {
-        selectGridPos = e.GridPos;
-
-#if UNITY_EDITOR
-        var gridState = buildManager.GetGridState(e.GridPos);
-        Debug.Log("gridpos:" + e.GridPos + " state:" + gridState);
-#endif
-        var worldPos = e.GridPos.ToWorldPos() + offset;
-        ClameWindow(worldPos, e.GridPos);
-
-        buildMenu.SetActive(true);
-
-
-        StartCoroutine(WaitShowUI());
-    }
     private void ClameWindow(Vector3 worldPos,Vector2Short gridPos)
     {
         transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPos);
@@ -137,47 +103,12 @@ public class NodeUI : MonoBehaviour
         cancelClickBtn.SetActive(true);
     }
 
-    public void PrereviwBuildTower(int towerId)
-    {
-        var towerData = gameManager.TowerData.GetData(towerId);
-        if (towerData != null)
-        {
-            selectTowerId = towerId;
-            if (towerData.towerType != TowerType.Money)
-                EventHelper.TowerPreviewBuiltEvent.Invoke(this, GameEvent.TowerPreviewBuildEvent.CreateEvent(towerData.TowerLevelData[0].ShootRange,towerData.TowerSize, selectGridPos));
-            else
-                EventHelper.TowerPreviewBuiltEvent.Invoke(this, GameEvent.TowerPreviewBuildEvent.CreateEvent(towerData.TowerSize, selectGridPos));
-            EventHelper.TipHideEvent.Invoke(this, GameEvent.HideTipEvent.CreateEvent());
-            yesToBuildBtn.interactable = buildManager.CheckCanBuild(towerData.TowerSize, selectGridPos);
-            buildMenu.SetActive(false);
-            confirmMenu.SetActive(true);
-        }
-    }
-
-    public void YesToBuild()
-    {
-        EventHelper.TowerBuiltEvent.Invoke(this,GameEvent.TowerBuildEvent.CreateEvent(selectTowerId, selectGridPos));
-        confirmMenu.SetActive(false);
-        cancelClickBtn.SetActive(false);
-        selectTowerId = -1;
-        selectGridPos = Vector2Short.Hide;
-    }
-
-    public void CancelBuild()
-    {
-        EventHelper.TowerCanceledPreviewEvent.Invoke(this, GameEvent.TowerCancelPreviewEvent.CreateEvent(selectGridPos));
-        confirmMenu.SetActive(false);
-        buildMenu.SetActive(true);
-    }
 
     public void Hide()
     {
         EventHelper.TipHideEvent.Invoke(this,GameEvent.HideTipEvent.CreateEvent());
-        selectTowerId = -1;
-        selectGridPos = Vector2Short.Hide;
         selectTowerUid = 0;
         upgradeAndSellMenu.SetActive(false);
-        buildMenu.SetActive(false);
         cancelClickBtn.SetActive(false);
         confirmMenu.SetActive(false);
     }
@@ -202,12 +133,10 @@ public class NodeUI : MonoBehaviour
 
     private void OnDisable()
     {
-        EventHelper.NodeSelectedEvent -= SelectNode;
         EventHelper.TowerSelectedEvent -= SelectTower;
     }
     private void OnEnable()
     {
-        EventHelper.NodeSelectedEvent += SelectNode;
         EventHelper.TowerSelectedEvent += SelectTower;
     }
 }
