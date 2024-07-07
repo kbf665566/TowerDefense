@@ -179,6 +179,11 @@ public class AOETower : TowerInLevel,IAttackTower,ITowerRange
         }
     }
 
+    public void ChangeAttackMode(TowerAttackMode towerAttackMode)
+    {
+        nowAttackMode = towerAttackMode;
+    }
+
     public float GetShootRange()
     {
         return final_ShootRange;

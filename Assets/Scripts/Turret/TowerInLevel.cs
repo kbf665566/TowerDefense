@@ -25,6 +25,9 @@ public class TowerInLevel : MonoBehaviour
     protected Vector2Short gridPos;
     public Vector2Short GridPos => gridPos;
 
+    protected TowerAttackMode nowAttackMode;
+    public TowerAttackMode NowAttackMode => nowAttackMode;
+
     //塔本身使用的物件池
     private IObjectPool<TowerInLevel> objectPool;
     public IObjectPool<TowerInLevel> ObjectPool { set => objectPool = value; }
@@ -40,6 +43,7 @@ public class TowerInLevel : MonoBehaviour
         id = towerData.Id;
         towerName = towerData.Name;
         nowLevel = 0;
+        nowAttackMode = towerData.AttackMode == TowerAttackMode.None ? TowerAttackMode.None : TowerAttackMode.Nearest;
         this.towerData = towerData;
         towerLevelData = towerData.TowerLevelData;
         this.gridPos = gridPos;

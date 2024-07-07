@@ -136,6 +136,9 @@ public class BuildManager : MonoBehaviour
         Debug.Log("gridpos:" + e.GridPos + " state:" + gridState);
 #endif
 
+        if (!nowPreviewBuild)
+            return;
+
         if (CheckCanBuild(tempSize, e.GridPos))
             EventHelper.TowerBuiltEvent.Invoke(this, GameEvent.TowerBuildEvent.CreateEvent(selectTowerId, e.GridPos));
         else
@@ -239,6 +242,16 @@ public class BuildManager : MonoBehaviour
         }
     }
 
+    public void ChangeTowerAttackMode(object s, GameEvent.TowerChangeAttackModeEvent e)
+    {
+        if (nowTowers.TryGetValue(e.Uid, out var tower))
+        {
+            if (tower.TowerType == TowerType.Normal || tower.TowerType == TowerType.AOE)
+                ((IAttackTower)tower).ChangeAttackMode(e.AttackMode);
+        }
+    }
+
+    #region Check/Get
     public bool CheckCanBuild(Vector2Short size,Vector2Short pos)
     {
         return gridManager.CheckCanBuild(pos,size);
@@ -270,6 +283,7 @@ public class BuildManager : MonoBehaviour
 
         return null;
     }
+    #endregion
 
     private void DrawTowerRange(Vector3 towerPos,float towerShootRange)
     {
@@ -302,6 +316,7 @@ public class BuildManager : MonoBehaviour
         EventHelper.TowerPreviewBuiltEvent -= PreviewBuildTower;
         EventHelper.MovePreviewBuiltEvent -= MovePreviewBuild;
         EventHelper.NodeCancelSelectedEvent -= CancelSelectTower;
+        EventHelper.TowerChangedAttackModeEvent -= ChangeTowerAttackMode;
     }
 
     private void OnEnable()
@@ -314,6 +329,7 @@ public class BuildManager : MonoBehaviour
         EventHelper.TowerPreviewBuiltEvent += PreviewBuildTower;
         EventHelper.MovePreviewBuiltEvent += MovePreviewBuild;
         EventHelper.NodeCancelSelectedEvent += CancelSelectTower;
+        EventHelper.TowerChangedAttackModeEvent += ChangeTowerAttackMode;
     }
 
     private int GenerateUid()

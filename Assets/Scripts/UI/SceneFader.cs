@@ -10,7 +10,7 @@ public class SceneFader : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(FadeIn());
+        DontDestroyOnLoad(gameObject);
     }
 
     public void FadeTo(string scene)
@@ -21,6 +21,11 @@ public class SceneFader : MonoBehaviour
     public void FadeTo(object s, GameEvent.SceneChangeEvent e)
     {
         StartCoroutine(FadeOut(e.SceneName));
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        StartCoroutine(FadeIn());
     }
 
     private IEnumerator FadeIn()
@@ -35,6 +40,8 @@ public class SceneFader : MonoBehaviour
             yield return null;
         }
     }
+
+
 
     private IEnumerator FadeOut(string scene)
     {
@@ -54,10 +61,12 @@ public class SceneFader : MonoBehaviour
     private void OnEnable()
     {
         EventHelper.SceneChangedEvent += FadeTo;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
         EventHelper.SceneChangedEvent -= FadeTo;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

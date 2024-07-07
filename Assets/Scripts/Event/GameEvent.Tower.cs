@@ -29,6 +29,19 @@ public static partial class GameEvent
         }
     }
 
+    public class TowerChangeAttackModeEvent : GameEventArgs<TowerChangeAttackModeEvent>
+    {
+        public int Uid { get; set; }
+        public TowerAttackMode AttackMode { get; set; }
+        public static TowerChangeAttackModeEvent CreateEvent(int uid,TowerAttackMode towerAttackMode)
+        {
+            var @event = CreateEvent();
+            @event.Uid = uid;
+            @event.AttackMode = towerAttackMode;
+            return @event;
+        }
+    }
+
     public class TowerSellEvent : GameEventArgs<TowerSellEvent>
     {
         public int Uid { get; set; }

@@ -168,6 +168,36 @@ MonoBehaviour:
     LanguageString:
     - "\u4E0B\u4E00\u6CE2"
     - NextWave
+  - Id: 59
+    Key: AttackMode
+    LanguageString:
+    - "\u653B\u64CA\u6A21\u5F0F"
+    - AttackMode
+  - Id: 60
+    Key: Nearest
+    LanguageString:
+    - "\u6700\u8FD1"
+    - Nearest
+  - Id: 61
+    Key: HighestHP
+    LanguageString:
+    - "\u8840\u91CF\u6700\u591A"
+    - HighestHP
+  - Id: 62
+    Key: Fixedpoint
+    LanguageString:
+    - "\u5B9A\u9EDE"
+    - Fixedpoint
+  - Id: 63
+    Key: Weakest
+    LanguageString:
+    - "\u8840\u91CF\u6700\u5C11"
+    - Weakest
+  - Id: 64
+    Key: First
+    LanguageString:
+    - "\u7B2C\u4E00\u500B"
+    - First
   - Id: 31
     Key: Map001
     LanguageString:

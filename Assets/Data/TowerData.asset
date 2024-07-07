@@ -62,6 +62,7 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
+    AttackMode: 15
     TowerPrefab: {fileID: -538096426614295507, guid: ee4561289e7fdb248a1644d1903699ed, type: 3}
   - Id: 1
     Name: RocketTower
@@ -112,6 +113,7 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
+    AttackMode: -1
     TowerPrefab: {fileID: -7594727079982387, guid: 852e13cd1fee71043be2067ce73f8c58, type: 3}
   - Id: 2
     Name: LaserTower
@@ -162,6 +164,7 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
+    AttackMode: 0
     TowerPrefab: {fileID: 3691680086958892297, guid: 769c5d595497c9046b38b765dc5be34e, type: 3}
   - Id: 3
     Name: LightningTower
@@ -212,6 +215,7 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
+    AttackMode: 0
     TowerPrefab: {fileID: -2869254594166877190, guid: 30b5d16d89d00a64397649af57f051a4, type: 3}
   - Id: 4
     Name: WindTower
@@ -262,6 +266,7 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
+    AttackMode: 0
     TowerPrefab: {fileID: 5851007637400312791, guid: d703b1bb197e75d41b67dbd9c40b1f85, type: 3}
   - Id: 5
     Name: MoneyTower
@@ -296,6 +301,7 @@ MonoBehaviour:
     NormalParticle: 106
     BuildParticle: 1
     RemoveParticle: 0
+    AttackMode: 0
     TowerPrefab: {fileID: 651710087589137828, guid: 747dd77151da46c40bb33b5705ec456b, type: 3}
   - Id: 6
     Name: RaderTower
@@ -346,4 +352,5 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
+    AttackMode: 0
     TowerPrefab: {fileID: 2181722627641859894, guid: f18933bff30f89d489f567a9e6720919, type: 3}

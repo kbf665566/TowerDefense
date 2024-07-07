@@ -53,13 +53,15 @@ public enum TowerAttackMode
 {
     None = 0,
     /// <summary> 最近 </summary>
-    Nearest = 1,
+    Nearest = 1 << 0,
+    /// <summary> 第一個 </summary>
+    First = 1 << 1,
     /// <summary> 總血量最高 </summary>
-    HighestHP = 2,
-    /// <summary> 攻擊特定地點 </summary>
-    Fixedpoint = 4,
+    HighestHP = 1 << 2,
     /// <summary> 當前血量最少 </summary>
-    Weakest = 8,
+    Weakest = 1 << 3,
+    /// <summary> 攻擊特定地點 </summary>
+    Fixedpoint = 1 << 4,
 }
 
 

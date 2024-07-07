@@ -28,6 +28,8 @@ public class EnemyManager : MonoBehaviour
     private int nowSpawnIndex = 0;
     private int spawnEnemyCount = 0;
 
+    private float nowLevelTime = 0;
+
     private Dictionary<int, Enemy> nowEnemies = new Dictionary<int, Enemy>();
 
     private void Awake()
@@ -59,7 +61,7 @@ public class EnemyManager : MonoBehaviour
         if (startSpawn == false)
             return;
 
-        if(spawnTimeCount >= nowWaveEnemies[nowSpawnIndex].SpawnInterval)
+        if (spawnTimeCount >= nowWaveEnemies[nowSpawnIndex].SpawnInterval)
         {
             if(nowWaveEnemies[nowSpawnIndex].SpawnInAllPath == true && gameManager.NowMapData.EnemyPathList.Count == 2)
             {
@@ -83,7 +85,7 @@ public class EnemyManager : MonoBehaviour
             spawnTimeCount = 0;
         }
 
-
+        nowLevelTime += Time.fixedDeltaTime;
         spawnTimeCount += Time.fixedDeltaTime;
     }
 
@@ -93,6 +95,8 @@ public class EnemyManager : MonoBehaviour
         totalEnemyAmount = 0;
         nowDiedEnemyAmount = 0;
         nowWave = e.NowWave;
+
+        nowLevelTime = 0;
 
         //計算這波敵人總數
         for (int i = 0;i < waves.WaveList[nowWave - 1].WaveEnemyList.Count;i++)
@@ -117,7 +121,7 @@ public class EnemyManager : MonoBehaviour
             var newEnemy = pool.Get();
             var wayPoints = pathId == 0 ? levelManager.WayPoints1 : levelManager.WayPoints2;
             var uid = GenerateUid();
-            newEnemy.ReSwpawn(wayPoints,uid);
+            newEnemy.ReSwpawn(wayPoints,uid,nowLevelTime);
             newEnemy.transform.SetPositionAndRotation(wayPoints[0].transform.position,Quaternion.identity);
             nowEnemies.Add(uid,newEnemy);
         }
@@ -143,7 +147,12 @@ public class EnemyManager : MonoBehaviour
             EventHelper.WaveEndEvent.Invoke(this, GameEvent.WaveEndEvent.CreateEvent());
         }
     }
-
+    /// <summary>
+    /// 找離最近的敵人
+    /// </summary>
+    /// <param name="towerPos"></param>
+    /// <param name="towerShootRange"></param>
+    /// <returns></returns>
     public Enemy FindNearestEnemy(Vector3 towerPos,float towerShootRange)
     {
         float shortestDistance = Mathf.Infinity;
@@ -152,18 +161,84 @@ public class EnemyManager : MonoBehaviour
         foreach (var enemy in nowEnemies)
         {
             float distaceToEnemy = Vector3.Distance(towerPos, enemy.Value.transform.localPosition);
-            if (distaceToEnemy < shortestDistance)
+            if (distaceToEnemy < shortestDistance && distaceToEnemy <= towerShootRange)
             {
                 shortestDistance = distaceToEnemy;
                 nearestEnemy = enemy.Value;
             }
         }
 
-        if (nearestEnemy != null && shortestDistance <= towerShootRange)
+        return nearestEnemy;
+    }
+    /// <summary>
+    /// 找血量最多的敵人
+    /// </summary>
+    /// <param name="towerPos"></param>
+    /// <param name="towerShootRange"></param>
+    /// <returns></returns>
+    public Enemy FindHighestHPEnemy(Vector3 towerPos, float towerShootRange)
+    {
+        float highestHP = 0;
+        Enemy highestHPEnemy = null;
+
+        foreach (var enemy in nowEnemies)
         {
-            return nearestEnemy;
+            float distaceToEnemy = Vector3.Distance(towerPos, enemy.Value.transform.localPosition);
+            if (distaceToEnemy <= towerShootRange && enemy.Value.HP > highestHP)
+            {
+                highestHP = enemy.Value.HP;
+                highestHPEnemy = enemy.Value;
+            }
         }
-        return null;
+
+        return highestHPEnemy;
+    }
+    /// <summary>
+    /// 找最弱的敵人
+    /// </summary>
+    /// <param name="towerPos"></param>
+    /// <param name="towerShootRange"></param>
+    /// <returns></returns>
+    public Enemy FindWeakestEnemy(Vector3 towerPos, float towerShootRange)
+    {
+        float weakestHP = Mathf.Infinity;
+        Enemy weakestPEnemy = null;
+
+        foreach (var enemy in nowEnemies)
+        {
+            float distaceToEnemy = Vector3.Distance(towerPos, enemy.Value.transform.localPosition);
+            if (distaceToEnemy <= towerShootRange && enemy.Value.HP < weakestHP)
+            {
+                weakestHP = enemy.Value.HP;
+                weakestPEnemy = enemy.Value;
+            }
+        }
+
+        return weakestPEnemy;
+    }
+
+    /// <summary>
+    /// 找第一個的敵人
+    /// </summary>
+    /// <param name="towerPos"></param>
+    /// <param name="towerShootRange"></param>
+    /// <returns></returns>
+    public Enemy FindFirstEnemy(Vector3 towerPos, float towerShootRange)
+    {
+        float firstSpawnTime = Mathf.Infinity;
+        Enemy firstEnemy = null;
+
+        foreach (var enemy in nowEnemies)
+        {
+            float distaceToEnemy = Vector3.Distance(towerPos, enemy.Value.transform.localPosition);
+            if (distaceToEnemy <= towerShootRange && enemy.Value.SpawnTime < firstSpawnTime)
+            {
+                firstSpawnTime = enemy.Value.SpawnTime;
+                firstEnemy = enemy.Value;
+            }
+        }
+
+        return firstEnemy;
     }
 
     public int GetNowEnemyAmount()

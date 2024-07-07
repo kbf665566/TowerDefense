@@ -141,7 +141,22 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
 
     public void FindEnemy()
     {
-        targetEnemy = enemyManager.FindNearestEnemy(transform.localPosition, final_ShootRange);
+        switch(nowAttackMode)
+        {
+            case TowerAttackMode.Nearest:
+                targetEnemy = enemyManager.FindNearestEnemy(transform.localPosition, final_ShootRange);
+                break;
+            case TowerAttackMode.First:
+                targetEnemy = enemyManager.FindFirstEnemy(transform.localPosition, final_ShootRange);
+                break;
+            case TowerAttackMode.HighestHP:
+                targetEnemy = enemyManager.FindHighestHPEnemy(transform.localPosition, final_ShootRange);
+                break;
+            case TowerAttackMode.Weakest:
+                targetEnemy = enemyManager.FindWeakestEnemy(transform.localPosition, final_ShootRange);
+                break;
+        }
+       
     }
 
     public void FireToEnemy()
@@ -213,6 +228,11 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
             bullet.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
             bullet.Seek(targetEnemy);
         }
+    }
+
+    public void ChangeAttackMode(TowerAttackMode towerAttackMode)
+    {
+        nowAttackMode = towerAttackMode;
     }
 
     public float GetShootRange()

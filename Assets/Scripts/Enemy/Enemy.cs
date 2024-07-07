@@ -10,7 +10,10 @@ public class Enemy : MonoBehaviour
     private float startSpeed;
     private float speed;
     private int damage = 1;
+
     private float hp = 100;
+    public float HP => hp;
+
     private int value = 50;
 
     private float rotationSpeed = 10f;
@@ -37,6 +40,9 @@ public class Enemy : MonoBehaviour
     private Transform target;
     private int wavepointIndex = 0;
     private Transform[] waypoints;
+
+    private float spawnTime;
+    public float SpawnTime => spawnTime;
 
     [SerializeField] private GameObject slowEffect;
     [SerializeField] private GameObject stunEffect;
@@ -99,7 +105,7 @@ public class Enemy : MonoBehaviour
         damage = enemyData.Damage;
     }
 
-    public void ReSwpawn(Transform[] waypoints,int uid)
+    public void ReSwpawn(Transform[] waypoints,int uid,float spawnTime)
     {
         hp = enemyData.HP;
         speed = startSpeed;
@@ -108,6 +114,8 @@ public class Enemy : MonoBehaviour
         wavepointIndex = 0;
         isDead = false;
         this.uid = uid;
+
+        this.spawnTime = spawnTime;
 
         nowStun = false;
         nowSlow = false;

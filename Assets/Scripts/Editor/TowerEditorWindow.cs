@@ -327,6 +327,10 @@ public class TowerEditorWindow : UnitEditorWindow
             cont = new GUIContent("Debuff類型:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             tower.Debuff = (DebuffType)EditorGUI.EnumPopup(new Rect(startX + spaceX, startY, 100, height), tower.Debuff);
+
+            cont = new GUIContent("可用攻擊模式:");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            tower.AttackMode = (TowerAttackMode)EditorGUI.EnumFlagsField(new Rect(startX + spaceX, startY, 100, height), tower.AttackMode);
         }
 
         if (startX + spaceX + width > maxWidth) 
@@ -337,8 +341,9 @@ public class TowerEditorWindow : UnitEditorWindow
         startY = 240;
         startX = cachedX;
 
+
         cont = new GUIContent("LevelData:", "");
-        GUI.Label(new Rect(startX, startY += spaceY, 120, height), cont);
+        GUI.Label(new Rect(startX, startY += spaceY *2, 120, height), cont);
         if (GUI.Button(new Rect(startX + spaceX, startY, 50, 15), "-1"))
         {
             if (tower.TowerLevelData.Count > 1) 
@@ -359,7 +364,7 @@ public class TowerEditorWindow : UnitEditorWindow
         float maxContentHeight = 0;
 
 
-        minimiseStat = EditorGUI.Foldout(new Rect(startX, startY += spaceY + 15, width, height), minimiseStat, "Show Stats");
+        minimiseStat = EditorGUI.Foldout(new Rect(startX, startY += spaceY * 2 + 10, width, height), minimiseStat, "Show Stats");
         if (!minimiseStat)
         {
             startY += spaceY;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class NodeUI : MonoBehaviour
 {
@@ -24,11 +25,14 @@ public class NodeUI : MonoBehaviour
     [SerializeField] private Button upgradeBtn;
     [SerializeField] private GameObject upgradeAndSellMenu;
 
-    private int selectTowerUid;
+    [Header("AttackMode")]
+    [SerializeField] private GameObject attackModeMenu;
+    [SerializeField] private TextMeshProUGUI attackModeText;
+    private int nowAttackModeIndex = 0;
+    private TowerAttackMode nowCanSelectAttackMode;
+    private TowerAttackMode nowSelectTowerAttackMode;
 
-    [Header("Confirm")]
-    [SerializeField] private GameObject confirmMenu;
-    [SerializeField] private Button yesToBuildBtn;
+    private int selectTowerUid;
 
     private BuildManager buildManager => BuildManager.instance;
     private GameManager gameManager => GameManager.instance;
@@ -38,7 +42,7 @@ public class NodeUI : MonoBehaviour
     {
         upgradeAndSellMenu.SetActive(false);
         cancelClickBtn.SetActive(false);
-        confirmMenu.SetActive(false);
+        attackModeMenu.SetActive(false);
 
         parentRect = transform.GetTopParent().GetComponent<RectTransform>();
     }
@@ -72,6 +76,15 @@ public class NodeUI : MonoBehaviour
             }
             sellPriceText.text = "$" + tower.GetNowLevelData().SoldPrice;
 
+            if (tower.TowerType == TowerType.Normal)
+            {
+                nowCanSelectAttackMode = tower.TowerData.AttackMode;
+                nowSelectTowerAttackMode = tower.NowAttackMode;
+                nowAttackModeIndex = (int)tower.NowAttackMode;
+                attackModeText.text = tower.NowAttackMode.ToString().GetLanguageValue();
+                attackModeMenu.SetActive(true);
+            }
+
             upgradeAndSellMenu.SetActive(true);
             StartCoroutine(WaitShowUI());
         }
@@ -94,6 +107,37 @@ public class NodeUI : MonoBehaviour
     }
 
     /// <summary>
+    /// 切換塔的攻擊模式
+    /// </summary>
+    public void PrevAttackMode()
+    {
+        var enumValues = Enum.GetValues(typeof(TowerAttackMode));
+        nowAttackModeIndex >>= 1;
+        if (nowAttackModeIndex <= 0)
+            nowAttackModeIndex = nowCanSelectAttackMode.HasFlag(TowerAttackMode.Fixedpoint) ? (int)enumValues.GetValue(enumValues.Length - 1) : (int)enumValues.GetValue(enumValues.Length - 2);
+        nowSelectTowerAttackMode = (TowerAttackMode)nowAttackModeIndex;
+        attackModeText.text = nowSelectTowerAttackMode.ToString().GetLanguageValue();
+
+        EventHelper.TowerChangedAttackModeEvent.Invoke(this,GameEvent.TowerChangeAttackModeEvent.CreateEvent(selectTowerUid, nowSelectTowerAttackMode));
+    }
+    /// <summary>
+    /// 切換塔的攻擊模式
+    /// </summary>
+    public void NextAttackMode()
+    {
+        nowAttackModeIndex <<= 1;
+        var enumValues = Enum.GetValues(typeof(TowerAttackMode));
+        if ((!nowCanSelectAttackMode.HasFlag(TowerAttackMode.Fixedpoint) && nowAttackModeIndex == (int)enumValues.GetValue(enumValues.Length - 1))
+            || nowAttackModeIndex > (int)enumValues.GetValue(enumValues.Length - 1))
+            nowAttackModeIndex = 1;
+        nowSelectTowerAttackMode = (TowerAttackMode)nowAttackModeIndex;
+        attackModeText.text = nowSelectTowerAttackMode.ToString().GetLanguageValue();
+
+        EventHelper.TowerChangedAttackModeEvent.Invoke(this, GameEvent.TowerChangeAttackModeEvent.CreateEvent(selectTowerUid, nowSelectTowerAttackMode));
+    }
+
+
+    /// <summary>
     /// 避免還沒出現就被關掉
     /// </summary>
     /// <returns></returns>
@@ -110,7 +154,7 @@ public class NodeUI : MonoBehaviour
         selectTowerUid = 0;
         upgradeAndSellMenu.SetActive(false);
         cancelClickBtn.SetActive(false);
-        confirmMenu.SetActive(false);
+        attackModeMenu.SetActive(false);
     }
 
     public void Upgrade()
