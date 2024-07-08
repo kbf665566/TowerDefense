@@ -15,6 +15,7 @@ public class LevelEditorWindow : UnitEditorWindow
         window = (LevelEditorWindow)GetWindow(typeof(LevelEditorWindow));
 
         EditorDataManager.Init();
+        EditorDataManager.OpenLevelEditorWindow();
         selectID = -1;
         enemyIDArray = EditorDataManager.EnemyIDList.ToArray();
     }
@@ -73,6 +74,7 @@ public class LevelEditorWindow : UnitEditorWindow
         {
             newLevel = new LevelAllWaves();
             newLevel.LevelName = "NewLevel";
+            newLevel.WaveList = new List<WaveData>();
             int newSelectID = EditorDataManager.AddNewLevel(newLevel);
             if (newSelectID != -1) 
                 SelectLevel(newSelectID);

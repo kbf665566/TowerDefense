@@ -15,7 +15,7 @@ public class EnemyEditorWindow : UnitEditorWindow
         window = (EnemyEditorWindow)GetWindow(typeof(EnemyEditorWindow));
 
         EditorDataManager.Init();
-
+        EditorDataManager.OpenEnemyEditorWindow();
     }
 
     private Vector2 scrollPos1;

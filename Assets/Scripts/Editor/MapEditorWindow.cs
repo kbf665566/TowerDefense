@@ -1,6 +1,7 @@
 ﻿using Codice.Client.BaseCommands;
 using Game;
 using System.Collections.Generic;
+using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class MapEditorWindow : UnitEditorWindow
         window = (MapEditorWindow)GetWindow(typeof(MapEditorWindow));
 
         EditorDataManager.Init();
+        EditorDataManager.OpenMapEditorWindow();
         selectID = -1;
     }
 
@@ -296,7 +298,7 @@ public class MapEditorWindow : UnitEditorWindow
         startY += 30;
 
         cont = new GUIContent("敵人路徑:");
-        EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+        EditorGUI.LabelField(new Rect(startX, startY += spaceY * 4, width, height), cont);
 
         if (GUI.Button(new Rect(startX + 65, startY, 75, 17), "Add Path") && map.EnemyPathList.Count < 2)
         {
@@ -389,7 +391,39 @@ public class MapEditorWindow : UnitEditorWindow
 
         cont = new GUIContent("WavesId:", "要使用的Waves的Id");
         EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-        map.WavesId = EditorGUI.IntField(new Rect(startX + spaceX, startY, 40, height), map.WavesId);
+        cont = new GUIContent(map.WavesId.ToString(), "");
+        if (EditorGUI.DropdownButton(new Rect(startX + spaceX, startY, 70, height), cont, FocusType.Passive))
+        {
+            GenericMenu menu = new GenericMenu();
+            foreach (var wave in EditorDataManager.LevelDataList)
+                menu.AddItem(new GUIContent("ID:" + wave.Id), false, SelectWaves, wave.Id);
+            menu.DropDown(new Rect(startX + spaceX, startY, 70, height));
+        }
+
+        cont = new GUIContent("禁用塔Id:", "這個地圖禁止使用的塔");
+        EditorGUI.LabelField(new Rect(cachedX, startY + spaceY + 10, width, height), cont);
+        var selectedTowerIdString = new StringBuilder();
+        if (map.DisableTowersIdList.Count == 0)
+            selectedTowerIdString.Append("無禁用塔");
+        else
+        {
+            for(int i =0;i<map.DisableTowersIdList.Count;i++)
+            {
+                if (i >= map.DisableTowersIdList.Count - 1)
+                    selectedTowerIdString.Append(map.DisableTowersIdList[i]);
+                else
+                    selectedTowerIdString.Append(map.DisableTowersIdList[i] + ", ");
+            }
+        }
+        cont = new GUIContent(selectedTowerIdString.ToString(), "");
+        if (EditorGUI.DropdownButton(new Rect(cachedX + spaceX, startY + spaceY + 10, 200, height), cont, FocusType.Passive))
+        {
+            GenericMenu menu = new GenericMenu();
+            foreach (var tower in EditorDataManager.TowerList)
+                menu.AddItem(new GUIContent("ID:" + tower.Id), false, SelectTower, tower.Id);
+            menu.DropDown(new Rect(startX + spaceX, startY + spaceY + 10, 200, height));
+        }
+
 
         cont = new GUIContent("起始生命:", "");
         EditorGUI.LabelField(new Rect(startX + spaceX * 2, startY, width, height), cont);
@@ -400,8 +434,8 @@ public class MapEditorWindow : UnitEditorWindow
         map.MapMusic = (AudioClip)EditorGUI.ObjectField(new Rect(startX + spaceX * 3 + 60, startY - spaceY, width, height), map.MapMusic, typeof(AudioClip), false);
 
         cont = new GUIContent("顯示地圖:", "是否顯示地圖");
-        EditorGUI.LabelField(new Rect(startX, startY + spaceY * 2.5f, width, height), cont);
-        showMap = EditorGUI.Toggle(new Rect(startX + spaceX, startY + spaceY * 2.5f, 40, height), showMap);
+        EditorGUI.LabelField(new Rect(startX, startY + spaceY * 4.5f, width, height), cont);
+        showMap = EditorGUI.Toggle(new Rect(startX + spaceX, startY + spaceY * 4.5f, 40, height), showMap);
 
 
         bool pathError = false;
@@ -417,7 +451,7 @@ public class MapEditorWindow : UnitEditorWindow
         if (showMap)
         {
             if (map.MapSize.x != 0 && map.MapSize.y != 0 && pathError == false)
-                DrawTempMap(630, 200, map.MapSize, map.EnemyPathList, map.BlockGridList);
+                DrawTempMap(630, 250, map.MapSize, map.EnemyPathList, map.BlockGridList);
             else if (map.MapSize.x == 0 || map.MapSize.y == 0)
             {
                 GUI.color = Color.red;
@@ -580,5 +614,22 @@ public class MapEditorWindow : UnitEditorWindow
         if (light != null) DestroyImmediate(light.gameObject);
 
         RenderSettings.skybox = null;
+    }
+
+    private void SelectWaves(object wavesId)
+    {
+        var map = EditorDataManager.MapList[selectID];
+        map.WavesId = (int)wavesId;
+    }
+
+    private void SelectTower(object towerId)
+    {
+        var map = EditorDataManager.MapList[selectID];
+        var id = (int)towerId;
+
+        if (map.DisableTowersIdList.Contains(id))
+            map.DisableTowersIdList.Remove(id);
+        else
+            map.DisableTowersIdList.Add(id);
     }
 }

@@ -15,6 +15,7 @@ public class TowerEditorWindow : UnitEditorWindow
         window = (TowerEditorWindow)GetWindow(typeof(TowerEditorWindow));
 
         EditorDataManager.Init();
+        EditorDataManager.OpenTowerEditorWindow();
 
         InitLabel();
     }
@@ -327,7 +328,10 @@ public class TowerEditorWindow : UnitEditorWindow
             cont = new GUIContent("Debuff類型:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             tower.Debuff = (DebuffType)EditorGUI.EnumPopup(new Rect(startX + spaceX, startY, 100, height), tower.Debuff);
+        }
 
+        if(tower.towerType == TowerType.Normal)
+        {
             cont = new GUIContent("可用攻擊模式:");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             tower.AttackMode = (TowerAttackMode)EditorGUI.EnumFlagsField(new Rect(startX + spaceX, startY, 100, height), tower.AttackMode);

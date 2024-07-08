@@ -23,7 +23,7 @@ public class MapData
     public AudioClip MapMusic;
     [HideInInspector]
     public LevelAllWaves Waves;
-
+    public List<int> DisableTowersIdList = new List<int>();
 
 
     public List<Vector2Short> GetBlockGridPosList(List<BlockData> blockDatas)

@@ -23,15 +23,55 @@ public class EditorDataManager : EditorWindow
         BoxStyle = new GUIStyle(GUIStyle.none);
         BoxStyle.normal.background = consoleBackground;
 
+        init = true;
+    }
+
+    public static void OpenTowerEditorWindow()
+    {
+        if (!init)
+            Init();
+
         LoadTower();
+    }
+
+    public static void OpenEnemyEditorWindow()
+    {
+        if (!init)
+            Init();
+
+        LoadEnemy();
+    }
+
+    public static void OpenLevelEditorWindow()
+    {
+        if (!init)
+            Init();
+
         LoadEnemy();
         LoadLevel();
+    }
+
+    public static void OpenMapEditorWindow()
+    {
+        if (!init)
+            Init();
+
+        LoadTower();
+        LoadLevel();
         LoadMap();
+    }
+
+    public static void OpenLanguageEditorWindow()
+    {
+        if (!init)
+            Init();
+
         LoadLanguage();
     }
 
     #region 塔
     private static Towers towers;
+    public static Towers Towers => towers;
     private static List<TowerData> towerList = new List<TowerData>();
     public static List<TowerData> TowerList => towerList;
     private static List<int> towerIDList = new List<int>();
@@ -43,10 +83,11 @@ public class EditorDataManager : EditorWindow
     /// <summary>
     /// 讀取Tower資料
     /// </summary>
-    private static void LoadTower()
+    public static void LoadTower()
     {
         //載入指定路徑的檔案
         towers = AssetDatabase.LoadAssetAtPath<Towers>(towerDatapath);
+
         towerList = towers.TowerList;
         towerIDList.Clear();
 
@@ -67,6 +108,7 @@ public class EditorDataManager : EditorWindow
 
         UpdateTowerNameList();
     }
+
     private static void UpdateTowerNameList()
     {
         List<string> tempList = new List<string>();

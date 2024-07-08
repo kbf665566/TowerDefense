@@ -246,8 +246,8 @@ public class BuildManager : MonoBehaviour
     {
         if (nowTowers.TryGetValue(e.Uid, out var tower))
         {
-            if (tower.TowerType == TowerType.Normal || tower.TowerType == TowerType.AOE)
-                ((IAttackTower)tower).ChangeAttackMode(e.AttackMode);
+            if (tower.TowerType == TowerType.Normal)
+                ((NormalTower)tower).ChangeAttackMode(e.AttackMode);
         }
     }
 

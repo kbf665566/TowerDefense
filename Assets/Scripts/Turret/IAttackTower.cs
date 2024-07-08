@@ -8,5 +8,4 @@ public interface IAttackTower
     void FindEnemy();
     void FireToEnemy();
     void Shoot();
-    void ChangeAttackMode(TowerAttackMode towerAttackMode);
 }

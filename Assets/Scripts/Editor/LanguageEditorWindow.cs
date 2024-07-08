@@ -13,7 +13,7 @@ public class LanguageEditorWindow : UnitEditorWindow
         window = (LanguageEditorWindow)GetWindow(typeof(LanguageEditorWindow));
 
         EditorDataManager.Init();
-
+        EditorDataManager.OpenLanguageEditorWindow();
     }
 
     private Vector2 scrollPos1;
