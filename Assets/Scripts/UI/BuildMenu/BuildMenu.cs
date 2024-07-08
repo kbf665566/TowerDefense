@@ -12,10 +12,14 @@ public class BuildMenu : MonoBehaviour
         var towerList = gameManager.TowerData.TowerList;
         for (int i = 0; i < towerList.Count; i++)
         {
-            var buildBtn = Instantiate(buildMenuItemObj);
-            buildBtn.transform.SetParent(buildMenuItemParent, false);
-            int i2 = i;
-            buildBtn.SetItem(towerList[i].Id, towerList[i].TowerIcon, towerList[i].TowerLevelData[0].BuildUpgradeCost, () => PrereviwBuildTower(towerList[i2].Id));
+            //禁用指定的塔
+            if (!gameManager.NowMapData.DisableTowersIdList.Contains(towerList[i].Id))
+            {
+                var buildBtn = Instantiate(buildMenuItemObj);
+                buildBtn.transform.SetParent(buildMenuItemParent, false);
+                int i2 = i;
+                buildBtn.SetItem(towerList[i].Id, towerList[i].TowerIcon, towerList[i].TowerLevelData[0].BuildUpgradeCost, () => PrereviwBuildTower(towerList[i2].Id));
+            }
         }
     }
 
