@@ -60,7 +60,7 @@ public class BuildManager : MonoBehaviour
 
         var mapData = gameManager.NowMapData;
         gridManager = new GridManager(Vector2Short.Zero, mapData.MapSize, mapData.GetBlockGridPosList(mapData.BlockGridList), mapData.GetEnemyPathPosList(mapData.EnemyPathList));
-
+        Time.timeScale = 1f;
 #if UNITY_EDITOR
         gridDebugger.SetUp();
 #endif

@@ -17,13 +17,12 @@ MonoBehaviour:
     Name: Buggy
     EnemyIcon: {fileID: 21300000, guid: e5600378dd761e64d9423790c482bf36, type: 3}
     HP: 30
-    Speed: 5
+    Speed: 1
     Value: 5
     Damage: 1
     ImmuneSlow: 0
     ImmuneStun: 0
     EnemyPrefab: {fileID: 2363954171552337673, guid: 2631640efc39101409f726e2a524e8a6, type: 3}
-    DeadSE: {fileID: 8300000, guid: f0f4d264bc72b4d0a8832cff5dd5a1de, type: 3}
     DeadParticle: 300
   - Id: 1
     Name: HoverTank
@@ -35,7 +34,6 @@ MonoBehaviour:
     ImmuneSlow: 0
     ImmuneStun: 0
     EnemyPrefab: {fileID: 4943515868587019179, guid: 3b28c49756963d24aabe1bbedb2736cc, type: 3}
-    DeadSE: {fileID: 8300000, guid: 762259e894ae7465eb205d15ff0415c7, type: 3}
     DeadParticle: 300
   - Id: 2
     Name: Boss
@@ -47,5 +45,4 @@ MonoBehaviour:
     ImmuneSlow: 1
     ImmuneStun: 1
     EnemyPrefab: {fileID: 2013957883763745283, guid: 1578b7dad5ba9574495139bb50dac2ec, type: 3}
-    DeadSE: {fileID: 8300000, guid: af2a0d5f6c52c4117aed93341b8f36cb, type: 3}
     DeadParticle: 300

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8716473558701303174}
   - component: {fileID: 245374018916628631}
   - component: {fileID: 6883600392113345910}
+  - component: {fileID: 7509961636883075763}
   m_Layer: 7
   m_Name: BossTankLv1
   m_TagString: Enemy
@@ -47,6 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d901ea68dbe2b4469b42078f7f55d63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slowEffect: {fileID: 0}
+  stunEffect: {fileID: 0}
 --- !u!65 &6883600392113345910
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -58,8 +61,24 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 8.3, y: 4.3, z: 9}
-  m_Center: {x: 0, y: 1.6, z: 0.8}
+  m_Size: {x: 8.3, y: 5.45, z: 9}
+  m_Center: {x: 0, y: 2.69, z: 0.8}
+--- !u!54 &7509961636883075763
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013957883763745283}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 4
+  m_CollisionDetection: 0
 --- !u!1001 &2457147823873130221
 PrefabInstance:
   m_ObjectHideFlags: 0

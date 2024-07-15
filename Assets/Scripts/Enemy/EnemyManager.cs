@@ -241,6 +241,30 @@ public class EnemyManager : MonoBehaviour
         return firstEnemy;
     }
 
+    /// <summary>
+    /// 找最後一個的敵人
+    /// </summary>
+    /// <param name="towerPos"></param>
+    /// <param name="towerShootRange"></param>
+    /// <returns></returns>
+    public Enemy FindLastEnemy(Vector3 towerPos, float towerShootRange)
+    {
+        float lastSpawnTime = 0;
+        Enemy lastEnemy = null;
+
+        foreach (var enemy in nowEnemies)
+        {
+            float distaceToEnemy = Vector3.Distance(towerPos, enemy.Value.transform.localPosition);
+            if (distaceToEnemy <= towerShootRange && enemy.Value.SpawnTime > lastSpawnTime)
+            {
+                lastSpawnTime = enemy.Value.SpawnTime;
+                lastEnemy = enemy.Value;
+            }
+        }
+
+        return lastEnemy;
+    }
+
     public int GetNowEnemyAmount()
     {
         return nowEnemies.Count;

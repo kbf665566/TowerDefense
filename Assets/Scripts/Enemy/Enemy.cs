@@ -117,10 +117,19 @@ public class Enemy : MonoBehaviour
 
         this.spawnTime = spawnTime;
 
-        nowStun = false;
-        nowSlow = false;
-        stunEffect.SetActive(false);
-        slowEffect.SetActive(false);
+        if(!enemyData.ImmuneStun)
+        {
+            nowStun = false;
+            stunEffect.SetActive(false);
+        }
+
+
+        if (!enemyData.ImmuneSlow)
+        {
+            nowSlow = false;
+            slowEffect.SetActive(false);
+        }
+       
 
         stunCount = 0;
         slowCount = 0;
@@ -187,6 +196,7 @@ public class Enemy : MonoBehaviour
 
     private void EndPath()
     {
+        isDead = true;
         objectPool.Release(this);
         EventHelper.EnemyEndPathEvent.Invoke(this, GameEvent.EnemyEndPathEvent.CreateEvent(uid,damage));
     }

@@ -47,7 +47,7 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
     private IObjectPool<Bullet> bulletPool;
     private bool collectionCheck = true;
     private int defaultCapacity = 20;
-    private int maxSize = 100;
+    private int maxSize = 200;
 
     public override void SetTower(int uid, TowerData towerData, Vector2Short gridPos)
     {
@@ -68,14 +68,6 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
         SetLevelData(nowLevel);
 
         fireTimer = originFireRate;
-
-        if (bulletPool == null && useBullet == true)
-        {
-            bulletPool = new ObjectPool<Bullet>(CreateBullet,
-           OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
-           collectionCheck, defaultCapacity, maxSize);
-        }
-
     }
 
     public override void LevelUp()
@@ -87,24 +79,37 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
 
     public override void SetLevelData(int level)
     {
-        originDamage = towerLevelData[level].Damage;
-        originShootRange = towerLevelData[level].ShootRange;
-        originFireRate = towerLevelData[level].FireRate;
+        var levelData = towerLevelData[level];
 
-        bulletSpeed = towerLevelData[level].BulletSpeed;
-        bulletExplsionRadius = towerLevelData[level].BulletExplosionRadius;
+        originDamage = levelData.Damage;
+        originShootRange = levelData.ShootRange;
+        originFireRate = levelData.FireRate;
+
+        bulletSpeed = levelData.BulletSpeed;
+        bulletExplsionRadius = levelData.BulletExplosionRadius;
 
         if (debuff == DebuffType.Slow)
         {
-            slowAmount = towerLevelData[level].SlowAmount;
-            slowDuration = towerLevelData[level].SlowDuration;
+            slowAmount = levelData.SlowAmount;
+            slowDuration = levelData.SlowDuration;
         }
 
         if (debuff == DebuffType.Stun)
         {
-            stunProbability = towerLevelData[level].StunProbability;
-            stunDuration = towerLevelData[level].StunDuration;
+            stunProbability = levelData.StunProbability;
+            stunDuration = levelData.StunDuration;
         }
+
+        if(useBullet == true)
+        {
+            if (bulletPool != null)
+                bulletPool.Clear();
+
+            bulletPool = new ObjectPool<Bullet>(CreateBullet,
+          OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
+          collectionCheck, defaultCapacity, maxSize);
+        }
+
 
         UpdateTowerState();
     }
@@ -148,6 +153,9 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
                 break;
             case TowerAttackMode.First:
                 targetEnemy = enemyManager.FindFirstEnemy(transform.localPosition, final_ShootRange);
+                break;
+            case TowerAttackMode.Last:
+                targetEnemy = enemyManager.FindLastEnemy(transform.localPosition, final_ShootRange);
                 break;
             case TowerAttackMode.HighestHP:
                 targetEnemy = enemyManager.FindHighestHPEnemy(transform.localPosition, final_ShootRange);
@@ -215,18 +223,53 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
 
     public virtual void Shoot()
     {
-        var bullet = bulletPool.Get();
-        if (bullet != null)
+        SpawnBullet();
+       
+    }
+
+    private void SpawnBullet()
+    {
+        var levelData = towerData.TowerLevelData[nowLevel];
+        for (int i = 0; i < levelData.BulletAmount; i++)
         {
-            var debuffCount = DebuffProcess();
+            var bullet = bulletPool.Get();
+            if (bullet != null)
+            {
+                var debuffCount = DebuffProcess();
 
-            EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(firePoint.transform.position, towerData.AttackParticle));
-            bullet.SetBullet(towerData.TowerLevelData[nowLevel].BulletSpeed,
-                  towerData.TowerLevelData[nowLevel].BulletExplosionRadius, final_Damage,
-                  debuffCount.amount, debuffCount.duration, debuff);
+                EventHelper.EffectShowEvent.Invoke(this, GameEvent.GameEffectShowEvent.CreateEvent(firePoint.transform.position, towerData.AttackParticle));
+                bullet.SetBullet(levelData.BulletSpeed,
+                      levelData.BulletExplosionRadius, final_Damage,
+                      debuffCount.amount, debuffCount.duration, debuff,
+                      levelData.BulletExistTime);
 
-            bullet.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
-            bullet.Seek(targetEnemy);
+                if (levelData.BulletShoot == BulletShootType.Front)
+                {
+                    if (i == 0)
+                    {
+                        bullet.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
+                        bullet.Seek(targetEnemy);
+                    }
+                    else
+                    {
+                        var angle = i % 2 == 0 ? 10f * i / 2 : -10f * (i / 2 + 1);
+                        var rotation = Quaternion.AngleAxis(angle, Vector3.up);
+                        bullet.transform.SetPositionAndRotation(firePoint.position, rotation * firePoint.rotation);
+                        if(levelData.BulletMove == BulletMoveType.Follow)
+                            bullet.Seek(targetEnemy);
+                    }
+                }
+                else if(levelData.BulletShoot == BulletShootType.Self)
+                {
+                    float angle = 360 / levelData.BulletAmount;
+                    var rotation = Quaternion.AngleAxis(angle * i, Vector3.up);
+                    var finalRotation = i == 0 ?  firePoint.rotation : rotation * firePoint.rotation;
+                    bullet.transform.SetPositionAndRotation(firePoint.position, finalRotation);
+                }
+
+                if(levelData.BulletMove != BulletMoveType.Follow)
+                    bullet.SetHideRange(final_ShootRange);
+            }
         }
     }
 
@@ -244,8 +287,16 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
     // 物件池中的物件不夠時，建立新的物件去填充物件池
     private Bullet CreateBullet()
     {
-        var obj = Instantiate(towerData.TowerLevelData[nowLevel].TowerBullet);
-        Bullet newBullet = obj.GetComponent<Bullet>();
+        var levelData = towerData.TowerLevelData[nowLevel];
+        var obj = Instantiate(levelData.TowerBullet);
+        Bullet newBullet = null;
+
+        if (levelData.BulletMove == BulletMoveType.Normal)
+            newBullet = obj.AddComponent<NormalBullet>();
+        else if (levelData.BulletMove == BulletMoveType.Follow)
+            newBullet = obj.AddComponent<FollowBullet>();
+        else if (levelData.BulletMove == BulletMoveType.Penetrate)
+            newBullet = obj.AddComponent<PenetrateBullet>();
 
         obj.transform.SetParent(transform);
         newBullet.ObjectPool = bulletPool;

@@ -193,6 +193,11 @@ MonoBehaviour:
     LanguageString:
     - "\u8840\u91CF\u6700\u5C11"
     - Weakest
+  - Id: 65
+    Key: Last
+    LanguageString:
+    - "\u6700\u5F8C\u4E00\u500B"
+    - Last
   - Id: 64
     Key: First
     LanguageString:

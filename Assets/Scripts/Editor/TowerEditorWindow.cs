@@ -442,7 +442,7 @@ public class TowerEditorWindow : UnitEditorWindow
     public static Vector3 DrawStat(TowerLevelData levelData, float startX, float startY, float statContentHeight, TowerData tower)
     {
         float width = 150;
-        float fWidth = 35;
+        float fWidth = 60;
         float spaceX = 130;
         float height = 18;
         float spaceY = height + 4;
@@ -479,7 +479,7 @@ public class TowerEditorWindow : UnitEditorWindow
         {
             cont = new GUIContent("發射物體:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
-            levelData.TowerBullet = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX - 48, startY, 3 * fWidth - 20, height), levelData.TowerBullet, typeof(GameObject), false);
+            levelData.TowerBullet = (GameObject)EditorGUI.ObjectField(new Rect(startX + spaceX, startY, fWidth, height), levelData.TowerBullet, typeof(GameObject), false);
 
             cont = new GUIContent("發射物速度:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
@@ -489,6 +489,18 @@ public class TowerEditorWindow : UnitEditorWindow
             cont = new GUIContent("發射物爆炸範圍:", "");
             EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
             levelData.BulletExplosionRadius = EditorGUI.FloatField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletExplosionRadius);
+
+            cont = new GUIContent("發射物發射數量:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.BulletAmount = EditorGUI.IntField(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletAmount);
+
+            cont = new GUIContent("發射物射擊方式:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.BulletShoot = (BulletShootType)EditorGUI.EnumPopup(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletShoot);
+
+            cont = new GUIContent("發射物移動方式:", "");
+            EditorGUI.LabelField(new Rect(startX, startY += spaceY, width, height), cont);
+            levelData.BulletMove = (BulletMoveType)EditorGUI.EnumPopup(new Rect(startX + spaceX, startY, fWidth, height), levelData.BulletMove);
         }
 
 

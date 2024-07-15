@@ -16,12 +16,16 @@ MonoBehaviour:
   - Id: 0
     Name: MachineGun
     TowerLevelData:
-    - Damage: 10
+    - Damage: 20
       ShootRange: 10
       FireRate: 1
       TowerBullet: {fileID: 4850711738385815153, guid: 1e47ce422a8e6bf40ba2dd304d248f1d, type: 3}
-      BulletSpeed: 70
+      BulletSpeed: 15
       BulletExplosionRadius: 0
+      BulletAmount: 10
+      BulletShoot: 0
+      BulletMove: 1
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -38,6 +42,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 4850711738385815153, guid: 1e47ce422a8e6bf40ba2dd304d248f1d, type: 3}
       BulletSpeed: 70
       BulletExplosionRadius: 0
+      BulletAmount: 1
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -73,6 +81,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 2200433021627184559, guid: fce1ad2035626214b95a8232d4051f41, type: 3}
       BulletSpeed: 90
       BulletExplosionRadius: 2
+      BulletAmount: 1
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -89,6 +101,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 2200433021627184559, guid: fce1ad2035626214b95a8232d4051f41, type: 3}
       BulletSpeed: 90
       BulletExplosionRadius: 3
+      BulletAmount: 1
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -124,6 +140,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
+      BulletAmount: 0
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -140,6 +160,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
+      BulletAmount: 0
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -175,6 +199,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
+      BulletAmount: 0
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -191,6 +219,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
+      BulletAmount: 0
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -226,6 +258,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
+      BulletAmount: 0
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -242,6 +278,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
+      BulletAmount: 0
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -277,6 +317,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
+      BulletAmount: 0
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
       BuffAddFireRate: 0
@@ -312,6 +356,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
+      BulletAmount: 0
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 1.2
       BuffAddRange: 1.2
       BuffAddFireRate: 1.2
@@ -328,6 +376,10 @@ MonoBehaviour:
       TowerBullet: {fileID: 0}
       BulletSpeed: 0
       BulletExplosionRadius: 0
+      BulletAmount: 0
+      BulletShoot: 0
+      BulletMove: 0
+      BulletExistTime: 0
       BuffAddDamage: 1.4
       BuffAddRange: 1.4
       BuffAddFireRate: 1.4

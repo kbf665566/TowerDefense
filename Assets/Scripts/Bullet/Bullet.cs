@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+using System.Diagnostics;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.Pool;
+using Color = UnityEngine.Color;
+using Debug = UnityEngine.Debug;
 
 public class Bullet : MonoBehaviour
 {
@@ -11,25 +14,43 @@ public class Bullet : MonoBehaviour
     protected float explosionRadius = 0f;
     protected float damage = 50;
 
-    protected DebuffType debuff;
-    
-    protected float amount;
-    protected float duration;
+    protected float bulletHitRange = 0.4f;
 
-    private IObjectPool<Bullet> objectPool;
+    protected DebuffType debuff;
+
+    protected float amount;
+    protected float defuffDuration;
+
+
+    protected float existTime;
+    protected WaitForSeconds hideTime;
+
+    protected IObjectPool<Bullet> objectPool;
     public IObjectPool<Bullet> ObjectPool { set => objectPool = value; }
 
-    [SerializeField] private LayerMask enemyLayer;
-    private Collider[] hitTargets = new Collider[30];
-    public void SetBullet(float speed, float explosionRadius, float damage,float amount, float duration,DebuffType debuff)
+    protected LayerMask enemyLayer => GameSetting.EnemyLayer;
+    protected Collider[] rangeHitTargets;
+    protected Collider[] bulletHitTargets = new Collider[1];
+
+    protected EnemyManager enemyManager => EnemyManager.instance;
+
+    protected float towerRange;
+
+    protected RaycastHit[] rayHitTatget = new RaycastHit[1];
+
+    public virtual void SetBullet(float speed, float explosionRadius, float damage,
+        float amount, float duration, DebuffType debuff, float existTime)
     {
         this.speed = speed;
         this.explosionRadius = explosionRadius;
         this.damage = damage;
 
         this.amount = amount;
-        this.duration = duration;
+        defuffDuration = duration;
         this.debuff = debuff;
+
+        if (rangeHitTargets == null && explosionRadius > 0)
+            rangeHitTargets = new Collider[50];
     }
 
     public void Seek(Enemy enemy)
@@ -37,29 +58,23 @@ public class Bullet : MonoBehaviour
         target = enemy;
     }
 
+    public void SetHideRange(float range)
+    {
+        towerRange = range;
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(target == null)
-        {
-            objectPool.Release(this);
-            return;
-        }
-
-        Vector3 dir = target.transform.position - transform.position;
-        float distanceThisFrame = speed * Time.fixedDeltaTime;
-
-        if(dir.magnitude <= distanceThisFrame)
-        {
-            HitTarget();
-            return;
-        }
-
-        transform.Translate(dir.normalized * distanceThisFrame,Space.World);
-        transform.LookAt(target.transform);
+        Move();
     }
 
-    protected virtual void HitTarget()
+    protected virtual void Move()
+    {
+
+    }
+
+    protected virtual void HitTarget(Transform target)
     {
         //發出特效事件
         EventHelper.EffectShowEvent.Invoke(this,GameEvent.GameEffectShowEvent.CreateEvent(transform.position,GameEffectType.BulletHit));
@@ -69,29 +84,25 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            Damage();
+            Damage(target);
         }
-
-
-        objectPool.Release(this);
-    }
-
-    protected void Damage()
-    {
-        target.TakeDamage(damage,amount,duration,debuff);
+        Hide();
     }
 
     protected void Damage(Transform enemy)
     {
         Enemy e = enemy.GetComponent<Enemy>();
         if (e != null)
-            e.TakeDamage(damage, amount, duration, debuff);
+            e.TakeDamage(damage, amount, defuffDuration, debuff);
     }
 
     protected void Explode()
     {
-        Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, hitTargets, enemyLayer);
-        foreach (Collider col in hitTargets)
+        var amount = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, rangeHitTargets, enemyLayer);
+        if (amount == 0)
+            return;
+
+        foreach (Collider col in rangeHitTargets)
         {
             if (col == null)
                 continue;
@@ -100,6 +111,40 @@ public class Bullet : MonoBehaviour
             {
                 Damage(col.transform);
             }
+        }
+    }
+
+    /// <summary>
+    /// 超出範圍就自動回收
+    /// </summary>
+    protected virtual bool OutRangeToHide()
+    {
+        var distance = Vector3.Distance(transform.localPosition,Vector3.zero);
+        if(distance >= towerRange)
+        {
+            Hide();
+            return true;
+        }
+        return false;
+    }
+
+    protected virtual void Hide()
+    {
+        target = null;
+        objectPool.Release(this);
+    }
+
+    protected bool TargetIsDied()
+    {
+        return target == null || target.gameObject.activeSelf == false;
+    }
+
+
+    protected virtual void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.activeSelf && col.CompareTag("Enemy"))
+        {
+            HitTarget(col.transform);
         }
     }
 

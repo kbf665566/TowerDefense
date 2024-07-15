@@ -48,7 +48,7 @@ public enum TowerType
     Special,
 }
 
-[Serializable]
+[Serializable]//新增攻擊最後一個
 public enum TowerAttackMode
 {
     None = 0,
@@ -56,12 +56,14 @@ public enum TowerAttackMode
     Nearest = 1 << 0,
     /// <summary> 第一個 </summary>
     First = 1 << 1,
+    /// <summary> 最後一個 </summary>
+    Last = 1 << 2,
     /// <summary> 總血量最高 </summary>
-    HighestHP = 1 << 2,
+    HighestHP = 1 << 3,
     /// <summary> 當前血量最少 </summary>
-    Weakest = 1 << 3,
+    Weakest = 1 << 4,
     /// <summary> 攻擊特定地點 </summary>
-    Fixedpoint = 1 << 4,
+    Fixedpoint = 1 << 5,
 }
 
 
@@ -80,6 +82,15 @@ public class TowerLevelData
     public float BulletSpeed;
     /// <summary> 發射物爆炸範圍 </summary>
     public float BulletExplosionRadius;
+
+    /// <summary> 一次發射的發射物數量 </summary>
+    public int BulletAmount;
+    /// <summary> 發射物射擊方式 </summary>
+    public BulletShootType BulletShoot;
+    /// <summary> 發射物移動方式 </summary>
+    public BulletMoveType BulletMove;
+    /// <summary> 發射物存在時間 </summary>
+    public float BulletExistTime;
 
     //Support用
     /// <summary> Buff增加的攻擊 </summary>
@@ -115,4 +126,22 @@ public enum DebuffType
     None,
     Stun,
     Slow,
+}
+[Serializable]
+public enum BulletShootType
+{
+    /// <summary> 向前方發射 </summary>
+    Front,
+    /// <summary> 以自身為範圍 </summary>
+    Self,
+}
+[Serializable]
+public enum BulletMoveType
+{
+    /// <summary> 擊中敵人即消失 </summary>
+    Normal,
+    /// <summary> 追蹤 </summary>
+    Follow,
+    /// <summary> 貫穿 </summary>
+    Penetrate
 }
