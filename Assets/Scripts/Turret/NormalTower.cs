@@ -199,7 +199,7 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
         Quaternion lookRotation = Quaternion.LookRotation(dir);
         Vector3 rotation = Quaternion.Lerp(partToRotation.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
         partToRotation.rotation = Quaternion.Euler(0f, rotation.y, 0f);
-        angleCanFire = MathF.Abs(Quaternion.Angle(partToRotation.rotation, lookRotation)) <= 5f;
+        angleCanFire = MathF.Abs(Quaternion.Angle(partToRotation.rotation, lookRotation)) <= 2.5f;
     }
 
     public (float amount, float duration) DebuffProcess()

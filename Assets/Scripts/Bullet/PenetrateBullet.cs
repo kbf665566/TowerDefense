@@ -8,6 +8,7 @@ using UnityEngine.Pool;
 public class PenetrateBullet : Bullet
 {
     private bool penetrateHitTarget = false;
+    private Vector3 targetPos;
 
     public override void SetBullet(float speed, float explosionRadius, float damage, float amount, float duration, DebuffType debuff, float existTime)
     {
@@ -22,9 +23,12 @@ public class PenetrateBullet : Bullet
         if (OutRangeToHide())
             return;
 
-        Vector3 targetPos = target.transform.position;
-        targetPos.y = transform.position.y;
-        Vector3 dir = penetrateHitTarget ? transform.forward : targetPos - transform.position;
+        if (!TargetIsDied())
+        {
+            targetPos = target.transform.position;
+            targetPos.y = transform.position.y;
+        }
+        Vector3 dir = penetrateHitTarget || TargetIsDied() ? transform.forward : targetPos - transform.position;
         float distanceThisFrame = speed * Time.fixedDeltaTime;
 
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);

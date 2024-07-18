@@ -9,7 +9,7 @@ using UnityEngine.Pool;
 public class FollowBullet : Bullet
 {
     private float findRange = 100f;
-    private const float startFollowTime = .5f;
+    private const float startFollowTime = .25f;
     private bool startFollow = false;
 
     public override void SetBullet(float speed, float explosionRadius, float damage, float amount, float duration, DebuffType debuff, float existTime)
