@@ -70,7 +70,7 @@ public class MoneyTower : TowerInLevel
         fireTimer += Time.fixedDeltaTime;
         fireTimer = fireTimer > final_FireRate ? final_FireRate : fireTimer;
 
-        if (levelManager.NextWaveEnd)
+        if (levelManager.NowWaveEnd)
             return;
 
         if (fireTimer >= final_FireRate)

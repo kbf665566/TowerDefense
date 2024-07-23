@@ -7,8 +7,8 @@ using UnityEngine;
 /// </summary>
 public class TMPTextGroup : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI[] texts;
-    [SerializeField] private LanguageText[] languageTexts;
+    [SerializeField] protected TextMeshProUGUI[] texts;
+    [SerializeField] protected LanguageText[] languageTexts;
 
     private bool firstShow = true;
     private LanguageType textLanguage = LanguageType.tw;
@@ -71,7 +71,6 @@ public class TMPTextGroup : MonoBehaviour
         EventHelper.LanguageChangedEvent -= LanguageChanged;
     }
 
-    [ContextMenu("SetLanguageText")]
     public void SetLanguageText()
     {
         languageTexts = new LanguageText[texts.Length];

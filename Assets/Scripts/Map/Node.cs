@@ -18,7 +18,7 @@ public class Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+        if (EventSystem.current.IsPointerOverGameObject() || BuildManager.instance.NowSelectTower)
             return;
 
         EventHelper.NodeSelectedEvent.Invoke(this, GameEvent.NodeSelectEvent.CreateEvent(pos));

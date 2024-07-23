@@ -18,8 +18,14 @@ public class BuildManager : MonoBehaviour
 
     private bool nowPreviewBuild = false;
     public bool NowPreviewBuild => nowPreviewBuild;
+
+    private bool nowSelectTower = false;
+    public bool NowSelectTower => nowSelectTower;
+
     private float tempShootRange;
     private Vector2Short tempSize;
+
+    private Vector3 defaultLockonPos;
 
     private GridManager gridManager;
 
@@ -83,6 +89,8 @@ public class BuildManager : MonoBehaviour
         LineDrawer.endColor = Color.red;
         LineDrawer.startWidth = 0.1f;
         LineDrawer.endWidth = 0.1f;
+
+        defaultLockonPos = levelManager.WayPoints1[0].position;
     }
 
     private void Update()
@@ -113,6 +121,7 @@ public class BuildManager : MonoBehaviour
     public void SelectTower(object s, GameEvent.TowerSelectEvent e)
     {
         var tower = GetTower(e.Uid);
+        nowSelectTower = true;
         if (tower.TowerType != TowerType.Money)
         {
             var range = ((ITowerRange)tower).GetShootRange();
@@ -126,6 +135,7 @@ public class BuildManager : MonoBehaviour
 
     public void CancelSelectTower(object s, GameEvent.NodeCancelSelectEvent e)
     {
+        nowSelectTower = false;
         StopDrawTowerRange();
     }
 
@@ -175,6 +185,9 @@ public class BuildManager : MonoBehaviour
                     ((SupportTower)newTower).SetTower(uid, towerData, e.GridPos);
                 else if (towerData.towerType == TowerType.Money)
                     ((MoneyTower)newTower).SetTower(uid, towerData, e.GridPos);
+
+                if (newTower is IAttackTower attackTower)
+                    attackTower.ChangeLockOnPos(defaultLockonPos);
 
                 gridManager.PlaceTower(uid, e.GridPos, towerData.TowerSize);
                 nowTowers.Add(uid, newTower);
@@ -251,6 +264,15 @@ public class BuildManager : MonoBehaviour
         }
     }
 
+    public void ChangeTowerSpecificPoint(object s, GameEvent.TowerSelectSpecificPointEvent e)
+    {
+        if (nowTowers.TryGetValue(e.Uid, out var tower))
+        {
+            if (tower is IAttackTower attackTower)
+                attackTower.ChangeLockOnPos(e.LockOnPos);
+        }
+    }
+
     #region Check/Get
     public bool CheckCanBuild(Vector2Short size,Vector2Short pos)
     {
@@ -317,6 +339,7 @@ public class BuildManager : MonoBehaviour
         EventHelper.MovePreviewBuiltEvent -= MovePreviewBuild;
         EventHelper.NodeCancelSelectedEvent -= CancelSelectTower;
         EventHelper.TowerChangedAttackModeEvent -= ChangeTowerAttackMode;
+        EventHelper.TowerSelectedSpecificPointEvent -= ChangeTowerSpecificPoint;
     }
 
     private void OnEnable()
@@ -330,6 +353,7 @@ public class BuildManager : MonoBehaviour
         EventHelper.MovePreviewBuiltEvent += MovePreviewBuild;
         EventHelper.NodeCancelSelectedEvent += CancelSelectTower;
         EventHelper.TowerChangedAttackModeEvent += ChangeTowerAttackMode;
+        EventHelper.TowerSelectedSpecificPointEvent += ChangeTowerSpecificPoint;
     }
 
     private int GenerateUid()

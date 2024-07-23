@@ -42,6 +42,19 @@ public static partial class GameEvent
         }
     }
 
+    public class TowerSelectSpecificPointEvent : GameEventArgs<TowerSelectSpecificPointEvent>
+    {
+        public int Uid { get; set; }
+        public Vector3 LockOnPos { get; set; }
+        public static TowerSelectSpecificPointEvent CreateEvent(int uid, Vector3 lockOnPos)
+        {
+            var @event = CreateEvent();
+            @event.Uid = uid;
+            @event.LockOnPos = lockOnPos;
+            return @event;
+        }
+    }
+
     public class TowerSellEvent : GameEventArgs<TowerSellEvent>
     {
         public int Uid { get; set; }

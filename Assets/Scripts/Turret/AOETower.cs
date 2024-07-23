@@ -31,6 +31,8 @@ public class AOETower : TowerInLevel,IAttackTower,ITowerRange
 
     private EnemyManager enemyManager => EnemyManager.instance;
 
+    public Vector3 LockOnPos { get; private set; }
+
     [SerializeField] private Transform firePoint;
     [SerializeField] private LayerMask enemyLayer;
 
@@ -139,6 +141,31 @@ public class AOETower : TowerInLevel,IAttackTower,ITowerRange
         }
     }
 
+    public void FireToSpecificPoint()
+    {
+        fireTimer += Time.fixedDeltaTime;
+        fireTimer = fireTimer > final_FireRate ? final_FireRate : fireTimer;
+
+        FindEnemy();
+
+        if (!nowCanFindEnemy)
+            return;
+
+
+        if (fireTimer >= final_FireRate)
+        {
+            int count = 0;
+            if (Time.frameCount % 10 == 0)
+                count = Physics.OverlapSphereNonAlloc(transform.position, final_ShootRange, hitTargets, enemyLayer);
+
+            if (count > 0)
+            {
+                Shoot();
+                fireTimer = 0;
+            }
+        }
+    }
+
     public (float amount, float duration) DebuffProcess()
     {
         float amount = 0f;
@@ -181,5 +208,10 @@ public class AOETower : TowerInLevel,IAttackTower,ITowerRange
     public float GetShootRange()
     {
         return final_ShootRange;
+    }
+
+    public void ChangeLockOnPos(Vector3 targetPos)
+    {
+        LockOnPos = targetPos;
     }
 }

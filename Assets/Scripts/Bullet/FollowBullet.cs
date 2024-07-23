@@ -39,6 +39,9 @@ public class FollowBullet : Bullet
         }
     }
 
+    /// <summary>
+    /// 射出時先往自身前方移動
+    /// </summary>
     private void HaveYetToStartFollowMove()
     {
         Vector3 dir = transform.forward;
@@ -47,6 +50,9 @@ public class FollowBullet : Bullet
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);
     }
 
+    /// <summary>
+    /// 開始追蹤目標
+    /// </summary>
     private void StartFollowMove()
     {
         Vector3 dir = target.transform.position - transform.position;

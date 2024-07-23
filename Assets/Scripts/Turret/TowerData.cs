@@ -63,7 +63,7 @@ public enum TowerAttackMode
     /// <summary> 當前血量最少 </summary>
     Weakest = 1 << 4,
     /// <summary> 攻擊特定地點 </summary>
-    Fixedpoint = 1 << 5,
+    SpecificPoint = 1 << 5,
 }
 
 

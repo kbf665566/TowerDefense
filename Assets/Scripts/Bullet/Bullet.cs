@@ -10,6 +10,9 @@ using Debug = UnityEngine.Debug;
 public class Bullet : MonoBehaviour
 {
     protected Enemy target;
+    protected Vector3 targetPos;
+    protected bool isSpecificPoint;
+
     protected float speed = 70f;
     protected float explosionRadius = 0f;
     protected float damage = 50;
@@ -51,11 +54,18 @@ public class Bullet : MonoBehaviour
 
         if (rangeHitTargets == null && explosionRadius > 0)
             rangeHitTargets = new Collider[50];
+        isSpecificPoint = false;
     }
 
     public void Seek(Enemy enemy)
     {
         target = enemy;
+    }
+
+    public void Seek(Vector3 targetPos)
+    {
+        this.targetPos = new Vector3(targetPos.x,transform.position.y, targetPos.z);
+        isSpecificPoint = true;
     }
 
     public void SetHideRange(float range)
@@ -74,7 +84,7 @@ public class Bullet : MonoBehaviour
 
     }
 
-    protected virtual void HitTarget(Transform target)
+    protected virtual void HitTarget(Transform target = null)
     {
         //發出特效事件
         EventHelper.EffectShowEvent.Invoke(this,GameEvent.GameEffectShowEvent.CreateEvent(transform.position,GameEffectType.BulletHit));
@@ -84,15 +94,15 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            Damage(target);
+            if (target != null)
+                Damage(target);
         }
         Hide();
     }
 
     protected void Damage(Transform enemy)
     {
-        Enemy e = enemy.GetComponent<Enemy>();
-        if (e != null)
+        if (enemy.TryGetComponent<Enemy>(out var e))
             e.TakeDamage(damage, amount, defuffDuration, debuff);
     }
 

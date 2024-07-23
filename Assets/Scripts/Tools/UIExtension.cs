@@ -39,7 +39,7 @@ public static class UIExtension
 
     public static string GetTowerLevelInfo(this TowerData towerData, int nowLevel, bool isUpdate = false)
     {
-        var info = string.Empty + "\n";
+        var info = string.Empty;
         var levelData = towerData.TowerLevelData[nowLevel];
         TowerLevelData nextData = (nowLevel + 1) >= towerData.TowerLevelData.Count ? null : towerData.TowerLevelData[nowLevel + 1];
         var addValue = string.Empty;

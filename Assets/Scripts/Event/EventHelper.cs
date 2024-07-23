@@ -16,6 +16,7 @@ public class EventHelper : MonoBehaviour
     public static EventHandler<GameEvent.MovePreviewBuildEvent> MovePreviewBuiltEvent;
     public static EventHandler<GameEvent.TowerCancelPreviewEvent> TowerCanceledPreviewEvent;
     public static EventHandler<GameEvent.TowerMakeMoneyEvent> TowerModeMoneyEvent;
+    public static EventHandler<GameEvent.TowerSelectSpecificPointEvent> TowerSelectedSpecificPointEvent;
 
     public static EventHandler<GameEvent.NodeSelectEvent> NodeSelectedEvent;
     public static EventHandler<GameEvent.NodeCancelSelectEvent> NodeCancelSelectedEvent;

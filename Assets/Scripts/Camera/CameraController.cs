@@ -36,7 +36,7 @@ public class CameraController : MonoBehaviour
         if (!canMove)
             return;
 
-        if(Input.GetKey(KeyCode.W) && (followTarget.localPosition + Vector3.forward).z < bound.yMax)
+        if(Input.GetKey(KeyCode.W) && (followTarget.localPosition + Vector3.forward).z < bound.yMax / 1.5)
         {
             followTarget.Translate(Vector3.forward * moveSpeed * Time.deltaTime,Space.World);
         }
@@ -67,7 +67,7 @@ public class CameraController : MonoBehaviour
     private void OnDisable()
     {
         EventHelper.GameOverEvent -= GameOverEvent;
-        EventHelper.GameWonEvent += GameWinEvent;
+        EventHelper.GameWonEvent -= GameWinEvent;
     }
 
     private void GameOverEvent(object s, GameEvent.GameOverEvent e)

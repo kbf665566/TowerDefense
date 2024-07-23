@@ -20,7 +20,7 @@ public class BuildMenuItem : MonoBehaviour,IPointerExitHandler,IPointerMoveHandl
         towerId = id;
         towerData = GameManager.instance.TowerData.GetData(towerId);
         towerName = towerData.Name.GetLanguageValue();
-        towerInfo = towerData.TowerInformation.GetLanguageValue() + towerData.GetTowerLevelInfo(0);
+        towerInfo = towerData.TowerInformation.GetLanguageValue() + "\n" + towerData.GetTowerLevelInfo(0);
         towerImage.sprite = towerIcon;
         costText.text = cost.ToString();
         btn.onClick.AddListener(clickAction);

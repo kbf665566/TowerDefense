@@ -163,11 +163,21 @@ MonoBehaviour:
     LanguageString:
     - "\u8CE3\u51FA"
     - Sell
+  - Id: 67
+    Key: Done
+    LanguageString:
+    - "\u5B8C\u6210"
+    - Done
   - Id: 30
     Key: NextWave
     LanguageString:
     - "\u4E0B\u4E00\u6CE2"
     - NextWave
+  - Id: 68
+    Key: UpgradeInfo
+    LanguageString:
+    - "\u5347\u7D1A\u8CC7\u8A0A"
+    - UpgradeInfo
   - Id: 59
     Key: AttackMode
     LanguageString:
@@ -184,10 +194,10 @@ MonoBehaviour:
     - "\u8840\u91CF\u6700\u591A"
     - HighestHP
   - Id: 62
-    Key: Fixedpoint
+    Key: SpecificPoint
     LanguageString:
     - "\u5B9A\u9EDE"
-    - Fixedpoint
+    - SpecificPoint
   - Id: 63
     Key: Weakest
     LanguageString:
@@ -203,6 +213,11 @@ MonoBehaviour:
     LanguageString:
     - "\u7B2C\u4E00\u500B"
     - First
+  - Id: 66
+    Key: LockOn
+    LanguageString:
+    - "\u9396\u5B9A"
+    - LockOn
   - Id: 31
     Key: Map001
     LanguageString:

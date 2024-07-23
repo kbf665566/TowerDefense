@@ -37,7 +37,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI waveText;
     [SerializeField] private Button nextWaveBtn;
     private bool nowWaveEnd = true;
-    public bool NextWaveEnd => nowWaveEnd;
+    public bool NowWaveEnd => nowWaveEnd;
     #endregion
 
     private float difficultyRatio;

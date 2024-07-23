@@ -28,10 +28,19 @@ public class NormalBullet : Bullet
 
     private void HaveTargetMove()
     {
-        Vector3 dir = target.transform.position - transform.position;
+        Vector3 dir = isSpecificPoint ? targetPos - transform.position : target.transform.position - transform.position;
         float distanceThisFrame = speed * Time.fixedDeltaTime;
 
+        if(dir.magnitude <= distanceThisFrame && isSpecificPoint)
+        {
+            HitTarget();
+            return;
+        }
+
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);
-        transform.LookAt(target.transform);
+        if (isSpecificPoint)
+            transform.LookAt(targetPos);
+        else
+            transform.LookAt(target.transform);
     }
 }

@@ -6,6 +6,7 @@ public class GameSetting
 {
     public const string MainMenuName = "MainMenu";
     public static LayerMask EnemyLayer = 1 << LayerMask.NameToLayer("Enemy");
+    public static LayerMask EnvironmentLayer = 1 << LayerMask.NameToLayer("Environment");
     public const float EasyMoneyRatio = 1f;
     public const float NormalMoneyRatio = 0.75f;
     public const float HardMoneyRatio = 0.5f;

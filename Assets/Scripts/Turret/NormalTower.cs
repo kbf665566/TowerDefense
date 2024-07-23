@@ -44,11 +44,14 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
     protected EnemyManager enemyManager => EnemyManager.instance;
     protected Enemy targetEnemy;
 
+    public Vector3 LockOnPos { get; private set; }
+
     private IObjectPool<Bullet> bulletPool;
     private bool collectionCheck = true;
     private int defaultCapacity = 20;
     private int maxSize = 200;
 
+    private LevelManager levelManager => LevelManager.instance;
     public override void SetTower(int uid, TowerData towerData, Vector2Short gridPos)
     {
         base.SetTower(uid, towerData, gridPos);
@@ -102,8 +105,7 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
 
         if(useBullet == true)
         {
-            if (bulletPool != null)
-                bulletPool.Clear();
+            bulletPool?.Clear();
 
             bulletPool = new ObjectPool<Bullet>(CreateBullet,
           OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
@@ -141,7 +143,10 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
 
     private void FixedUpdate()
     {
-        FireToEnemy();
+        if (nowAttackMode == TowerAttackMode.SpecificPoint)
+            FireToSpecificPoint();
+        else
+            FireToEnemy();
     }
 
     public void FindEnemy()
@@ -193,9 +198,28 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
             fireTimer = 0;
         }
     }
+
+    public void FireToSpecificPoint()
+    {
+        fireTimer += Time.fixedDeltaTime;
+        fireTimer = fireTimer > final_FireRate ? final_FireRate : fireTimer;
+
+        if (levelManager.NowWaveEnd)
+            return;
+
+        if (isNeedTurn == true)
+            LockOnTarget();
+
+        if (fireTimer >= final_FireRate && angleCanFire == true)
+        {
+            Shoot();
+            fireTimer = 0;
+        }
+    }
+
     protected void LockOnTarget()
     {
-        Vector3 dir = targetEnemy.transform.position - transform.position;
+        Vector3 dir = nowAttackMode == TowerAttackMode.SpecificPoint ? LockOnPos - transform.position : targetEnemy.transform.position - transform.position;
         Quaternion lookRotation = Quaternion.LookRotation(dir);
         Vector3 rotation = Quaternion.Lerp(partToRotation.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
         partToRotation.rotation = Quaternion.Euler(0f, rotation.y, 0f);
@@ -224,7 +248,6 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
     public virtual void Shoot()
     {
         SpawnBullet();
-       
     }
 
     private void SpawnBullet()
@@ -248,7 +271,10 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
                     if (i == 0)
                     {
                         bullet.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
-                        bullet.Seek(targetEnemy);
+                        if (nowAttackMode != TowerAttackMode.SpecificPoint)
+                            bullet.Seek(targetEnemy);
+                        else
+                            bullet.Seek(LockOnPos);
                     }
                     else
                     {
@@ -320,6 +346,11 @@ public class NormalTower : TowerInLevel,IAttackTower,ITowerRange
     private void OnDestroyPooledObject(Bullet pooledObject)
     {
         Destroy(pooledObject.gameObject);
+    }
+
+    public void ChangeLockOnPos(Vector3 targetPos)
+    {
+        LockOnPos = new Vector3(targetPos.x,transform.localPosition.y, targetPos.z);
     }
 
     #endregion

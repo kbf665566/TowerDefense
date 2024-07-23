@@ -24,7 +24,7 @@ MonoBehaviour:
       BulletExplosionRadius: 0
       BulletAmount: 10
       BulletShoot: 0
-      BulletMove: 1
+      BulletMove: 0
       BulletExistTime: 0
       BuffAddDamage: 0
       BuffAddRange: 0
@@ -70,7 +70,7 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
-    AttackMode: 15
+    AttackMode: 47
     TowerPrefab: {fileID: -538096426614295507, guid: ee4561289e7fdb248a1644d1903699ed, type: 3}
   - Id: 1
     Name: RocketTower
@@ -129,7 +129,7 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
-    AttackMode: -1
+    AttackMode: 31
     TowerPrefab: {fileID: -7594727079982387, guid: 852e13cd1fee71043be2067ce73f8c58, type: 3}
   - Id: 2
     Name: LaserTower
@@ -188,7 +188,7 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
-    AttackMode: 0
+    AttackMode: 31
     TowerPrefab: {fileID: 3691680086958892297, guid: 769c5d595497c9046b38b765dc5be34e, type: 3}
   - Id: 3
     Name: LightningTower
@@ -247,7 +247,7 @@ MonoBehaviour:
     NormalParticle: 0
     BuildParticle: 1
     RemoveParticle: 0
-    AttackMode: 0
+    AttackMode: 31
     TowerPrefab: {fileID: -2869254594166877190, guid: 30b5d16d89d00a64397649af57f051a4, type: 3}
   - Id: 4
     Name: WindTower
